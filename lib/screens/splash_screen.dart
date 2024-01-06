@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:a_rosa_je/screens/home_page.dart'; // Importez votre page d'accueil
+import 'package:a_rosa_je/screens/login_page.dart'; // Importez votre page de connexion
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => LoginPage()),
       );
     });
   }
@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FractionallySizedBox(
-              widthFactor: 0.5, // 50% de la largeur de l'écran
+              widthFactor: 0.3, // 50% de la largeur de l'écran
               child: Image.asset('assets/images/logos/logo_noir.png'),
             ),
           ],
