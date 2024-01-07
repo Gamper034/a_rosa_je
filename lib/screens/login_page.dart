@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/components/button.dart';
-import 'package:a_rosa_je/components/CustomTextField.dart';
+import 'package:a_rosa_je/components/text_field.dart';
 import 'package:a_rosa_je/constants.dart';
 import 'package:flutter/gestures.dart';
+import 'package:a_rosa_je/screens/register_page.dart';
 
 class LoginPage extends StatelessWidget {
   @override

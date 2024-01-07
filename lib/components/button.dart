@@ -21,16 +21,19 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 18),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextButton(
         child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-                color:
-                    textColor, // Modifié pour utiliser la couleur personnalisée
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Text(
+              label,
+              style: TextStyle(
+                  color:
+                      textColor, // Modifié pour utiliser la couleur personnalisée
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16),
+            ),
           ),
         ),
         onPressed: onPressed,
