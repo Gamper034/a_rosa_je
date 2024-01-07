@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/components/text_field.dart';
 import 'package:a_rosa_je/constants.dart';
 import 'package:a_rosa_je/components/button.dart';
+import 'package:a_rosa_je/screens/login_page.dart';
 
 class UserForm extends StatefulWidget {
   @override
@@ -60,9 +61,16 @@ class _UserFormState extends State<UserForm> {
   }
 
   void _submit() {
-    if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState?.save();
-      // Vous pouvez maintenant utiliser _username, _email et _password
-    }
+    // if (_formKey.currentState?.validate() ?? false) {
+    //   _formKey.currentState?.save();
+    //   // Vous pouvez maintenant utiliser _username, _email et _password
+    // }
+    //Rediriger vers la page login
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              LoginPage()), // Remplacez par votre page d'inscription
+    );
   }
 }

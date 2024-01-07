@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/components/text_field.dart';
 import 'package:a_rosa_je/constants.dart';
 import 'package:a_rosa_je/components/button.dart';
+import 'package:a_rosa_je/screens/confirm_sign_up.dart';
 
 class BotanistForm extends StatefulWidget {
   @override
@@ -67,9 +68,15 @@ class _BotanistFormState extends State<BotanistForm> {
   }
 
   void _submit() {
-    if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState?.save();
-      // Vous pouvez maintenant utiliser _username, _email et _password
-    }
+    // if (_formKey.currentState?.validate() ?? false) {
+    //   _formKey.currentState?.save();
+    //   // Vous pouvez maintenant utiliser _username, _email et _password
+    // }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              ConfirmSignUp()), // Remplacez par votre page d'inscription
+    );
   }
 }
