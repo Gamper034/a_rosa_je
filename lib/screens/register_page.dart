@@ -1,22 +1,22 @@
-import 'package:a_rosa_je/screens/login_page.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/components/button.dart';
-import 'package:a_rosa_je/components/text_field.dart';
+import 'package:a_rosa_je/forms/botaniste_form.dart';
+import 'package:a_rosa_je/forms/user_form.dart';
+import 'package:a_rosa_je/screens/login_page.dart';
 import 'package:a_rosa_je/constants.dart';
+import 'package:flutter/gestures.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
-
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  bool isUserForm = true;
+
   @override
   Widget build(BuildContext context) {
-    double screenHeight =
-        MediaQuery.of(context).size.height; // Obtenir la hauteur de l'écran
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Center(
@@ -29,7 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: EdgeInsets.only(
                     top: screenHeight * 0.1,
                     bottom: screenHeight * 0.05,
-                  ), // 10% de la hauteur de l'écran en haut, 5% en bas
+                  ),
                   child: Container(
                     width: 110,
                     height: 110,
@@ -51,55 +51,51 @@ class _RegisterPageState extends State<RegisterPage> {
                 Container(
                   child: Row(children: [
                     Expanded(
-                      child: Container(
-                        child: CustomButton(
-                          onPressed: () {},
-                          label: 'Utilisateur',
-                          buttonColor: AppColors.primaryColor,
-                          textColor: Colors.white,
-                        ),
+                      child: CustomButton(
+                        buttonColor: isUserForm
+                            ? AppColors.primaryColor
+                            : AppColors.secondaryColor,
+                        textColor:
+                            isUserForm ? Colors.white : AppColors.textColor,
+                        onPressed: () {
+                          setState(() {
+                            isUserForm = true;
+                          });
+                        },
+                        label: 'Utilisateur',
+                        // Ajoutez les autres propriétés pour conserver le style du bouton
                       ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    SizedBox(width: 10),
                     Expanded(
-                      child: Container(
-                        child: CustomButton(
-                          onPressed: () {},
-                          label: 'Botaniste',
-                          buttonColor: AppColors.secondaryColor,
-                          textColor: AppColors.textColor,
-                        ),
+                      child: CustomButton(
+                        buttonColor: isUserForm
+                            ? AppColors.secondaryColor
+                            : AppColors.primaryColor,
+                        textColor:
+                            isUserForm ? AppColors.textColor : Colors.white,
+                        onPressed: () {
+                          setState(() {
+                            isUserForm = false;
+                          });
+                        },
+                        label: 'Botaniste',
+                        // Ajoutez les autres propriétés pour conserver le style du bouton
                       ),
                     ),
                   ]),
                 ),
                 Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: 20,
                 ),
-                Container(
-                  child: Column(
-                    children: [
-                      CustomTextField(
-                          hintText: 'Prénom', color: AppColors.textColor),
-                      CustomTextField(
-                          hintText: 'Nom', color: AppColors.textColor),
-                      CustomTextField(
-                          hintText: 'Email', color: AppColors.textColor),
-                      CustomTextField(
-                          hintText: 'Mot de passe', color: AppColors.textColor),
-                      CustomButton(
-                          onPressed: () {},
-                          label: "S'inscrire",
-                          buttonColor: AppColors.primaryColor,
-                          textColor: Colors.white),
-                    ],
-                  ),
-                ),
+
+                // ...
+
+                isUserForm ? UserForm() : BotanistForm(),
+
                 Padding(
-                  padding: const EdgeInsets.only(top: 60.0),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Container(
                     child: RichText(
                       text: TextSpan(

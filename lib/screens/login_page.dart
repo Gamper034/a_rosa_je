@@ -20,8 +20,8 @@ class LoginPage extends StatelessWidget {
                 child: Image.asset('assets/images/logos/logo_blanc.png'),
               ),
               // Spacer(),
-              Expanded(
-                flex: 1,
+              Padding(
+                padding: EdgeInsets.only(bottom: 5),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: CustomTextField(
@@ -31,8 +31,8 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
 
-              Expanded(
-                flex: 1,
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: CustomTextField(
@@ -42,8 +42,8 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 1,
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: CustomButton(
