@@ -43,7 +43,6 @@ class ConfirmSignUp extends StatelessWidget {
                 ),
                 //Ajout du bouton de retour à la page de connexion
                 Container(
-                  height: 70,
                   child: CustomButton(
                     onPressed: () {
                       Navigator.push(
