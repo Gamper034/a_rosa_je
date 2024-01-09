@@ -8,7 +8,6 @@ import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/components/text_field.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -220,14 +219,6 @@ class _BotanistFormState extends State<BotanistForm> {
   }
 
   void _submit() {
-    var bodyBotanist = {
-      'role': _role,
-      'firstname': _firstname,
-      'lastname': _lastname,
-      'email': _email,
-      'siret': _siret,
-      'password': _password,
-    };
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
       registerBotanist(_role, _firstname, _lastname, _email, _siret,
