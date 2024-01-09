@@ -6,6 +6,7 @@ class CustomTextField extends StatelessWidget {
   final Color color;
   final FormFieldSetter<String>? onSaved;
   final FormFieldValidator<String>? validator;
+  final Color? errorColor;
 
   CustomTextField({
     required this.hintText,
@@ -13,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     required this.color,
     this.onSaved,
     this.validator,
+    this.errorColor,
   });
 
   @override
@@ -39,6 +41,15 @@ class CustomTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(width: 0.5, color: color),
           ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 0.5, color: errorColor ?? Colors.red),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 0.5, color: errorColor ?? Colors.red),
+          ),
+          errorStyle: TextStyle(color: errorColor),
         ),
         style: TextStyle(fontWeight: FontWeight.w300, color: color),
         obscureText: obscureText,

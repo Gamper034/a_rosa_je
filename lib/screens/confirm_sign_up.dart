@@ -21,7 +21,7 @@ class ConfirmSignUp extends StatelessWidget {
                 //Ajout du logo blanc
                 Expanded(
                   flex: 2,
-                  child: Image.asset('assets/images/logos/logo_blanc.png'),
+                  child: Image.asset('assets/images/logos/png/logo_blanc.png'),
                 ),
                 Spacer(
                   flex: 1,

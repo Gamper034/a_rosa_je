@@ -1,3 +1,4 @@
+import 'package:a_rosa_je/screens/confirm_sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/components/button.dart';
 import 'package:a_rosa_je/screens/login_page.dart';
@@ -7,6 +8,7 @@ import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/components/text_field.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -34,8 +36,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Container(
                       width: 110,
                       height: 110,
-                      child:
-                          Image.asset('assets/images/logos/logo_vert_noir.png'),
+                      child: Image.asset(
+                          'assets/images/logos/png/logo_vert_noir.png'),
                     ),
                   ),
 
@@ -218,33 +220,50 @@ class _BotanistFormState extends State<BotanistForm> {
   }
 
   void _submit() {
+    var bodyBotanist = {
+      'role': _role,
+      'firstname': _firstname,
+      'lastname': _lastname,
+      'email': _email,
+      'siret': _siret,
+      'password': _password,
+    };
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
-      registerBotanist(); // Appelle la fonction pour enregistrer l'utilisateur
+      registerBotanist(_role, _firstname, _lastname, _email, _siret,
+          _password); // Appelle la fonction pour enregistrer l'utilisateur
     }
   }
 
-  Future<void> registerBotanist() async {
+  Future<Map<String, dynamic>> registerBotanist(String role, String firstname,
+      String lastname, String email, String siret, String password) async {
     try {
+      final Map<String, dynamic> registrationData = {
+        'role': _role,
+        'firstname': _firstname,
+        'lastname': _lastname,
+        'email': _email,
+        'siret': _siret,
+        'password': _password,
+      };
+
       final response = await http.post(
         Uri.parse('http://localhost:2000/api/user/register'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, String>{
-          'role': _role,
-          'firstname': _firstname,
-          'lastname': _lastname,
-          'email': _email,
-          'siret': _siret,
-          'password': _password,
-        }),
+        body: jsonEncode(registrationData),
       );
 
       if (response.statusCode == 200) {
         print(response.body);
         print('User registered successfully');
-        Navigator.of(context).pushReplacementNamed('/confirmSignUp');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ConfirmSignUp())); // Remplacez par votre page d'inscription
+        return jsonDecode(response.body);
       } else {
         var responseBody = jsonDecode(response.body);
         if (response.statusCode == 400 &&
@@ -252,18 +271,21 @@ class _BotanistFormState extends State<BotanistForm> {
           setState(() {
             _errorMessage = 'Le botaniste existe déjà.';
           });
+          return responseBody;
         } else if (response.statusCode == 400 &&
             responseBody['message'] == "Invalid email") {
           setState(() {
             _errorMessage = 'L\'email est invalide.';
           });
+          return responseBody;
         } else {
           print('Failed to register user. Status code: ${response.statusCode}');
           print('Response body: ${response.body}');
+          return responseBody;
         }
       }
     } catch (e) {
-      print('An error occurred: $e');
+      throw Exception('Failed to register user: $e');
     }
   }
 }
@@ -339,30 +361,38 @@ class _UserFormState extends State<UserForm> {
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
-      registerUser(); // Appelle la fonction pour enregistrer l'utilisateur
+      registerUser(_role, _firstname, _lastname, _email,
+          _password); // Appelle la fonction pour enregistrer l'utilisateur
     }
   }
 
-  Future<void> registerUser() async {
+  Future<Map<String, dynamic>> registerUser(String role, String firstname,
+      String lastname, String email, String password) async {
+    final Map<String, dynamic> registrationData = {
+      'role': _role,
+      'firstname': _firstname,
+      'lastname': _lastname,
+      'email': _email,
+      'password': _password,
+    };
     try {
       final response = await http.post(
         Uri.parse('http://localhost:2000/api/user/register'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, String>{
-          'role': _role,
-          'firstname': _firstname,
-          'lastname': _lastname,
-          'email': _email,
-          'password': _password,
-        }),
+        body: jsonEncode(registrationData),
       );
 
       if (response.statusCode == 200) {
         print(response.body);
         print('User registered successfully');
-        Navigator.of(context).pushReplacementNamed('/login');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    LoginPage())); // Remplacez par votre page d'inscription
+        return jsonDecode(response.body);
       } else {
         var responseBody = jsonDecode(response.body);
         if (response.statusCode == 400 &&
@@ -370,18 +400,21 @@ class _UserFormState extends State<UserForm> {
           setState(() {
             _errorMessage = 'L\'utilisateur existe déjà.';
           });
+          return responseBody;
         } else if (response.statusCode == 400 &&
             responseBody['message'] == "Invalid email") {
           setState(() {
             _errorMessage = 'L\'email est invalide.';
           });
+          return responseBody;
         } else {
           print('Failed to register user. Status code: ${response.statusCode}');
           print('Response body: ${response.body}');
+          return responseBody;
         }
       }
     } catch (e) {
-      print('An error occurred: $e');
+      throw Exception('Failed to register user: $e');
     }
   }
 }
