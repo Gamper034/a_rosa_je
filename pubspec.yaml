@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   flutter_launcher_icons: ^0.13.1
+  http: ^1.1.2
   flutter:
     sdk: flutter
 

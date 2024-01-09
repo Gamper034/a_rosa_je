@@ -5,6 +5,8 @@ import 'package:a_rosa_je/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/components/text_field.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -16,8 +18,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -28,8 +28,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(
-                      top: screenHeight * 0.1,
-                      bottom: screenHeight * 0.05,
+                      top: 80,
+                      bottom: 30,
                     ),
                     child: Container(
                       width: 110,
@@ -66,7 +66,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             });
                           },
                           label: 'Utilisateur',
-                          // Ajoutez les autres propriétés pour conserver le style du bouton
                         ),
                       ),
                       SizedBox(width: 10),
@@ -83,7 +82,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             });
                           },
                           label: 'Botaniste',
-                          // Ajoutez les autres propriétés pour conserver le style du bouton
                         ),
                       ),
                     ]),
@@ -100,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   isUserForm ? UserForm() : BotanistForm(),
 
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: 10),
                     child: Container(
                       child: RichText(
                         text: TextSpan(
@@ -122,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => LoginPage(),
-                                    ), // Remplacez par votre page d'inscription
+                                    ),
                                   );
                                 },
                             ),
@@ -148,7 +146,13 @@ class BotanistForm extends StatefulWidget {
 
 class _BotanistFormState extends State<BotanistForm> {
   final _formKey = GlobalKey<FormState>();
-  String? _firstname, _lastname, _email, _password, _siret;
+  String _firstname = '';
+  String _lastname = '';
+  String _email = '';
+  String _siret = '';
+  String _password = '';
+  String _role = 'botanist';
+  String _errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -160,28 +164,28 @@ class _BotanistFormState extends State<BotanistForm> {
             CustomTextField(
               color: textColor,
               hintText: "Prénom",
-              onSaved: (value) => _firstname = value,
+              onSaved: (value) => _firstname = value ?? '',
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
             ),
             CustomTextField(
               color: textColor,
               hintText: "Nom",
-              onSaved: (value) => _lastname = value,
+              onSaved: (value) => _lastname = value ?? '',
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
             ),
             CustomTextField(
               color: textColor,
               hintText: "Email",
-              onSaved: (value) => _email = value,
+              onSaved: (value) => _email = value ?? '',
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
             ),
             CustomTextField(
               color: textColor,
               hintText: "N° de SIRET",
-              onSaved: (value) => _siret = value,
+              onSaved: (value) => _siret = value ?? '',
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
             ),
@@ -189,7 +193,7 @@ class _BotanistFormState extends State<BotanistForm> {
               color: textColor,
               hintText: "Mot de passe",
               obscureText: true,
-              onSaved: (value) => _password = value,
+              onSaved: (value) => _password = value ?? '',
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
             ),
@@ -200,6 +204,13 @@ class _BotanistFormState extends State<BotanistForm> {
               buttonColor: primaryColor,
               textColor: Colors.white,
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 1),
+              child: Text(
+                _errorMessage,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
           ],
         ),
       ),
@@ -208,15 +219,52 @@ class _BotanistFormState extends State<BotanistForm> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState?.save();
-      // Vous pouvez maintenant utiliser _username, _email et _password
+      _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
+      registerBotanist(); // Appelle la fonction pour enregistrer l'utilisateur
     }
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //       builder: (context) =>
-    //           ConfirmSignUp()), // Remplacez par votre page d'inscription
-    // );
+  }
+
+  Future<void> registerBotanist() async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:2000/api/user/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'role': _role,
+          'firstname': _firstname,
+          'lastname': _lastname,
+          'email': _email,
+          'siret': _siret,
+          'password': _password,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        print('User registered successfully');
+        Navigator.of(context).pushReplacementNamed('/confirmSignUp');
+      } else {
+        var responseBody = jsonDecode(response.body);
+        if (response.statusCode == 400 &&
+            responseBody['message'] == 'User already exists') {
+          setState(() {
+            _errorMessage = 'Le botaniste existe déjà.';
+          });
+        } else if (response.statusCode == 400 &&
+            responseBody['message'] == "Invalid email") {
+          setState(() {
+            _errorMessage = 'L\'email est invalide.';
+          });
+        } else {
+          print('Failed to register user. Status code: ${response.statusCode}');
+          print('Response body: ${response.body}');
+        }
+      }
+    } catch (e) {
+      print('An error occurred: $e');
+    }
   }
 }
 
@@ -227,7 +275,12 @@ class UserForm extends StatefulWidget {
 
 class _UserFormState extends State<UserForm> {
   final _formKey = GlobalKey<FormState>();
-  String? _firstname, _lastname, _email, _password;
+  String _firstname = '';
+  String _lastname = '';
+  String _email = '';
+  String _password = '';
+  String _role = 'user';
+  String _errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -238,21 +291,21 @@ class _UserFormState extends State<UserForm> {
           CustomTextField(
             color: AppColors.textColor,
             hintText: "Prénom",
-            onSaved: (value) => _firstname = value,
+            onSaved: (value) => _firstname = value ?? '',
             validator: (value) =>
                 value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
           ),
           CustomTextField(
             color: AppColors.textColor,
             hintText: "Nom",
-            onSaved: (value) => _lastname = value,
+            onSaved: (value) => _lastname = value ?? '',
             validator: (value) =>
                 value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
           ),
           CustomTextField(
             color: AppColors.textColor,
             hintText: "Email",
-            onSaved: (value) => _email = value,
+            onSaved: (value) => _email = value ?? '',
             validator: (value) =>
                 value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
           ),
@@ -260,7 +313,7 @@ class _UserFormState extends State<UserForm> {
             color: AppColors.textColor,
             hintText: "Mot de passe",
             obscureText: true,
-            onSaved: (value) => _password = value,
+            onSaved: (value) => _password = value ?? '',
             validator: (value) =>
                 value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
           ),
@@ -271,6 +324,13 @@ class _UserFormState extends State<UserForm> {
             buttonColor: AppColors.primaryColor,
             textColor: Colors.white,
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Text(
+              _errorMessage,
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
         ],
       ),
     );
@@ -278,15 +338,50 @@ class _UserFormState extends State<UserForm> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState?.save();
-      // Vous pouvez maintenant utiliser _username, _email et _password
+      _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
+      registerUser(); // Appelle la fonction pour enregistrer l'utilisateur
     }
-    //Rediriger vers la page login
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //       builder: (context) =>
-    //           LoginPage()), // Remplacez par votre page d'inscription
-    // );
+  }
+
+  Future<void> registerUser() async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:2000/api/user/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'role': _role,
+          'firstname': _firstname,
+          'lastname': _lastname,
+          'email': _email,
+          'password': _password,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        print('User registered successfully');
+        Navigator.of(context).pushReplacementNamed('/login');
+      } else {
+        var responseBody = jsonDecode(response.body);
+        if (response.statusCode == 400 &&
+            responseBody['message'] == 'User already exists') {
+          setState(() {
+            _errorMessage = 'L\'utilisateur existe déjà.';
+          });
+        } else if (response.statusCode == 400 &&
+            responseBody['message'] == "Invalid email") {
+          setState(() {
+            _errorMessage = 'L\'email est invalide.';
+          });
+        } else {
+          print('Failed to register user. Status code: ${response.statusCode}');
+          print('Response body: ${response.body}');
+        }
+      }
+    } catch (e) {
+      print('An error occurred: $e');
+    }
   }
 }
