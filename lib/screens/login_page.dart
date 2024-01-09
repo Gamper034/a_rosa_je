@@ -5,6 +5,7 @@ import 'package:a_rosa_je/components/text_field.dart';
 // import 'package:a_rosa_je/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:a_rosa_je/screens/register_page.dart';
+import 'package:a_rosa_je/screens/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -60,10 +61,26 @@ class _LoginPageState extends State<LoginPage> {
               //     ),
               //   ),
               // ),
+
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: CustomButton(onPressed: () {}, label: "Se connecter"),
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: CustomButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage(), // Remplacez HomePage() par votre widget de page d'accueil
+                        ),
+                      );
+                    },
+                    label: "Se connecter",
+                  ),
+                ),
               ),
+
               Spacer(flex: 2),
               Expanded(
                 child: RichText(
