@@ -221,62 +221,36 @@ class _BotanistFormState extends State<BotanistForm> {
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
-      registerBotanist(_role, _firstname, _lastname, _email, _siret,
-          _password); // Appelle la fonction pour enregistrer l'utilisateur
+      confirmRegisterBotanist();
     }
   }
 
-  Future<Map<String, dynamic>> registerBotanist(String role, String firstname,
-      String lastname, String email, String siret, String password) async {
-    try {
-      final Map<String, dynamic> registrationData = {
-        'role': _role,
-        'firstname': _firstname,
-        'lastname': _lastname,
-        'email': _email,
-        'siret': _siret,
-        'password': _password,
-      };
+  void confirmRegisterBotanist() async {
+    var result = await registerBotanist(
+        _role, _firstname, _lastname, _email, _siret, _password);
 
-      final response = await http.post(
-        Uri.parse('http://localhost:2000/api/user/register'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(registrationData),
-      );
-
-      if (response.statusCode == 200) {
-        print(response.body);
-        print('User registered successfully');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    ConfirmSignUp())); // Remplacez par votre page d'inscription
-        return jsonDecode(response.body);
-      } else {
-        var responseBody = jsonDecode(response.body);
-        if (response.statusCode == 400 &&
-            responseBody['message'] == 'User already exists') {
-          setState(() {
-            _errorMessage = 'Le botaniste existe déjà.';
-          });
-          return responseBody;
-        } else if (response.statusCode == 400 &&
-            responseBody['message'] == "Invalid email") {
-          setState(() {
-            _errorMessage = 'L\'email est invalide.';
-          });
-          return responseBody;
-        } else {
-          print('Failed to register user. Status code: ${response.statusCode}');
-          print('Response body: ${response.body}');
-          return responseBody;
-        }
-      }
-    } catch (e) {
-      throw Exception('Failed to register user: $e');
+    if (result['statusCode'] == 200) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ConfirmSignUp())); // Remplacez par votre page d'inscription
+    } else if (result['statusCode'] == 400 &&
+        result['body']['message'] == 'User already exists') {
+      setState(() {
+        _errorMessage = 'Le botaniste existe déjà.';
+      });
+    } else if (result['statusCode'] == 400 &&
+        result['body']['message'] == "Invalid email") {
+      setState(() {
+        _errorMessage = 'L\'email est invalide.';
+      });
+    } else {
+      print('Failed to register user. Status code: ${result['statusCode']}');
+      print('Response body: ${result['body']}');
+      setState(() {
+        _errorMessage = 'Une erreur est survenue.';
+      });
     }
   }
 }
@@ -352,60 +326,93 @@ class _UserFormState extends State<UserForm> {
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
-      registerUser(_role, _firstname, _lastname, _email,
-          _password); // Appelle la fonction pour enregistrer l'utilisateur
+      confirmRegisterUser(); // Appelle la fonction pour enregistrer l'utilisateur
     }
   }
 
-  Future<Map<String, dynamic>> registerUser(String role, String firstname,
-      String lastname, String email, String password) async {
-    final Map<String, dynamic> registrationData = {
-      'role': _role,
-      'firstname': _firstname,
-      'lastname': _lastname,
-      'email': _email,
-      'password': _password,
-    };
-    try {
-      final response = await http.post(
-        Uri.parse('http://localhost:2000/api/user/register'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(registrationData),
-      );
+  void confirmRegisterUser() async {
+    var result =
+        await registerUser(_role, _firstname, _lastname, _email, _password);
 
-      if (response.statusCode == 200) {
-        print(response.body);
-        print('User registered successfully');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    LoginPage())); // Remplacez par votre page d'inscription
-        return jsonDecode(response.body);
-      } else {
-        var responseBody = jsonDecode(response.body);
-        if (response.statusCode == 400 &&
-            responseBody['message'] == 'User already exists') {
-          setState(() {
-            _errorMessage = 'L\'utilisateur existe déjà.';
-          });
-          return responseBody;
-        } else if (response.statusCode == 400 &&
-            responseBody['message'] == "Invalid email") {
-          setState(() {
-            _errorMessage = 'L\'email est invalide.';
-          });
-          return responseBody;
-        } else {
-          print('Failed to register user. Status code: ${response.statusCode}');
-          print('Response body: ${response.body}');
-          return responseBody;
-        }
-      }
-    } catch (e) {
-      throw Exception('Failed to register user: $e');
+    if (result['statusCode'] == 200) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  LoginPage())); // Remplacez par votre page d'inscription
+    } else if (result['statusCode'] == 400 &&
+        result['body']['message'] == 'User already exists') {
+      setState(() {
+        _errorMessage = "L'utilisateur existe déjà.";
+      });
+    } else if (result['statusCode'] == 400 &&
+        result['body']['message'] == "Invalid email") {
+      setState(() {
+        _errorMessage = 'L\'email est invalide.';
+      });
+    } else {
+      print('Failed to register user. Status code: ${result['statusCode']}');
+      print('Response body: ${result['body']}');
+      setState(() {
+        _errorMessage = 'Une erreur est survenue.';
+      });
     }
+  }
+}
+
+Future<Map<String, dynamic>> registerBotanist(String role, String firstname,
+    String lastname, String email, String siret, String password) async {
+  try {
+    final Map<String, dynamic> registrationData = {
+      'role': role,
+      'firstname': firstname,
+      'lastname': lastname,
+      'email': email,
+      'siret': siret,
+      'password': password,
+    };
+
+    final response = await http.post(
+      Uri.parse('http://localhost:2000/api/user/register'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(registrationData),
+    );
+
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
+  } catch (e) {
+    throw Exception('Failed to register user: $e');
+  }
+}
+
+Future<Map<String, dynamic>> registerUser(String role, String firstname,
+    String lastname, String email, String password) async {
+  try {
+    final Map<String, dynamic> registrationData = {
+      'role': role,
+      'firstname': firstname,
+      'lastname': lastname,
+      'email': email,
+      'password': password,
+    };
+
+    final response = await http.post(
+      Uri.parse('http://localhost:2000/api/user/register'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(registrationData),
+    );
+
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
+  } catch (e) {
+    throw Exception('Failed to register user: $e');
   }
 }
