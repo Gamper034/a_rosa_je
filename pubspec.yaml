@@ -28,7 +28,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  flutter_launcher_icons: ^0.13.1
+  flutter_svg: ^2.0.9
+  flutter_secure_storage: ^9.0.0
+  flutter_launcher_icons: ^0.11.0
+  http: ^1.1.2
   flutter:
     sdk: flutter
 
@@ -39,6 +42,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^5.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -52,7 +56,8 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/logos/logo_noir.png"
+  image_path: "assets/images/logos/png/logo_noir.png"
+  adaptive_icon_background: "#FFFFFF"
 # The following section is specific to Flutter packages.
 flutter:
 
@@ -63,7 +68,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/logos/
+    - assets/images/logos/svg/
+    - assets/images/logos/png/
     - assets/images/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see

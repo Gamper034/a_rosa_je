@@ -1,3 +1,3 @@
 import 'package:flutter/material.dart';
 
-TextStyle test = TextStyle(color: Colors.white);
+TextStyle white = TextStyle(color: Colors.white);

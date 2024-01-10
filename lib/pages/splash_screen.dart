@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:a_rosa_je/screens/login_page.dart'; // Importez votre page de connexion
+import 'package:a_rosa_je/services/user.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -10,11 +10,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
+
+    Future.delayed(Duration(seconds: 2), () {
+      UserService userService = UserService();
+      userService.checkLoginStatus(context);
+      // userService.logout(context);
     });
   }
 
@@ -26,8 +26,8 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FractionallySizedBox(
-              widthFactor: 0.3, // 50% de la largeur de l'écran
-              child: Image.asset('assets/images/logos/logo_noir.png'),
+              widthFactor: 0.3,
+              child: Image.asset('assets/images/logos/png/logo_noir.png'),
             ),
           ],
         ),
