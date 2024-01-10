@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:a_rosa_je/components/button.dart';
+import 'package:a_rosa_je/widgets/button.dart';
 import 'package:a_rosa_je/constants.dart';
-import 'package:a_rosa_je/screens/login_page.dart';
-import 'package:a_rosa_je/components/toast_info.dart';
+import 'package:a_rosa_je/pages/login_page.dart';
+import 'package:a_rosa_je/widgets/toast_info.dart';
 
 class ConfirmSignUp extends StatelessWidget {
   const ConfirmSignUp({super.key});

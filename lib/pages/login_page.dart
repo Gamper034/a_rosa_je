@@ -1,15 +1,14 @@
-import 'package:a_rosa_je/screens/home_page.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:a_rosa_je/components/button.dart';
-import 'package:a_rosa_je/components/text_field.dart';
+import 'package:a_rosa_je/widgets/button.dart';
+import 'package:a_rosa_je/widgets/text_field.dart';
 // import 'package:a_rosa_je/constants.dart';
 import 'package:flutter/gestures.dart';
-import 'package:a_rosa_je/screens/register_page.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:a_rosa_je/pages/register/register_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:a_rosa_je/services/user.dart';
+import 'package:a_rosa_je/services/api/auth_api.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,9 +17,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  String _email = '';
-  String _password = '';
-  String _errorMessage = '';
+  String errorMessage = '';
+  String email = '';
+  String password = '';
+  Future<String>? auth;
 
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
@@ -36,9 +36,8 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               Expanded(
                 flex: 4,
-                child: SvgPicture.asset(
-                  'assets/images/logos/svg/Logo_Blanc.svg',
-                  colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                child: Image.asset(
+                  'assets/images/logos/png/logo_blanc.png',
                 ),
               ),
               // Spacer(),
@@ -49,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: CustomTextField(
                     color: Colors.white,
                     hintText: "Email",
-                    onSaved: (value) => _email = value ?? '',
+                    onSaved: (value) => email = value ?? '',
                     validator: (value) => value?.isEmpty ?? true
                         ? 'Veuillez entrer votre email'
                         : null,
@@ -66,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.white,
                     hintText: "Mot de passe",
                     obscureText: true,
-                    onSaved: (value) => _password = value ?? '',
+                    onSaved: (value) => password = value ?? '',
                     validator: (value) => value?.isEmpty ?? true
                         ? 'Veuillez entrer votre mot de passe'
                         : null,
@@ -80,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: CustomButton(
-                    onPressed: _submit,
+                    onPressed: _login,
                     label: 'Se connecter',
                     buttonColor: Colors.white,
                     textColor: primaryColor,
@@ -88,10 +87,13 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  _errorMessage,
-                  style: TextStyle(color: Colors.white),
+                padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+                child: Center(
+                  child: Text(
+                    errorMessage,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
 
@@ -130,92 +132,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _submit() {
+  Future<void> _login() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
-      authentification(); // Appelle la fonction pour enregistrer l'utilisateur
-    }
-  }
-
-  Future<void> authentification() async {
-    var body = jsonEncode(<String, String>{
-      'email': _email,
-      'password': _password,
-    });
-    try {
-      final response = await http.post(
-        Uri.parse('http://localhost:1000/api/login'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: body,
+      AuthApi authApi = AuthApi();
+      String result = await authApi.authentification(
+        context,
+        email,
+        password,
       );
 
-      var responseBody = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        print(response.body);
-        print('Login successful');
-        // Récupérez le JWT du cookie
-        String rawCookie = response.headers['set-cookie']!;
-        int index = rawCookie.indexOf(';');
-        String jwt = (index == -1) ? rawCookie : rawCookie.substring(0, index);
-
-        // Stockez le JWT
-        await storage.write(key: 'jwt', value: jwt);
-
-        Navigator.pushAndRemoveUntil<void>(
-          context,
-          MaterialPageRoute(builder: (BuildContext context) => HomePage()),
-          ModalRoute.withName('/home'), // Ajout de l'argument manquant
-        );
-      } else {
-        if (response.statusCode == 400 &&
-            responseBody['message'] == 'Identifiants incorrects') {
-          setState(() {
-            _errorMessage =
-                'Vos identifiants sont incorrects ou n\'existent pas.';
-          });
-        } else if (responseBody['message'] ==
-            'Votre compte est en attente de validation') {
-          print(response.body);
-          print('not verified');
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(
-                  'Compte Botaniste',
-                  textAlign: TextAlign.center,
-                ),
-                content: Text(
-                  'Votre compte est en attente de validation par un administrateur.',
-                  textAlign: TextAlign.center,
-                ),
-                actions: <Widget>[
-                  Center(
-                    child: CustomButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        label: 'Fermer',
-                        textColor: primaryColor,
-                        buttonColor: Colors.transparent),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          print(response.body);
-          print(body);
-          setState(() {
-            _errorMessage = 'Problème de connexion. Veuillez réessayer.';
-          });
-        }
-      }
-    } catch (e) {
-      print('An error occurred: $e');
+      setState(() {
+        errorMessage = result;
+      });
     }
   }
 }
