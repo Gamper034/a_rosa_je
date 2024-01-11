@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/widgets/button.dart';
-import 'package:a_rosa_je/constants.dart';
 import 'package:a_rosa_je/pages/login_page.dart';
 import 'package:a_rosa_je/widgets/toast_info.dart';
+import 'package:a_rosa_je/theme/theme.dart';
 
 class ConfirmSignUp extends StatelessWidget {
   const ConfirmSignUp({super.key});
@@ -11,7 +11,7 @@ class ConfirmSignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: primaryColor,
         body: Center(
           child: Padding(
             padding:
@@ -30,7 +30,7 @@ class ConfirmSignUp extends StatelessWidget {
                 Container(
                   child: ToastInfo(
                     height: 250,
-                    backgroundColor: AppColors.solidGreen,
+                    backgroundColor: solidGreen,
                     textColor: Colors.white,
                     firstText: 'Votre inscription a bien été enregistrée',
                     secondText:

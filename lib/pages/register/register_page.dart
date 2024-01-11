@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/widgets/button.dart';
 import 'package:a_rosa_je/pages/login_page.dart';
-import 'package:a_rosa_je/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:a_rosa_je/pages/register/user_form.dart';
 import 'package:a_rosa_je/pages/register/botanist_form.dart';
+import 'package:a_rosa_je/theme/theme.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -53,11 +53,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Row(children: [
                       Expanded(
                         child: CustomButton(
-                          buttonColor: isUserForm
-                              ? AppColors.primaryColor
-                              : AppColors.secondaryColor,
-                          textColor:
-                              isUserForm ? Colors.white : AppColors.textColor,
+                          buttonColor:
+                              isUserForm ? primaryColor : secondaryColor,
+                          textColor: isUserForm ? Colors.white : textColor,
                           onPressed: () {
                             setState(() {
                               isUserForm = true;
@@ -69,11 +67,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       SizedBox(width: 10),
                       Expanded(
                         child: CustomButton(
-                          buttonColor: isUserForm
-                              ? AppColors.secondaryColor
-                              : AppColors.primaryColor,
-                          textColor:
-                              isUserForm ? AppColors.textColor : Colors.white,
+                          buttonColor:
+                              isUserForm ? secondaryColor : primaryColor,
+                          textColor: isUserForm ? textColor : Colors.white,
                           onPressed: () {
                             setState(() {
                               isUserForm = false;
@@ -102,14 +98,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         text: TextSpan(
                           text: 'Déjà inscrit ? ',
                           style: TextStyle(
-                              color: AppColors.textColor,
-                              fontWeight: FontWeight.w500),
+                              color: textColor, fontWeight: FontWeight.w500),
                           children: <TextSpan>[
                             TextSpan(
                               text: 'Se connecter',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.primaryColor,
+                                color: primaryColor,
                                 decoration: TextDecoration.underline,
                               ),
                               recognizer: TapGestureRecognizer()

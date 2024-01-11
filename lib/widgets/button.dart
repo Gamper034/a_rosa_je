@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:a_rosa_je/constants.dart';
+// import 'package:a_rosa_je/constants.dart';
+import 'package:a_rosa_je/theme/theme.dart';
 
 class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -14,8 +15,8 @@ class CustomButton extends StatelessWidget {
     required this.label,
     this.buttonColor =
         Colors.white, // Par défaut, la couleur du bouton est blanche
-    this.textColor = AppColors
-        .primaryColor, // Par défaut, la couleur du texte est la couleur primaire de l'application
+    this.textColor =
+        primaryColor, // Par défaut, la couleur du texte est la couleur primaire de l'application
   });
 //OutlinedButton
   @override
