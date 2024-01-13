@@ -106,9 +106,16 @@ class _HomePage extends State<HomePage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(LucideIcons.user),
-              label: 'Profil',
+              label: 'Mon Compte',
             ),
           ],
+          iconSize: 25,
+          selectedLabelStyle: TextStyle(
+              fontSize:
+                  11), // Réduisez cette valeur pour réduire la taille du texte
+          unselectedLabelStyle: TextStyle(
+              fontSize:
+                  11), // Réduisez cette valeur pour réduire la taille du texte
         ));
   }
 }
