@@ -62,6 +62,8 @@ class UserService {
 
   void logout(context) async {
     await storage.delete(key: 'jwt');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('user');
     Navigator.pushReplacementNamed(context, '/login');
   }
 }

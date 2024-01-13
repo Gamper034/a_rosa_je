@@ -51,7 +51,7 @@ class _HomePage extends State<HomePage> {
     AppBar(
       title: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Profil'),
+        child: Text('Mon Compte'),
       ),
       backgroundColor: Colors.white,
     ),
