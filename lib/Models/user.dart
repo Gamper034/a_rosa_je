@@ -16,7 +16,7 @@ class User {
   List<Guard>? applications = [];
   List<Message>? messages = [];
   List<Advice>? advices = [];
-  // DateTime createdAt;
+  DateTime createdAt;
 
   User({
     required this.id,
@@ -32,7 +32,7 @@ class User {
     this.applications,
     this.messages,
     this.advices,
-    // required this.createdAt,
+    required this.createdAt,
   });
 
   // Méthode fromJson
@@ -44,7 +44,7 @@ class User {
       lastname: json['lastname'],
       role: json['role'],
       avatar: json['avatar'],
-      // createdAt: json['createdAt'],
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 
@@ -57,7 +57,7 @@ class User {
       'lastname': lastname,
       'role': role,
       'avatar': avatar,
-      // 'createdAt': createdAt,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 }

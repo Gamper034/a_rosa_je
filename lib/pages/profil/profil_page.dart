@@ -5,6 +5,7 @@ import 'package:a_rosa_je/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:a_rosa_je/services/user.dart';
+import 'package:intl/intl.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({super.key});
@@ -58,9 +59,18 @@ class ProfilPage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            user.email,
+                            'Inscrit(e) le ' +
+                                DateFormat('d MMMM yyyy', 'fr_FR')
+                                    .format(user.createdAt),
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            '20 Plantes gardées',
+                            style: TextStyle(
+                              fontSize: 12,
                               color: Colors.grey,
                             ),
                           ),
