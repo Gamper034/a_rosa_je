@@ -20,23 +20,38 @@ class _HomePage extends State<HomePage> {
 
   List<AppBar> _appBar = [
     AppBar(
-      title: Text('Dernière demandes'),
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text('Dernière demandes'),
+      ),
       backgroundColor: Colors.white,
     ),
     AppBar(
-      title: Text('Mes gardes'),
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text('Mes gardes'),
+      ),
       backgroundColor: Colors.white,
     ),
     AppBar(
-      title: Text('Demande de garde'),
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text('Demande de garde'),
+      ),
       backgroundColor: Colors.white,
     ),
     AppBar(
-      title: Text('Messages'),
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text('Messages'),
+      ),
       backgroundColor: Colors.white,
     ),
     AppBar(
-      title: Text('Profil'),
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text('Profil'),
+      ),
       backgroundColor: Colors.white,
     ),
   ];
