@@ -5,9 +5,9 @@ import 'package:a_rosa_je/models/guard.dart';
 class User {
   String id;
   String email;
-  String firstName;
-  String lastName;
-  String password;
+  String firstname;
+  String lastname;
+  // String password;
   String role;
   String? siret;
   String avatar;
@@ -16,14 +16,14 @@ class User {
   List<Guard>? applications = [];
   List<Message>? messages = [];
   List<Advice>? advices = [];
-  DateTime createdAt;
+  // DateTime createdAt;
 
   User({
     required this.id,
     required this.email,
-    required this.firstName,
-    required this.lastName,
-    required this.password,
+    required this.firstname,
+    required this.lastname,
+    // required this.password,
     required this.role,
     this.siret,
     required this.avatar,
@@ -32,6 +32,32 @@ class User {
     this.applications,
     this.messages,
     this.advices,
-    required this.createdAt,
+    // required this.createdAt,
   });
+
+  // Méthode fromJson
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      email: json['email'],
+      firstname: json['firstname'],
+      lastname: json['lastname'],
+      role: json['role'],
+      avatar: json['avatar'],
+      // createdAt: json['createdAt'],
+    );
+  }
+
+  // Méthode toJson
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'firstname': firstname,
+      'lastname': lastname,
+      'role': role,
+      'avatar': avatar,
+      // 'createdAt': createdAt,
+    };
+  }
 }

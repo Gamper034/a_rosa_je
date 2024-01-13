@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:a_rosa_je/pages/profil/profil_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -50,7 +51,7 @@ class _HomePage extends State<HomePage> {
     AppBar(
       title: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Profil'),
+        child: Text('Mon Compte'),
       ),
       backgroundColor: Colors.white,
     ),
@@ -70,7 +71,7 @@ class _HomePage extends State<HomePage> {
       child: Text('Messages'),
     ),
     Container(
-      child: Text('Profil'),
+      child: ProfilPage(),
     ),
   ];
 
@@ -106,9 +107,16 @@ class _HomePage extends State<HomePage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(LucideIcons.user),
-              label: 'Profil',
+              label: 'Mon Compte',
             ),
           ],
+          iconSize: 25,
+          selectedLabelStyle: TextStyle(
+              fontSize:
+                  11), // Réduisez cette valeur pour réduire la taille du texte
+          unselectedLabelStyle: TextStyle(
+              fontSize:
+                  11), // Réduisez cette valeur pour réduire la taille du texte
         ));
   }
 }
