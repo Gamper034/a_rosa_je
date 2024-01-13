@@ -73,12 +73,12 @@ class ProfilPage extends StatelessWidget {
                     color: secondaryColor,
                   ),
                   ProfilButton(
-                    onPressed: () => Navigator.pushNamed(context, '/profil'),
+                    onPressed: () {},
                     text: "Modifier mon profil",
                     icon: LucideIcons.pencil,
                   ),
                   ProfilButton(
-                    onPressed: () => Navigator.pushNamed(context, '/profil'),
+                    onPressed: () {},
                     text: "Aide",
                     icon: LucideIcons.helpCircle,
                   ),
