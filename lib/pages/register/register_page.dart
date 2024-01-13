@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/widgets/button.dart';
-import 'package:a_rosa_je/pages/login_page.dart';
+import 'package:a_rosa_je/pages/login/login_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:a_rosa_je/pages/register/user_form.dart';
 import 'package:a_rosa_je/pages/register/botanist_form.dart';
