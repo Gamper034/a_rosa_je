@@ -2,6 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:a_rosa_je/models/user.dart';
 
 class AuthApi {
   final storage = FlutterSecureStorage();
@@ -31,6 +33,19 @@ class AuthApi {
         int index = rawCookie.indexOf(';');
         String jwt = (index == -1) ? rawCookie : rawCookie.substring(0, index);
         await storage.write(key: 'jwt', value: jwt);
+        // Récupérer les données utilisateur de la réponse
+        Map<String, dynamic> userMap = responseBody['data']['user'];
+        // Construire l'objet User
+        User user = User.fromJson(userMap);
+
+        // Convertir l'objet User en JSON
+        String userJson = jsonEncode(user.toJson());
+
+        // Obtenir une instance de SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        // Stocker les données utilisateur
+        await prefs.setString('user', userJson);
         Navigator.pushReplacementNamed(context, '/home');
         return '';
       } else if (response.statusCode == 401 &&
