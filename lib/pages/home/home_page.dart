@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/pages/profil/profil_page.dart';
+import 'package:a_rosa_je/pages/guard/publish_guard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,35 +24,50 @@ class _HomePage extends State<HomePage> {
     AppBar(
       title: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Dernière demandes'),
+        child: Text(
+          'Dernière demandes',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
       ),
       backgroundColor: Colors.white,
     ),
     AppBar(
       title: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Mes gardes'),
+        child: Text(
+          'Mes gardes',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
       ),
       backgroundColor: Colors.white,
     ),
     AppBar(
       title: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Demande de garde'),
+        child: Text(
+          'Demande de garde',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
       ),
       backgroundColor: Colors.white,
     ),
     AppBar(
       title: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Messages'),
+        child: Text(
+          'Messages',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
       ),
       backgroundColor: Colors.white,
     ),
     AppBar(
       title: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Mon Compte'),
+        child: Text(
+          'Mon Compte',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
       ),
       backgroundColor: Colors.white,
     ),
@@ -65,7 +81,7 @@ class _HomePage extends State<HomePage> {
       child: Text('Gardes'),
     ),
     Container(
-      child: Text('Publier'),
+      child: PublishGuard(),
     ),
     Container(
       child: Text('Messages'),
