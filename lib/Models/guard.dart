@@ -5,10 +5,13 @@ import 'package:a_rosa_je/Models/user.dart';
 import 'package:a_rosa_je/Models/visit.dart';
 
 class Guard {
-  String id;
+  String? id;
   User owner;
   DateTime startDate;
   DateTime endDate;
+  String address;
+  String zipCode;
+  String city;
   List<User>? applicants = [];
   User? guardian;
   List<Plant>? plants = [];
@@ -18,10 +21,13 @@ class Guard {
   DateTime createdAt;
 
   Guard({
-    required this.id,
+    this.id,
     required this.owner,
     required this.startDate,
     required this.endDate,
+    required this.address,
+    required this.zipCode,
+    required this.city,
     this.applicants,
     this.guardian,
     this.plants,

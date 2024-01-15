@@ -2,6 +2,10 @@ import 'package:a_rosa_je/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class PublishGuard extends StatefulWidget {
   const PublishGuard({super.key});
@@ -12,72 +16,405 @@ class PublishGuard extends StatefulWidget {
 
 class _PublishGuardState extends State<PublishGuard> {
   final _formKey = GlobalKey<FormState>();
-  DateTime? _startDate;
-  DateTime? _endDate;
+  String? _startDate;
+  final _startDateController = TextEditingController();
+  final _endDateController = TextEditingController();
+  String? _endDate;
+  String? _address;
+  String? _zipCode;
+  String? _city;
+  int plantNumber = 0;
+  List<Widget> plantContainers = [];
+  File? _selectedImage;
 
   @override
   Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Dates', style: ArosajeTextStyle.titleFormTextStyle),
+                Divider(
+                  color: primaryColor,
+                ),
+                SizedBox(height: 10),
+                Text('Date de début:',
+                    style: ArosajeTextStyle.labelFormTextStyle),
+                CustomTextField(
+                  controller: _startDateController,
+                  onTap: () async {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      builder: (BuildContext context, Widget? child) {
+                        return Theme(
+                          data: ThemeData.light().copyWith(
+                            primaryColor:
+                                primaryColor, // Couleur principale pour le DatePicker
+
+                            hintColor:
+                                primaryColor, // Couleur d'accent pour le DatePicker
+                            colorScheme: ColorScheme.light(
+                              primary: primaryColor,
+                              secondary:
+                                  primaryColor, // Utilisé pour définir la couleur du bouton OK
+                            ),
+                            buttonTheme: ButtonThemeData(
+                                textTheme: ButtonTextTheme
+                                    .primary), // Utilisé pour les styles de bouton
+                            dialogBackgroundColor: Colors
+                                .white, // Couleur de fond pour le DatePicker
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (picked != null) {
+                      _startDateController.text =
+                          DateFormat('dd/MM/yyyy').format(picked);
+                    }
+                  },
+                  color: textColor,
+                  hintText: "Entrez une date",
+                  onSaved: (value) => _startDate = value,
+                  validator: (value) => value?.isEmpty ?? true
+                      ? 'Ce champ est obligatoire'
+                      : null,
+                ),
+                Text('Date de fin:',
+                    style: ArosajeTextStyle.labelFormTextStyle),
+                CustomTextField(
+                  controller: _endDateController,
+                  onTap: () async {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      builder: (BuildContext context, Widget? child) {
+                        return Theme(
+                          data: ThemeData.light().copyWith(
+                            primaryColor:
+                                primaryColor, // Couleur principale pour le DatePicker
+
+                            hintColor:
+                                primaryColor, // Couleur d'accent pour le DatePicker
+                            colorScheme: ColorScheme.light(
+                              primary: primaryColor,
+                              secondary:
+                                  primaryColor, // Utilisé pour définir la couleur du bouton OK
+                            ),
+                            buttonTheme: ButtonThemeData(
+                                textTheme: ButtonTextTheme
+                                    .primary), // Utilisé pour les styles de bouton
+                            dialogBackgroundColor: Colors
+                                .white, // Couleur de fond pour le DatePicker
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (picked != null) {
+                      _endDateController.text =
+                          DateFormat('dd/MM/yyyy').format(picked);
+                    }
+                  },
+                  color: textColor,
+                  hintText: "Entrez une date",
+                  onSaved: (value) => _endDate = value,
+                  validator: (value) => value?.isEmpty ?? true
+                      ? 'Ce champ est obligatoire'
+                      : null,
+                ),
+                SizedBox(height: 15),
+                Text('Adresse', style: ArosajeTextStyle.titleFormTextStyle),
+                Divider(
+                  color: primaryColor,
+                ),
+                SizedBox(height: 10),
+                Text('N° et libellé de rue:',
+                    style: ArosajeTextStyle.labelFormTextStyle),
+                CustomTextField(
+                  color: textColor,
+                  hintText: "Adresse",
+                  onSaved: (value) => _address = value,
+                  validator: (value) => value?.isEmpty ?? true
+                      ? 'Ce champ est obligatoire'
+                      : null,
+                ),
+                Text('Code postal:',
+                    style: ArosajeTextStyle.labelFormTextStyle),
+                CustomTextField(
+                  color: textColor,
+                  hintText: "",
+                  onSaved: (value) => _zipCode = value,
+                  validator: (value) => value?.isEmpty ?? true
+                      ? 'Ce champ est obligatoire'
+                      : null,
+                ),
+                Text('Ville:', style: ArosajeTextStyle.labelFormTextStyle),
+                CustomTextField(
+                  color: textColor,
+                  hintText: "",
+                  onSaved: (value) => _city = value,
+                  validator: (value) => value?.isEmpty ?? true
+                      ? 'Ce champ est obligatoire'
+                      : null,
+                ),
+                SizedBox(height: 15),
+                Text('Plantes à garder',
+                    style: ArosajeTextStyle.titleFormTextStyle),
+                Divider(
+                  color: primaryColor,
+                ),
+                SizedBox(height: 10),
+                Column(
+                  children: [
+                    for (int i = 0; i < plantContainers.length; i++) ...[
+                      _buildPlantContainer(i),
+                      if (i != plantContainers.length - 1)
+                        SizedBox(
+                            height:
+                                10), // Ajoute un espace entre les containers
+                    ],
+                    SizedBox(height: 20),
+                    CustomButton(
+                      onPressed: () {
+                        setState(() {
+                          plantContainers.add(
+                              _buildPlantContainer(plantContainers.length));
+                        });
+                      },
+                      label: 'Ajouter une plante',
+                      icon: LucideIcons.flower2,
+                      buttonColor: secondaryColor,
+                      textColor: Colors.black,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Divider(
+                  color: primaryColor,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                CustomButton(
+                  onPressed: _submit,
+                  label: 'Publier la demande de garde',
+                  buttonColor: primaryColor,
+                  textColor: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _submit() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
+      print('toto');
+    }
+  }
+
+  Widget _buildPlantContainer(int index) {
+    plantNumber++;
     return Container(
+      width: double.infinity,
+      // height: 200,
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Dates', style: ArosajeTextStyle.titleFormTextStyle),
-            Divider(
-              color: primaryColor,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Plante n°${index + 1}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        plantContainers.removeAt(
+                            index); // Supprime le container à l'index donné
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 10),
-            Text('Date de début:', style: ArosajeTextStyle.labelFormTextStyle),
-            CustomTextField(
-              color: textColor,
-              hintText: "Entrez une date",
-              onSaved: (value) => _startDate = DateTime.parse(value ?? ''),
-              validator: (value) =>
-                  value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
-            ),
-            Text('Date de fin:', style: ArosajeTextStyle.labelFormTextStyle),
-            CustomTextField(
-              color: textColor,
-              hintText: "Entrez une date",
-              onSaved: (value) => _endDate = DateTime.parse(value ?? ''),
-              validator: (value) =>
-                  value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
-            ),
-            SizedBox(height: 15),
-            Text('Adresse', style: ArosajeTextStyle.titleFormTextStyle),
-            Divider(
-              color: primaryColor,
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Nom de la plante',
+                          style: ArosajeTextStyle.labelFormTextStyle),
+                      CustomTextField(
+                        color: textColor,
+                        hintText: "",
+                        onSaved: (value) => _city = value,
+                        validator: (value) => value?.isEmpty ?? true
+                            ? 'Ce champ est obligatoire'
+                            : null,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Catégorie',
+                          style: ArosajeTextStyle.labelFormTextStyle),
+                      Container(
+                        child: CustomTextField(
+                          color: textColor,
+                          hintText: "",
+                          onSaved: (value) => _city = value,
+                          validator: (value) => value?.isEmpty ?? true
+                              ? 'Ce champ est obligatoire'
+                              : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 10),
-            Text('N° et libellé de rue:',
-                style: ArosajeTextStyle.labelFormTextStyle),
-            CustomTextField(
-              color: textColor,
-              hintText: "Adresse",
-              onSaved: (value) => _endDate = DateTime.parse(value ?? ''),
-              validator: (value) =>
-                  value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
-            ),
-            Text('Code postal:', style: ArosajeTextStyle.labelFormTextStyle),
-            CustomTextField(
-              color: textColor,
-              hintText: "CP",
-              onSaved: (value) => _endDate = DateTime.parse(value ?? ''),
-              validator: (value) =>
-                  value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
-            ),
-            Text('Ville:', style: ArosajeTextStyle.labelFormTextStyle),
-            CustomTextField(
-              color: textColor,
-              hintText: "Mtp",
-              onSaved: (value) => _endDate = DateTime.parse(value ?? ''),
-              validator: (value) =>
-                  value?.isEmpty ?? true ? 'Ce champ est obligatoire' : null,
-            ),
+            _selectedImage != null
+                ? AspectRatio(
+                    aspectRatio: 21 /
+                        9, // Ajustez ce ratio pour obtenir la hauteur désirée
+                    child: Stack(
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              10.0), // Ajoute des bordures arrondies
+                          child: Container(
+                            width: double
+                                .infinity, // Utilise toute la largeur disponible
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: FileImage(_selectedImage!),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity, // La même largeur que l'image
+                          color: Colors.white.withOpacity(
+                              0.3), // Un voile blanc semi-transparent
+                        ),
+                        // Positioned(
+                        //   top: 5.0,
+                        //   right: 5.0,
+                        //   child: CustomButton(
+                        //     onPressed: _pickFile,
+                        //     label: 'Modifier la photo',
+                        //     icon: LucideIcons.camera,
+                        //     buttonColor: secondaryColor,
+                        //     textColor: Colors.black,
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  )
+                : CustomButton(
+                    onPressed: _pickFile,
+                    label: 'Ajouter une photo',
+                    icon: LucideIcons.camera,
+                    buttonColor: primaryColor,
+                    textColor: Colors.white,
+                  ),
+            SizedBox(height: 10),
           ],
         ),
       ),
     );
+  }
+
+  // Future<void> _pickImage() async {
+  //   final ImagePicker _picker = ImagePicker();
+  //   final ImageSource? source = await showDialog<ImageSource>(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return SimpleDialog(
+  //           title: const Text('Choisissez une option'),
+  //           children: <Widget>[
+  //             SimpleDialogOption(
+  //               onPressed: () {
+  //                 Navigator.pop(context, ImageSource.camera);
+  //               },
+  //               child: const Text('Prendre une photo'),
+  //             ),
+  //             SimpleDialogOption(
+  //               onPressed: () {
+  //                 Navigator.pop(context, ImageSource.gallery);
+  //               },
+  //               child: const Text('Choisir depuis la galerie'),
+  //             ),
+  //           ],
+  //         );
+  //       });
+
+  //   if (source != null) {
+  //     final XFile? image = await _picker.pickImage(source: source);
+
+  //     if (image != null) {
+  //       // Utilisez l'image ici
+  //     }
+  //   }
+  // }
+
+  Future<void> _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image, // Pour choisir des images
+    );
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      if (file.path != null) {
+        setState(() {
+          _selectedImage = File(file.path!);
+        });
+      } else {
+        // Gérez le cas où file.path est null
+      }
+      // Utilisez le fichier ici
+    }
   }
 }

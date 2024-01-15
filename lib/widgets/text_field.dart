@@ -7,6 +7,8 @@ class CustomTextField extends StatelessWidget {
   final FormFieldSetter<String>? onSaved;
   final FormFieldValidator<String>? validator;
   final Color? errorColor;
+  final Function()? onTap;
+  final TextEditingController? controller;
 
   CustomTextField({
     required this.hintText,
@@ -15,6 +17,8 @@ class CustomTextField extends StatelessWidget {
     this.onSaved,
     this.validator,
     this.errorColor,
+    this.onTap,
+    this.controller,
   });
 
   @override
@@ -55,6 +59,8 @@ class CustomTextField extends StatelessWidget {
         obscureText: obscureText,
         onSaved: onSaved,
         validator: validator,
+        onTap: onTap,
+        controller: controller,
       ),
     );
   }
