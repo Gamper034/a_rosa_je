@@ -1,10 +1,12 @@
+import 'package:a_rosa_je/services/api/data_api.dart';
+import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
 class PublishGuard extends StatefulWidget {
@@ -25,7 +27,23 @@ class _PublishGuardState extends State<PublishGuard> {
   String? _city;
   int plantNumber = 0;
   List<Widget> plantContainers = [];
-  File? _selectedImage;
+
+  List<String> plantTypes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlantTypes();
+  }
+
+  fetchPlantTypes() async {
+    DataApi dataApi = DataApi();
+    var result = await dataApi.getPlantsType();
+    setState(() {
+      plantTypes = result;
+      print(plantTypes);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,12 +245,39 @@ class _PublishGuardState extends State<PublishGuard> {
   Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
-      print('toto');
+      // print('toto');
+      // print(_startDate);
+      // print(_endDate);
+      // print(_address);
+      // print(_zipCode);
+      // print(_city);
+      // print(plantContainers.length);
+      // print(plants[0]['plantImageUrl']);
+      GuardService guardService = GuardService();
+      guardService.addGuard(
+        _startDate!,
+        _endDate!,
+        _address!,
+        _zipCode!,
+        _city!,
+        plants,
+      );
     }
   }
 
+  List<Map<String, dynamic>> plants = [];
+
   Widget _buildPlantContainer(int index) {
-    plantNumber++;
+    if (index >= plants.length) {
+      Map<String, dynamic> plant = {
+        'plantName': null,
+        'plantType': null,
+        'plantImage': null,
+        'plantImageUrl': null,
+      };
+      plants.add(plant);
+    }
+
     return Container(
       width: double.infinity,
       // height: 200,
@@ -262,10 +307,7 @@ class _PublishGuardState extends State<PublishGuard> {
                   child: IconButton(
                     icon: Icon(Icons.close),
                     onPressed: () {
-                      setState(() {
-                        plantContainers.removeAt(
-                            index); // Supprime le container à l'index donné
-                      });
+                      _deleteContainer(index);
                     },
                   ),
                 ),
@@ -283,7 +325,9 @@ class _PublishGuardState extends State<PublishGuard> {
                       CustomTextField(
                         color: textColor,
                         hintText: "",
-                        onSaved: (value) => _city = value,
+                        onSaved: (value) {
+                          plants[index]['plantName'] = value;
+                        },
                         validator: (value) => value?.isEmpty ?? true
                             ? 'Ce champ est obligatoire'
                             : null,
@@ -299,13 +343,26 @@ class _PublishGuardState extends State<PublishGuard> {
                       Text('Catégorie',
                           style: ArosajeTextStyle.labelFormTextStyle),
                       Container(
-                        child: CustomTextField(
-                          color: textColor,
-                          hintText: "",
-                          onSaved: (value) => _city = value,
-                          validator: (value) => value?.isEmpty ?? true
-                              ? 'Ce champ est obligatoire'
-                              : null,
+                        child: DropdownButtonFormField(
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          value: plants[index]['plantType'],
+                          onChanged: (value) {
+                            setState(() {
+                              plants[index]['plantType'] = value;
+                            });
+                          },
+                          items: plantTypes.map((plantType) {
+                            return DropdownMenuItem(
+                              value: plantType,
+                              child: Text('$plantType'),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ],
@@ -314,7 +371,7 @@ class _PublishGuardState extends State<PublishGuard> {
               ],
             ),
             SizedBox(height: 10),
-            _selectedImage != null
+            plants[index]['plantImage'] != null
                 ? AspectRatio(
                     aspectRatio: 21 /
                         9, // Ajustez ce ratio pour obtenir la hauteur désirée
@@ -328,7 +385,8 @@ class _PublishGuardState extends State<PublishGuard> {
                                 .infinity, // Utilise toute la largeur disponible
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: FileImage(_selectedImage!),
+                                image:
+                                    AssetImage(plants[index]['plantImageUrl']),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -354,7 +412,9 @@ class _PublishGuardState extends State<PublishGuard> {
                     ),
                   )
                 : CustomButton(
-                    onPressed: _pickFile,
+                    onPressed: () {
+                      _addImage(index);
+                    },
                     label: 'Ajouter une photo',
                     icon: LucideIcons.camera,
                     buttonColor: primaryColor,
@@ -367,54 +427,45 @@ class _PublishGuardState extends State<PublishGuard> {
     );
   }
 
-  // Future<void> _pickImage() async {
-  //   final ImagePicker _picker = ImagePicker();
-  //   final ImageSource? source = await showDialog<ImageSource>(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return SimpleDialog(
-  //           title: const Text('Choisissez une option'),
-  //           children: <Widget>[
-  //             SimpleDialogOption(
-  //               onPressed: () {
-  //                 Navigator.pop(context, ImageSource.camera);
-  //               },
-  //               child: const Text('Prendre une photo'),
-  //             ),
-  //             SimpleDialogOption(
-  //               onPressed: () {
-  //                 Navigator.pop(context, ImageSource.gallery);
-  //               },
-  //               child: const Text('Choisir depuis la galerie'),
-  //             ),
-  //           ],
-  //         );
-  //       });
+  Future<void> _deleteContainer(int index) async {
+    setState(() {
+      plantContainers.removeAt(index); // Supprime le container à l'index donné
+      plants.removeAt(index); // Supprime la plante à l'index donné
+    });
+  }
 
-  //   if (source != null) {
-  //     final XFile? image = await _picker.pickImage(source: source);
-
-  //     if (image != null) {
-  //       // Utilisez l'image ici
-  //     }
-  //   }
-  // }
-
-  Future<void> _pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image, // Pour choisir des images
-    );
-
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      if (file.path != null) {
-        setState(() {
-          _selectedImage = File(file.path!);
+  Future<void> _addImage(int index) async {
+    final ImagePicker _picker = ImagePicker();
+    final ImageSource? source = await showDialog<ImageSource>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text('Choisissez une option'),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, ImageSource.camera);
+                },
+                child: const Text('Prendre une photo'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, ImageSource.gallery);
+                },
+                child: const Text('Choisir depuis la galerie'),
+              ),
+            ],
+          );
         });
-      } else {
-        // Gérez le cas où file.path est null
+
+    if (source != null) {
+      final XFile? image = await _picker.pickImage(source: source);
+
+      if (image != null) {
+        plants[index]['plantImage'] = Image.file(File(image.path));
+        plants[index]['plantImageUrl'] = image.path;
+        setState(() {});
       }
-      // Utilisez le fichier ici
     }
   }
 }
