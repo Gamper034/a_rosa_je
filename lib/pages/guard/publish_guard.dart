@@ -73,13 +73,21 @@ class _PublishGuardState extends State<PublishGuard> {
                       lastDate: DateTime(2100),
                       builder: (BuildContext context, Widget? child) {
                         return Theme(
-                          data: Theme.of(context).copyWith(
-                            primaryColor: Colors.amberAccent,
-                            hintColor: Colors.redAccent,
-                            buttonTheme: ButtonThemeData(
-                              textTheme: ButtonTextTheme.primary,
+                          data: ThemeData.light().copyWith(
+                            primaryColor: Colors
+                                .black, // Couleur principale pour le DatePicker
+                            hintColor: Colors
+                                .black, // Couleur d'accent pour le DatePicker
+                            colorScheme: ColorScheme.light(
+                              primary: Colors.black,
+                              secondary:
+                                  primaryColor, // Utilisé pour définir la couleur du bouton OK
                             ),
-                            dialogBackgroundColor: Colors.white,
+                            buttonTheme: ButtonThemeData(
+                                textTheme: ButtonTextTheme
+                                    .primary), // Utilisé pour les styles de bouton
+                            dialogBackgroundColor: Colors
+                                .white, // Couleur de fond pour le DatePicker
                           ),
                           child: child!,
                         );
@@ -111,13 +119,13 @@ class _PublishGuardState extends State<PublishGuard> {
                       builder: (BuildContext context, Widget? child) {
                         return Theme(
                           data: ThemeData.light().copyWith(
-                            primaryColor:
-                                primaryColor, // Couleur principale pour le DatePicker
+                            primaryColor: Colors
+                                .black, // Couleur principale pour le DatePicker
 
-                            hintColor:
-                                primaryColor, // Couleur d'accent pour le DatePicker
+                            hintColor: Colors
+                                .black, // Couleur d'accent pour le DatePicker
                             colorScheme: ColorScheme.light(
-                              primary: primaryColor,
+                              primary: Colors.black,
                               secondary:
                                   primaryColor, // Utilisé pour définir la couleur du bouton OK
                             ),
@@ -308,7 +316,7 @@ class _PublishGuardState extends State<PublishGuard> {
                       Text('Nom de la plante',
                           style: ArosajeTextStyle.labelFormTextStyle),
                       CustomTextField(
-                        color: textColor,
+                        color: Colors.black,
                         hintText: "",
                         onSaved: (value) {
                           plants[index]['plantName'] = value;
@@ -327,13 +335,21 @@ class _PublishGuardState extends State<PublishGuard> {
                     children: [
                       Text('Catégorie',
                           style: ArosajeTextStyle.labelFormTextStyle),
-                      Container(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: DropdownButtonFormField(
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
+                                horizontal: 15, vertical: 15),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(width: 0.5, color: textColor),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(width: 0.5, color: textColor),
                             ),
                           ),
                           value: plants[index]['plantType'],
@@ -346,7 +362,7 @@ class _PublishGuardState extends State<PublishGuard> {
                             return DropdownMenuItem(
                               value: plantType,
                               child: Container(
-                                width: 110,
+                                width: 102,
                                 child: Text(
                                   '$plantType',
                                   overflow: TextOverflow.ellipsis,
