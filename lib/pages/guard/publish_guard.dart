@@ -360,7 +360,13 @@ class _PublishGuardState extends State<PublishGuard> {
                           items: plantTypes.map((plantType) {
                             return DropdownMenuItem(
                               value: plantType,
-                              child: Text('$plantType'),
+                              child: Container(
+                                width: 110,
+                                child: Text(
+                                  '$plantType',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             );
                           }).toList(),
                         ),
