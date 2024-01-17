@@ -9,6 +9,7 @@ class CustomButton extends StatelessWidget {
       buttonColor; // Ajouté pour permettre la personnalisation de la couleur du bouton
   final Color
       textColor; // Ajouté pour permettre la personnalisation de la couleur du texte
+  final IconData? icon;
 
   CustomButton({
     required this.onPressed,
@@ -17,6 +18,7 @@ class CustomButton extends StatelessWidget {
         Colors.white, // Par défaut, la couleur du bouton est blanche
     this.textColor =
         primaryColor, // Par défaut, la couleur du texte est la couleur primaire de l'application
+    this.icon,
   });
 //OutlinedButton
   @override
@@ -53,18 +55,31 @@ class CustomButton extends StatelessWidget {
       style: OutlinedButton.styleFrom(
           backgroundColor: buttonColor, side: BorderSide.none),
       child: Container(
-          width: double.infinity,
-          height: 50,
-          child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-              ),
-            ),
-          )),
+        width: double.infinity,
+        height: 50,
+        child: Center(
+          child: icon != null
+              ? Row(
+                  // Si icon est fourni, affichez une Row avec l'icône et le texte
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      label,
+                      style: TextStyle(color: textColor),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(
+                      icon,
+                      color: textColor,
+                    ),
+                  ],
+                )
+              : Text(
+                  label,
+                  style: TextStyle(color: textColor),
+                ), // Sinon, affichez simplement le texte
+        ),
+      ),
     );
   }
 }
