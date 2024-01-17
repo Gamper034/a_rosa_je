@@ -5,9 +5,26 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, TargetPlatform;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 
 class DataApi {
   final storage = new FlutterSecureStorage();
+  String getHost() {
+    if (kIsWeb) {
+      return 'localhost';
+    }
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return '10.0.2.2';
+      case TargetPlatform.iOS:
+        return 'localhost';
+      default:
+        return 'localhost';
+    }
+  }
+
+
   Future<Map<String, dynamic>> registerUser(String role, String firstname,
       String lastname, String email, String password) async {
     try {
@@ -20,7 +37,7 @@ class DataApi {
       };
 
       final response = await http.post(
-        Uri.parse('http://localhost:2000/api/user/register'),
+        Uri.parse('http://${getHost()}:2000/api/user/register'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -49,7 +66,7 @@ class DataApi {
       };
 
       final response = await http.post(
-        Uri.parse('http://localhost:2000/api/user/register'),
+        Uri.parse('http://${getHost()}:2000/api/user/register'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -74,7 +91,7 @@ class DataApi {
       };
       // print(jwt);
       var request = http.MultipartRequest(
-          'POST', Uri.parse('http://localhost:2000/api/guard/add'));
+          'POST', Uri.parse('http://${getHost()}:2000/api/guard/add'));
       request.fields.addAll({
         'startDate': startDate,
         'endDate': endDate,
@@ -109,7 +126,7 @@ class DataApi {
   Future<List<String>> getPlantsType() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:2000/api/plant/getTypes'),
+        Uri.parse('http://${getHost()}:2000/api/plant/getTypes'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

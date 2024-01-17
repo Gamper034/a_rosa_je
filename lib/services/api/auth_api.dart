@@ -4,8 +4,24 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:a_rosa_je/models/user.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, TargetPlatform;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 
 class AuthApi {
+  String getHost() {
+    if (kIsWeb) {
+      return 'localhost';
+    }
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return '10.0.2.2';
+      case TargetPlatform.iOS:
+        return 'localhost';
+      default:
+        return 'localhost';
+    }
+  }
+
   final storage = FlutterSecureStorage();
 
   Future<String> authentification(
@@ -17,7 +33,7 @@ class AuthApi {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:1000/api/login'),
+        Uri.parse('http://${getHost()}:1000/api/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
