@@ -1,7 +1,6 @@
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
@@ -41,7 +40,7 @@ class _PublishGuardState extends State<PublishGuard> {
     var result = await dataApi.getPlantsType();
     setState(() {
       plantTypes = result;
-      print(plantTypes);
+      // print(plantTypes);
     });
   }
 
@@ -74,22 +73,13 @@ class _PublishGuardState extends State<PublishGuard> {
                       lastDate: DateTime(2100),
                       builder: (BuildContext context, Widget? child) {
                         return Theme(
-                          data: ThemeData.light().copyWith(
-                            primaryColor:
-                                primaryColor, // Couleur principale pour le DatePicker
-
-                            hintColor:
-                                primaryColor, // Couleur d'accent pour le DatePicker
-                            colorScheme: ColorScheme.light(
-                              primary: primaryColor,
-                              secondary:
-                                  primaryColor, // Utilisé pour définir la couleur du bouton OK
-                            ),
+                          data: Theme.of(context).copyWith(
+                            primaryColor: Colors.amberAccent,
+                            hintColor: Colors.redAccent,
                             buttonTheme: ButtonThemeData(
-                                textTheme: ButtonTextTheme
-                                    .primary), // Utilisé pour les styles de bouton
-                            dialogBackgroundColor: Colors
-                                .white, // Couleur de fond pour le DatePicker
+                              textTheme: ButtonTextTheme.primary,
+                            ),
+                            dialogBackgroundColor: Colors.white,
                           ),
                           child: child!,
                         );
@@ -97,7 +87,7 @@ class _PublishGuardState extends State<PublishGuard> {
                     );
                     if (picked != null) {
                       _startDateController.text =
-                          DateFormat('dd/MM/yyyy').format(picked);
+                          DateFormat('dd-MM-yyyy').format(picked);
                     }
                   },
                   color: textColor,
@@ -143,7 +133,7 @@ class _PublishGuardState extends State<PublishGuard> {
                     );
                     if (picked != null) {
                       _endDateController.text =
-                          DateFormat('dd/MM/yyyy').format(picked);
+                          DateFormat('dd-MM-yyyy').format(picked);
                     }
                   },
                   color: textColor,
@@ -245,16 +235,11 @@ class _PublishGuardState extends State<PublishGuard> {
   Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
-      // print('toto');
-      // print(_startDate);
-      // print(_endDate);
-      // print(_address);
-      // print(_zipCode);
-      // print(_city);
-      // print(plantContainers.length);
-      // print(plants[0]['plantImageUrl']);
+
       GuardService guardService = GuardService();
+
       guardService.addGuard(
+        context,
         _startDate!,
         _endDate!,
         _address!,
@@ -446,19 +431,26 @@ class _PublishGuardState extends State<PublishGuard> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: const Text('Choisissez une option'),
+            title: Align(
+              alignment: Alignment.center,
+              child: Text('Ajouter une photo'),
+            ),
+            backgroundColor: Colors.white,
             children: <Widget>[
-              SimpleDialogOption(
-                onPressed: () {
+              ListTile(
+                leading: Icon(LucideIcons.camera), // Icône de la caméra
+                title: Text('Prendre une photo', textAlign: TextAlign.center),
+                onTap: () {
                   Navigator.pop(context, ImageSource.camera);
                 },
-                child: const Text('Prendre une photo'),
               ),
-              SimpleDialogOption(
-                onPressed: () {
+              ListTile(
+                leading: Icon(LucideIcons.image), // Icône de la caméra
+                title: Text('Choisir depuis la galerie',
+                    textAlign: TextAlign.center),
+                onTap: () {
                   Navigator.pop(context, ImageSource.gallery);
                 },
-                child: const Text('Choisir depuis la galerie'),
               ),
             ],
           );

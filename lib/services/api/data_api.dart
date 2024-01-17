@@ -1,8 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DataApi {
+  final storage = new FlutterSecureStorage();
   Future<Map<String, dynamic>> registerUser(String role, String firstname,
       String lastname, String email, String password) async {
     try {
@@ -60,38 +65,42 @@ class DataApi {
     }
   }
 
-  Future<Map<String, dynamic>> addGuard(String startDate, String endDate,
+  Future<http.Response> addGuard(String startDate, String endDate,
       String address, String zipCode, String city, List plants) async {
     try {
-      final Map<String, dynamic> guardData = {
+      String? jwt = await storage.read(key: 'jwt');
+      var headers = {
+        'Cookie': '$jwt',
+      };
+      // print(jwt);
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('http://localhost:2000/api/guard/add'));
+      request.fields.addAll({
         'startDate': startDate,
         'endDate': endDate,
         'address': address,
         'zipCode': zipCode,
         'city': city,
-        'plantImages': [],
-      };
+      });
 
       for (var i = 0; i < plants.length; i++) {
-        guardData['plantName$i'] = plants[i]['plantName'];
-        guardData['plantType$i'] = plants[i]['plantType'];
-
-        String imagePath = plants[i]['plantImageUrl'];
-        String base64Image = base64Encode(File(imagePath).readAsBytesSync());
-        guardData['plantImages'].add(base64Image);
+        request.fields['plantName${i + 1}'] = plants[i]['plantName'];
+        request.fields['plantType${i + 1}'] = plants[i]['plantType'];
+        var multipartFile = await http.MultipartFile.fromPath(
+          'plantImage',
+          plants[i]['plantImageUrl'],
+          contentType: MediaType('image', 'jpeg'),
+        );
+        request.files.add(multipartFile);
       }
-      final response = await http.post(
-        Uri.parse('http://localhost:2000/api/guard/add'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(guardData),
-      );
+      //
 
-      return {
-        'statusCode': response.statusCode,
-        'body': jsonDecode(response.body),
-      };
+      request.headers.addAll(headers);
+
+      http.StreamedResponse streamedResponse = await request.send();
+      http.Response response = await http.Response.fromStream(streamedResponse);
+
+      return response;
     } catch (e) {
       throw Exception('Failed to add guard: $e');
     }
