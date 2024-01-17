@@ -1,3 +1,4 @@
+import 'package:a_rosa_je/widgets/card-guard.dart';
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -59,8 +60,16 @@ class _HomePage extends State<HomePage> {
 
   List<Widget> _navigate = [
     Container(
-      child: Text('Recherche'),
-    ),
+        child: SingleChildScrollView(
+            child: Column(
+      children: [
+        GuardCard(),
+        GuardCard(),
+        GuardCard(),
+        GuardCard(),
+        GuardCard(),
+      ],
+    ))),
     Container(
       child: Text('Gardes'),
     ),
@@ -79,9 +88,7 @@ class _HomePage extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: _appBar.elementAt(currentIndex),
-        body: Center(
-          child: _navigate.elementAt(currentIndex),
-        ),
+        body: _navigate.elementAt(currentIndex),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
           selectedItemColor: primaryColor,
