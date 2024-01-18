@@ -378,7 +378,7 @@ class _PublishGuardState extends State<PublishGuard> {
               ],
             ),
             SizedBox(height: 10),
-            plants[index]['plantImage'] != null
+            plants[index]['plantImageUrl'] != null
                 ? AspectRatio(
                     aspectRatio: 21 /
                         9, // Ajustez ce ratio pour obtenir la hauteur désirée
@@ -476,7 +476,7 @@ class _PublishGuardState extends State<PublishGuard> {
       final XFile? image = await _picker.pickImage(source: source);
 
       if (image != null) {
-        plants[index]['plantImage'] = Image.file(File(image.path));
+        // plants[index]['plantImage'] = Image.file(File(image.path));
         plants[index]['plantImageUrl'] = image.path;
         setState(() {});
       }

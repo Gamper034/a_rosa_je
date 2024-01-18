@@ -55,7 +55,7 @@ class _HomePage extends State<HomePage> {
       title: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          'Messages',
+          'Messagerie',
           style: ArosajeTextStyle.AppBarTextStyle,
         ),
       ),
