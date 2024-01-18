@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/pages/profil/profil_page.dart';
-import 'package:a_rosa_je/pages/guard/publish_guard.dart';
+import 'package:a_rosa_je/pages/publish_guard/publish_guard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
