@@ -1,3 +1,4 @@
+import 'package:a_rosa_je/pages/guard_details/guard_details.dart';
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -84,7 +85,7 @@ class _HomePage extends State<HomePage> {
       child: PublishGuard(),
     ),
     Container(
-      child: Text('Messages'),
+      child: GuardDetails(),
     ),
     Container(
       child: ProfilPage(),

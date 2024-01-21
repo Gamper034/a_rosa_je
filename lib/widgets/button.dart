@@ -10,6 +10,7 @@ class CustomButton extends StatelessWidget {
   final Color
       textColor; // Ajouté pour permettre la personnalisation de la couleur du texte
   final IconData? icon;
+  final bool border;
 
   CustomButton({
     required this.onPressed,
@@ -19,6 +20,7 @@ class CustomButton extends StatelessWidget {
     this.textColor =
         primaryColor, // Par défaut, la couleur du texte est la couleur primaire de l'application
     this.icon,
+    this.border = false,
   });
 //OutlinedButton
   @override
@@ -53,7 +55,11 @@ class CustomButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-          backgroundColor: buttonColor, side: BorderSide.none),
+        backgroundColor: buttonColor,
+        side: border
+            ? BorderSide(color: secondaryTextColor, width: 1)
+            : BorderSide.none, // Utilisez le paramètre border ici
+      ),
       child: Container(
         width: double.infinity,
         height: 50,

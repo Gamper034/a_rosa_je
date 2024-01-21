@@ -55,7 +55,6 @@ class ArosajeTextStyle {
 
   static final regularGreyTextStyle = baseTextStyle.copyWith(
     color: Colors.grey,
-    fontSize: 13,
   );
 
   static final boldTextStyle = baseTextStyle.copyWith(
