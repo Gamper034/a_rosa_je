@@ -1,5 +1,6 @@
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
+import 'package:a_rosa_je/services/plants.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -36,8 +37,8 @@ class _PublishGuardState extends State<PublishGuard> {
   }
 
   fetchPlantTypes() async {
-    DataApi dataApi = DataApi();
-    var result = await dataApi.getPlantsType();
+    PlantService plantService = PlantService();
+    var result = await plantService.getPlantsType();
     setState(() {
       plantTypes = result;
       // print(plantTypes);
