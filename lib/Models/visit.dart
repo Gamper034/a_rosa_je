@@ -4,18 +4,18 @@ import 'package:a_rosa_je/models/guard.dart';
 
 class Visit {
   String id;
-  Guard guard;
+  String guardId;
   DateTime date;
-  List<Plant>? plants = [];
   String? comment;
-  List<Advice>? advice = [];
+  List<Advice>? botanistAdvice = [];
 
   Visit({
     required this.id,
-    required this.guard,
+    required this.guardId,
     required this.date,
-    this.plants,
     this.comment,
-    this.advice,
+    this.botanistAdvice,
   });
+
+  static fromJson(visit) {}
 }

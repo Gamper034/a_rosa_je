@@ -1,9 +1,28 @@
-import 'package:flutter/foundation.dart';
+import 'package:a_rosa_je/Models/guard.dart';
+import 'package:a_rosa_je/Models/plant.dart';
+import 'package:a_rosa_je/Models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class GuardCard extends StatelessWidget {
-  const GuardCard({super.key});
+  GuardCard({super.key, required this.guard});
+
+  final monthNames = [
+    'JAN',
+    'FEV',
+    'MAR',
+    'AVR',
+    'MAI',
+    'JUIN',
+    'JUIL',
+    'AOU',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC'
+  ];
+
+  final Guard guard;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +44,7 @@ class GuardCard extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
                               child: Image.asset(
+                                //guard.plants[0].picture,
                                 'assets/images/placeholders/plant.jpg',
                                 fit: BoxFit.cover,
                               ),
@@ -45,7 +65,8 @@ class GuardCard extends StatelessWidget {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Icon(LucideIcons.flower2),
-                                        Text("5 plantes")
+                                        Text(guard.plants.length.toString() +
+                                            " plantes"),
                                       ],
                                     )),
                               )),
@@ -63,6 +84,7 @@ class GuardCard extends StatelessWidget {
                       CircleAvatar(
                         radius: 20.0,
                         backgroundImage: AssetImage(
+                            //guard.user.profilePicture,
                             'assets/images/placeholders/profile.jpg'),
                         backgroundColor: Colors.transparent,
                       ),
@@ -70,7 +92,10 @@ class GuardCard extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        'Emmanuel M.',
+                        guard.owner.firstname +
+                            " " +
+                            guard.owner.lastname.substring(0, 1) +
+                            ".",
                         style: TextStyle(
                           fontSize: 16,
                         ),
@@ -86,10 +111,20 @@ class GuardCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            '10 DEC - 12 DEC',
+                            guard.startDate.day.toString() +
+                                " " +
+                                monthNames[guard.startDate.month] +
+                                " " +
+                                guard.startDate.year.toString().substring(2) +
+                                " - " +
+                                guard.endDate.day.toString() +
+                                " " +
+                                monthNames[guard.endDate.month] +
+                                " " +
+                                guard.endDate.year.toString().substring(2),
                             textAlign: TextAlign.right,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                         ],
                       ),
@@ -98,7 +133,7 @@ class GuardCard extends StatelessWidget {
                         children: [
                           Container(
                             child: Text(
-                              'Juvignac 34990',
+                              guard.city + " " + guard.zipCode,
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 color: Colors.black54,

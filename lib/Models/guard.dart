@@ -9,9 +9,12 @@ class Guard {
   User owner;
   DateTime startDate;
   DateTime endDate;
-  List<User>? applicants = [];
+  String address;
+  String zipCode;
+  String city;
   User? guardian;
-  List<Plant>? plants = [];
+  List<User>? applicants = [];
+  List<Plant> plants = [];
   List<Visit>? visits = [];
   List<Advice>? advices = [];
   Conversation? conversation;
@@ -22,12 +25,44 @@ class Guard {
     required this.owner,
     required this.startDate,
     required this.endDate,
+    required this.address,
+    required this.zipCode,
+    required this.city,
     this.applicants,
     this.guardian,
-    this.plants,
+    required this.plants,
     this.visits,
     this.advices,
     this.conversation,
     required this.createdAt,
   });
+
+  factory Guard.fromJson(Map<String, dynamic> json) {
+    return Guard(
+      id: json['id'],
+      owner: User.fromJson(json['owner']),
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
+      address: json['address'],
+      zipCode: json['zipCode'],
+      city: json['city'],
+      applicants: null,
+      guardian: null,
+      plants:
+          json['plants'].map<Plant>((plant) => Plant.fromJson(plant)).toList(),
+      visits: null,
+      advices: null,
+      conversation: null,
+      createdAt: DateTime.parse(json['createdAt']),
+    );
+  }
+
+  fromJsonDetails(Map<String, dynamic> json) {
+    return null;
+  }
+
+  @override
+  String toString() {
+    return 'Guard{id: $id, owner: $owner, startDate: $startDate, endDate: $endDate, address: $address, zipCode: $zipCode, city: $city, applicants: $applicants, guardian: $guardian, plants: $plants, visits: $visits, advices: $advices, conversation: $conversation, createdAt: $createdAt}';
+  }
 }
