@@ -15,4 +15,6 @@ class Message {
     required this.content,
     required this.createdAt,
   });
+
+  static fromJson(message) {}
 }

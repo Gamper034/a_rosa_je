@@ -20,4 +20,6 @@ class Advice {
     required this.content,
     required this.createdAt,
   });
+
+  static fromJson(advice) {}
 }

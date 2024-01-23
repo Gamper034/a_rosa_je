@@ -3,7 +3,7 @@ import 'package:a_rosa_je/models/guard.dart';
 
 class Conversation {
   String id;
-  Guard guard;
+  String guard;
   List<Message>? messages = [];
   DateTime createdAt;
 
@@ -13,4 +13,13 @@ class Conversation {
     this.messages,
     required this.createdAt,
   });
+
+  static fromJson(json) {
+    return Conversation(
+      id: json['id'],
+      guard: "*",
+      messages: [],
+      createdAt: DateTime.parse(json['createdAt']),
+    );
+  }
 }
