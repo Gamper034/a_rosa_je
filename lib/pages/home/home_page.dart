@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/pages/profil/profil_page.dart';
+import 'package:a_rosa_je/pages/publish_guard/publish_guard.dart';
 
 class HomePage extends StatefulWidget {
   HomePage(
@@ -26,7 +27,6 @@ class _HomePage extends State<HomePage> {
       currentIndex = index;
     });
   }
-
   void navigateToSearchFilterPage() {
     Navigator.pushReplacement(
       context,
@@ -133,6 +133,7 @@ class _HomePage extends State<HomePage> {
         child: ProfilPage(),
       ),
     ];
+
     return Scaffold(
         appBar: appBarFromIndex(currentIndex),
         body: Center(
