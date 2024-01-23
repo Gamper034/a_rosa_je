@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/pages/profil/profil_page.dart';
+import 'package:a_rosa_je/pages/publish_guard/publish_guard.dart';
 
 class HomePage extends StatefulWidget {
   HomePage(
@@ -133,6 +134,80 @@ class _HomePage extends State<HomePage> {
         child: ProfilPage(),
       ),
     ];
+
+  List<AppBar> _appBar = [
+    AppBar(
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Dernière demandes',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
+      ),
+      backgroundColor: Colors.white,
+    ),
+    AppBar(
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Mes gardes',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
+      ),
+      backgroundColor: Colors.white,
+    ),
+    AppBar(
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Demande de garde',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
+      ),
+      backgroundColor: Colors.white,
+    ),
+    AppBar(
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Messagerie',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
+      ),
+      backgroundColor: Colors.white,
+    ),
+    AppBar(
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Mon Compte',
+          style: ArosajeTextStyle.AppBarTextStyle,
+        ),
+      ),
+      backgroundColor: Colors.white,
+    ),
+  ];
+
+  List<Widget> _navigate = [
+    Container(
+      child: Text('Recherche'),
+    ),
+    Container(
+      child: Text('Gardes'),
+    ),
+    Container(
+      child: PublishGuard(),
+    ),
+    Container(
+      child: Text('Messages'),
+    ),
+    Container(
+      child: ProfilPage(),
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: appBarFromIndex(currentIndex),
         body: Center(

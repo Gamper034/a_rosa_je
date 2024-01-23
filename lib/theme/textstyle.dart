@@ -39,3 +39,46 @@ TextStyle white = TextStyle(color: Colors.white);
 //     fontSize: 16,
 //   );
 // }
+
+class ArosajeTextStyle {
+  static final baseTextStyle = TextStyle(
+    fontFamily: 'Inter',
+  );
+
+  static final regularTextStyle = baseTextStyle.copyWith(
+    fontSize: 13,
+  );
+
+  static final regularWhiteTextStyle = baseTextStyle.copyWith(
+    color: Colors.white70,
+  );
+
+  static final regularGreyTextStyle = baseTextStyle.copyWith(
+    color: Colors.grey,
+    fontSize: 13,
+  );
+
+  static final boldTextStyle = baseTextStyle.copyWith(
+    fontWeight: FontWeight.bold,
+  );
+
+  static final subTitleboldTextStyle = baseTextStyle.copyWith(
+    fontWeight: FontWeight.bold,
+    fontSize: 16,
+  );
+
+  static final AppBarTextStyle = baseTextStyle.copyWith(
+    fontWeight: FontWeight.w500,
+    fontSize: 24,
+  );
+
+  static final titleFormTextStyle = baseTextStyle.copyWith(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+  );
+
+  static final labelFormTextStyle = baseTextStyle.copyWith(
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+  );
+}
