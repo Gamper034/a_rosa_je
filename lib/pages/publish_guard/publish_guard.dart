@@ -69,7 +69,7 @@ class _PublishGuardState extends State<PublishGuard> {
                     final DateTime? picked = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime.now(),
                       lastDate: DateTime(2100),
                       builder: (BuildContext context, Widget? child) {
                         return Theme(
@@ -111,10 +111,12 @@ class _PublishGuardState extends State<PublishGuard> {
                   controller: _endDateController,
                   onTap: () async {
                     FocusScope.of(context).requestFocus(new FocusNode());
+                    final DateTime startDate = DateFormat('dd-MM-yyyy')
+                        .parse(_startDateController.text);
                     final DateTime? picked = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      initialDate: startDate,
+                      firstDate: startDate,
                       lastDate: DateTime(2100),
                       builder: (BuildContext context, Widget? child) {
                         return Theme(

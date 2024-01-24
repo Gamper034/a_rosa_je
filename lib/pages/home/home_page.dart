@@ -27,6 +27,7 @@ class _HomePage extends State<HomePage> {
       currentIndex = index;
     });
   }
+
   void navigateToSearchFilterPage() {
     Navigator.pushReplacement(
       context,
@@ -124,7 +125,7 @@ class _HomePage extends State<HomePage> {
         child: Text('Gardes'),
       ),
       Container(
-        child: Text('Publier'),
+        child: PublishGuard(),
       ),
       Container(
         child: Text('Messages'),
