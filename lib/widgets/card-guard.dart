@@ -164,6 +164,7 @@ class GuardCard extends StatelessWidget {
   }
 
   guardianStatus() {
+    //TODO : Modifier et afficher 'Recherche de gardien' si pas de gardien
     return Row(
       children: [
         Icon(
@@ -192,6 +193,7 @@ class GuardCard extends StatelessWidget {
   }
 
   badgeStatusGuard() {
+    //TODO: Ajouter Candidature en attente si Dans effectuées donc isMade = false et pas de gardien + Ajout opacité si terminée et revoir le traitement car Terminée affiché alors que guarde non passée
     String badgeText;
     Color badgeColor;
     IconData icon;
