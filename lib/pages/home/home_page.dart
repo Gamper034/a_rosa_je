@@ -1,3 +1,4 @@
+import 'package:a_rosa_je/pages/my_guards/my_guards.dart';
 import 'package:a_rosa_je/pages/search/search_filters_page.dart';
 import 'package:a_rosa_je/pages/search/search_page.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +123,7 @@ class _HomePage extends State<HomePage> {
         ),
       ),
       Container(
-        child: Text('Gardes'),
+        child: MyGuards(),
       ),
       Container(
         child: PublishGuard(),
@@ -168,13 +169,13 @@ class _HomePage extends State<HomePage> {
               label: 'Mon Compte',
             ),
           ],
-          iconSize: 25,
+          iconSize: 24,
           selectedLabelStyle: TextStyle(
               fontSize:
-                  11), // Réduisez cette valeur pour réduire la taille du texte
+                  10), // Réduisez cette valeur pour réduire la taille du texte
           unselectedLabelStyle: TextStyle(
               fontSize:
-                  11), // Réduisez cette valeur pour réduire la taille du texte
+                  10), // Réduisez cette valeur pour réduire la taille du texte
         ));
   }
 }

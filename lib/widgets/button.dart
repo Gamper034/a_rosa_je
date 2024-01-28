@@ -23,33 +23,6 @@ class CustomButton extends StatelessWidget {
 //OutlinedButton
   @override
   Widget build(BuildContext context) {
-    // return Padding(
-    //   padding: const EdgeInsets.symmetric(vertical: 10),
-    //   child: TextButton(
-    //     child: Center(
-    //       child: Padding(
-    //         padding: const EdgeInsets.symmetric(vertical: 5),
-    //         child: Text(
-    //           label,
-    //           style: TextStyle(
-    //             color:
-    //                 textColor, // Modifié pour utiliser la couleur personnalisée
-    //             fontWeight: FontWeight.w500,
-    //             fontSize: 16,
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //     onPressed: onPressed,
-    //     style: TextButton.styleFrom(
-    //       backgroundColor:
-    //           buttonColor, // Modifié pour utiliser la couleur personnalisée
-    //       shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(10),
-    //       ),
-    //     ),
-    //   ),
-    // );
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
