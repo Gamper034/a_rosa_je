@@ -62,10 +62,10 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_icons:
-  android: true
+  android: "launcher_icon"
   ios: true
-  image_path: "assets/images/logos/png/logo_noir.png"
-  adaptive_icon_background: "#FFFFFF"
+  image_path: "assets/images/logos/png/thumb.png"
+  # adaptive_icon_background: "#FFFFFF"
 # The following section is specific to Flutter packages.
 flutter:
 

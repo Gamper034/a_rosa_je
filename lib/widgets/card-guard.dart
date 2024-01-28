@@ -28,9 +28,9 @@ class GuardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
       // margin: EdgeInsets.all(10),
-      height: 290,
+      // height: 290,
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -97,7 +97,7 @@ class GuardCard extends StatelessWidget {
                 child: Row(
                   children: [
                     CircleAvatar(
-                      radius: 20.0,
+                      radius: 16.0,
                       // backgroundImage: AssetImage(
                       //     //guard.user.profilePicture,
                       //     guard.owner.avatar),
@@ -110,7 +110,7 @@ class GuardCard extends StatelessWidget {
                           " " +
                           guard.owner.lastname.substring(0, 1) +
                           ".",
-                      style: TextStyle(color: textColor, fontSize: 16),
+                      style: TextStyle(color: textColor, fontSize: 14),
                     ),
                   ],
                 ),
