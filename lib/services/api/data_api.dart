@@ -1,4 +1,5 @@
-
+import 'package:a_rosa_je/models/user.dart';
+import 'package:a_rosa_je/services/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -25,7 +26,6 @@ class DataApi {
         return 'localhost';
     }
   }
-
 
   Future<Map<String, dynamic>> registerUser(String role, String firstname,
       String lastname, String email, String password) async {
@@ -84,7 +84,6 @@ class DataApi {
     }
   }
 
-
   Future<Map<String, dynamic>> getGuardList(
       List<String> selectedPlantTypeList, String selectedVille) async {
     try {
@@ -116,9 +115,6 @@ class DataApi {
       throw Exception('Failed to get guard list: $e');
     }
   }
-
-  
-
 
   Future<http.Response> addGuard(String startDate, String endDate,
       String address, String zipCode, String city, List plants) async {
@@ -161,7 +157,7 @@ class DataApi {
     }
   }
 
-   Future<Map<String, dynamic>> getPlantTypeList() async {
+  Future<Map<String, dynamic>> getPlantTypeList() async {
     try {
       String? jwt = await storage.read(key: 'jwt');
 
@@ -181,7 +177,7 @@ class DataApi {
       throw Exception('Failed to get guard list: $e');
     }
   }
-  
+
   Future<List<String>> getPlantsType() async {
     try {
       final response = await http.get(
@@ -205,6 +201,29 @@ class DataApi {
       throw Exception('Failed to get plants type: $e');
     }
   }
-    
-  
+
+  Future<Map<String, dynamic>> getOwnerGuards() async {
+    //Récupérer l'id de l'utilisateur
+    UserService userService = UserService();
+    User owner = await userService.getUserPreferences();
+
+    //Récupérer le jwt
+    String? jwt = await storage.read(key: 'jwt');
+
+    var request = http.Request('GET',
+        Uri.parse('http://${getHost()}:2000/api/guard/user/${owner.id}'));
+
+    request.headers['Cookie'] = '$jwt';
+
+    http.StreamedResponse response = await request.send();
+
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(await response.stream.bytesToString()),
+    };
+    // return {
+    //   'statusCode': response.statusCode,
+    //   'body': jsonDecode(response()),
+    // };
+  }
 }

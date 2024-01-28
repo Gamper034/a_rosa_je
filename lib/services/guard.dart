@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:a_rosa_je/models/guard.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

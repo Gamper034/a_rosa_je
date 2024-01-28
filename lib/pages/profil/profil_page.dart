@@ -6,27 +6,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:a_rosa_je/services/user.dart';
 import 'package:intl/intl.dart';
+import 'package:a_rosa_je/services/user.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({super.key});
 
-  Future<User> getUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userJson = prefs.getString('user');
-
-    if (userJson != null) {
-      Map<String, dynamic> userMap = jsonDecode(userJson);
-      User user = User.fromJson(userMap);
-      return user;
-    }
-
-    throw Exception('No user found');
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<User>(
-      future: getUser(),
+      future: UserService().getUserPreferences(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
