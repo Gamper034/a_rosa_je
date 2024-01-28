@@ -65,4 +65,18 @@ class Guard {
   String toString() {
     return 'Guard{id: $id, owner: $owner, startDate: $startDate, endDate: $endDate, address: $address, zipCode: $zipCode, city: $city, applicants: $applicants, guardian: $guardian, plants: $plants, visits: $visits, advices: $advices, conversation: $conversation, createdAt: $createdAt}';
   }
+
+  String getStatus() {
+    if (this.guardian != null) {
+      return "En cours";
+    } else if (this.endDate.isBefore(DateTime.now())) {
+      return "Terminée";
+    } else if (this.startDate.isAfter(DateTime.now())) {
+      return "A venir";
+    } else if (this.applicants!.length > 0) {
+      return "En attente";
+    } else {
+      return "Disponible";
+    }
+  }
 }
