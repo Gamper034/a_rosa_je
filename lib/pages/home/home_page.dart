@@ -55,6 +55,7 @@ class _HomePage extends State<HomePage> {
                 Expanded(
                   child: Text(
                     'Dernière demandes',
+                    style: ArosajeTextStyle.AppBarTextStyle,
                   ),
                 ),
                 InkWell(
@@ -74,6 +75,7 @@ class _HomePage extends State<HomePage> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Mes gardes',
+            style: ArosajeTextStyle.AppBarTextStyle,
           ),
         ),
         backgroundColor: Colors.white,
@@ -84,6 +86,7 @@ class _HomePage extends State<HomePage> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Demande de garde',
+            style: ArosajeTextStyle.AppBarTextStyle,
           ),
         ),
         backgroundColor: Colors.white,
@@ -94,6 +97,7 @@ class _HomePage extends State<HomePage> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Messages',
+            style: ArosajeTextStyle.AppBarTextStyle,
           ),
         ),
         backgroundColor: Colors.white,
@@ -104,6 +108,7 @@ class _HomePage extends State<HomePage> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Mon Compte',
+            style: ArosajeTextStyle.AppBarTextStyle,
           ),
         ),
         backgroundColor: Colors.white,

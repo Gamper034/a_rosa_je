@@ -1,3 +1,4 @@
+import 'package:a_rosa_je/theme/color.dart';
 import 'package:flutter/material.dart';
 
 TextStyle white = TextStyle(color: Colors.white);
@@ -70,6 +71,7 @@ class ArosajeTextStyle {
   static final AppBarTextStyle = baseTextStyle.copyWith(
     fontWeight: FontWeight.w500,
     fontSize: 24,
+    color: greenTitle,
   );
 
   static final titleFormTextStyle = baseTextStyle.copyWith(
