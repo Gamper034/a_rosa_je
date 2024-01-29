@@ -75,8 +75,8 @@ class _UserFormState extends State<UserForm> {
   Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
-      UserService user = UserService();
-      String result = await user.confirmRegisterUser(
+      DataApi user = DataApi();
+      String result = await user.registerUser(
         context,
         _role,
         _firstname,

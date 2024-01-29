@@ -1,5 +1,5 @@
-import 'package:a_rosa_je/Models/conversation.dart';
-import 'package:a_rosa_je/Models/user.dart';
+import 'package:a_rosa_je/models/conversation.dart';
+import 'package:a_rosa_je/models/user.dart';
 
 class Message {
   String id;
