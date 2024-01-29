@@ -14,6 +14,7 @@ class Guard {
   String address;
   String zipCode;
   String city;
+  String? guardianId;
   User? guardian;
   List<User>? applicants;
   List<Plant> plants;
@@ -30,6 +31,7 @@ class Guard {
     required this.address,
     required this.zipCode,
     required this.city,
+    this.guardianId,
     this.applicants,
     this.guardian,
     required this.plants,
@@ -40,6 +42,7 @@ class Guard {
   });
 
   factory Guard.fromJson(Map<String, dynamic> json) {
+    // print('JSON before parsing: $json');
     return Guard(
       id: json['id'],
       owner: User.fromJson(json['owner']),
@@ -48,6 +51,7 @@ class Guard {
       address: json['address'],
       zipCode: json['zipCode'],
       city: json['city'],
+      guardianId: json['guardianId'],
       applicants: [],
       guardian:
           json['guardian'] != null ? User.fromJson(json['guardian']) : null,

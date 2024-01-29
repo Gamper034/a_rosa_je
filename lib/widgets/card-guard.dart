@@ -196,7 +196,7 @@ class GuardCard extends StatelessWidget {
   }
 
   _guardianStatus() {
-    bool hasGuard = guard.guardian != null;
+    bool hasGuard = guard.guardianId != null;
     // print(hasGuard);
     return Row(
       children: [
