@@ -1,5 +1,3 @@
-import 'package:a_rosa_je/models/user.dart';
-import 'package:a_rosa_je/services/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -13,7 +11,7 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 class DataApi {
   final storage = new FlutterSecureStorage();
 
-  String getHost() {
+  static String getHost() {
     if (kIsWeb) {
       return 'localhost';
     }
@@ -226,4 +224,5 @@ class DataApi {
     //   'body': jsonDecode(response()),
     // };
   }
+
 }
