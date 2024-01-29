@@ -1,11 +1,10 @@
 import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/services/user.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, TargetPlatform;
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
@@ -27,8 +26,8 @@ class DataApi {
     }
   }
 
-  Future<Map<String, dynamic>> registerUser(String role, String firstname,
-      String lastname, String email, String password) async {
+  Future<String> registerUser(BuildContext context, String role,
+      String firstname, String lastname, String email, String password) async {
     try {
       final Map<String, dynamic> registrationData = {
         'role': role,
@@ -46,17 +45,40 @@ class DataApi {
         body: jsonEncode(registrationData),
       );
 
-      return {
-        'statusCode': response.statusCode,
-        'body': jsonDecode(response.body),
-      };
+      String errorMessage;
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        Navigator.pushReplacementNamed(context, '/login');
+        errorMessage = '';
+      } else if (response.statusCode == 400 &&
+          json['message'] == 'User already exists') {
+        errorMessage = 'L\'utilisateur existe déjà.';
+      } else if (response.statusCode == 400 &&
+          json['message'] == "Invalid email") {
+        errorMessage = 'L\'email est invalide.';
+      } else {
+        print('Failed to register user. Status code: ${response.statusCode}');
+        print('Response body: ${json}');
+
+        errorMessage = 'Une erreur est survenue.';
+      }
+
+      return errorMessage;
     } catch (e) {
       throw Exception('Failed to register user: $e');
     }
   }
 
-  Future<Map<String, dynamic>> registerBotanist(String role, String firstname,
-      String lastname, String email, String siret, String password) async {
+  Future<String> registerBotanist(
+      BuildContext context,
+      String role,
+      String firstname,
+      String lastname,
+      String email,
+      String siret,
+      String password) async {
+    String errorMessage;
     try {
       final Map<String, dynamic> registrationData = {
         'role': role,
@@ -75,10 +97,25 @@ class DataApi {
         body: jsonEncode(registrationData),
       );
 
-      return {
-        'statusCode': response.statusCode,
-        'body': jsonDecode(response.body),
-      };
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        Navigator.pushReplacementNamed(context, '/confirmSignUp');
+        errorMessage = '';
+      } else if (response.statusCode == 400 &&
+          json['message'] == 'User already exists') {
+        errorMessage = 'Le botaniste existe déjà.';
+      } else if (response.statusCode == 400 &&
+          json['message'] == "Invalid email") {
+        errorMessage = 'L\'email est invalide.';
+      } else {
+        print('Failed to register user. Status code: ${response.statusCode}');
+        print('Response body: ${json['message']}');
+
+        errorMessage = 'Une erreur est survenue.';
+      }
+
+      return errorMessage;
     } catch (e) {
       throw Exception('Failed to register user: $e');
     }
@@ -116,7 +153,7 @@ class DataApi {
     }
   }
 
-  Future<http.Response> addGuard(String startDate, String endDate,
+  Future<void> addGuard(BuildContext context, String startDate, String endDate,
       String address, String zipCode, String city, List plants) async {
     try {
       String? jwt = await storage.read(key: 'jwt');
@@ -151,7 +188,21 @@ class DataApi {
       http.StreamedResponse streamedResponse = await request.send();
       http.Response response = await http.Response.fromStream(streamedResponse);
 
-      return response;
+      if (response.statusCode == 200) {
+        print('Status code: ${response.statusCode}');
+
+        print('Created guard!!!!!!!!!!!');
+        Navigator.pushReplacementNamed(context, '/home');
+      } else if (response.statusCode == 401) {
+        await storage.delete(key: 'jwt');
+        final prefs = await SharedPreferences.getInstance();
+        prefs.remove('user');
+        Navigator.pushReplacementNamed(context, '/login');
+        print('Status code: ${response.statusCode}');
+      } else {
+        print('Status code: ${response.statusCode}');
+        print('Reason phrase: ${response.reasonPhrase}');
+      }
     } catch (e) {
       throw Exception('Failed to add guard: $e');
     }

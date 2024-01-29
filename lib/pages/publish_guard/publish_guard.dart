@@ -246,9 +246,8 @@ class _PublishGuardState extends State<PublishGuard> {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
 
-      GuardService guardService = GuardService();
-
-      guardService.addGuard(
+      DataApi dataApi = DataApi();
+      dataApi.addGuard(
         context,
         _startDate!,
         _endDate!,

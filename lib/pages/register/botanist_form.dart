@@ -1,3 +1,4 @@
+import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/widgets/button.dart';
 import 'package:a_rosa_je/widgets/text_field.dart';
@@ -85,8 +86,8 @@ class _BotanistFormState extends State<BotanistForm> {
   Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
-      BotanistService user = BotanistService();
-      String result = await user.confirmRegisterBotanist(
+      DataApi user = DataApi();
+      String result = await user.registerBotanist(
         context,
         _role,
         _firstname,
