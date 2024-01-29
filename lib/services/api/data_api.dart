@@ -199,4 +199,30 @@ class DataApi {
       throw Exception('Failed to get plants type: $e');
     }
   }
+
+  Future<Map<String, dynamic>> getOwnerGuards() async {
+    //Récupérer l'id de l'utilisateur
+    UserService userService = UserService();
+    User owner = await userService.getUserPreferences();
+
+    //Récupérer le jwt
+    String? jwt = await storage.read(key: 'jwt');
+
+    var request = http.Request('GET',
+        Uri.parse('http://${getHost()}:2000/api/guard/user/${owner.id}'));
+
+    request.headers['Cookie'] = '$jwt';
+
+    http.StreamedResponse response = await request.send();
+
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(await response.stream.bytesToString()),
+    };
+    // return {
+    //   'statusCode': response.statusCode,
+    //   'body': jsonDecode(response()),
+    // };
+  }
+
 }

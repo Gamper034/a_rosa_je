@@ -3,6 +3,8 @@ import 'package:a_rosa_je/Models/conversation.dart';
 import 'package:a_rosa_je/Models/plant.dart';
 import 'package:a_rosa_je/Models/user.dart';
 import 'package:a_rosa_je/Models/visit.dart';
+import 'package:a_rosa_je/theme/color.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class Guard {
   String? id;
@@ -12,6 +14,7 @@ class Guard {
   String address;
   String zipCode;
   String city;
+  String? guardianId;
   User? guardian;
   List<User>? applicants;
   List<Plant> plants;
@@ -28,7 +31,8 @@ class Guard {
     required this.address,
     required this.zipCode,
     required this.city,
-    this.applicants,
+    required this.guardianId,
+    this.applications,
     this.guardian,
     required this.plants,
     this.visits,
@@ -64,6 +68,6 @@ class Guard {
 
   @override
   String toString() {
-    return 'Guard{id: $id, owner: $owner, startDate: $startDate, endDate: $endDate, address: $address, zipCode: $zipCode, city: $city, applicants: $applicants, guardian: $guardian, plants: $plants, visits: $visits, advices: $advices, conversation: $conversation, createdAt: $createdAt}';
+    return 'Guard{id: $id, owner: $owner, startDate: $startDate, endDate: $endDate, address: $address, zipCode: $zipCode, city: $city, guardianId: $guardianId,  applicants: $applications, guardian: $guardian, plants: $plants, visits: $visits, advices: $advices, conversation: $conversation, createdAt: $createdAt}';
   }
 }
