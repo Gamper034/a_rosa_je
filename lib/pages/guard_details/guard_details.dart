@@ -1,5 +1,8 @@
+import 'package:a_rosa_je/services/api/data_api.dart';
+import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/color.dart';
 import 'package:a_rosa_je/widgets/card_plant.dart';
+import 'package:a_rosa_je/widgets/status_badge_guard/status_badge.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -14,6 +17,18 @@ class GuardDetails extends StatefulWidget {
 }
 
 class _GuardDetailsState extends State<GuardDetails> {
+  late Guard guard;
+  GuardService guardService = GuardService();
+  late GuardStatus status;
+
+  @override
+  void initState() {
+    guard = widget.guard;
+    status = guardService.getStatus(guard);
+    super.initState();
+    print('initState');
+  }
+
   final monthNames = [
     'Janv.',
     'Fév.',
@@ -29,163 +44,166 @@ class _GuardDetailsState extends State<GuardDetails> {
     'Déc.'
   ];
 
-  Widget getBadgeEnCours() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              LucideIcons.hourglass,
-              color: Colors.white,
-              size: 18,
-            ),
-            SizedBox(width: 10),
-            Text(
-              'En cours',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Align getBadgeEnCours() {
+  //   return Align(
+  //     alignment: Alignment.centerLeft,
+  //     child: Container(
+  //       padding: EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //         color: Colors.blue,
+  //         borderRadius: BorderRadius.circular(5),
+  //       ),
+  //       child: Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(
+  //             LucideIcons.hourglass,
+  //             color: Colors.white,
+  //             size: 18,
+  //           ),
+  //           SizedBox(width: 10),
+  //           Text(
+  //             'En cours',
+  //             style: TextStyle(color: Colors.white),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget getBadgeTermine() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              LucideIcons.bookmark,
-              color: Colors.white,
-              size: 18,
-            ),
-            SizedBox(width: 10),
-            Text(
-              'Terminé',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Align getBadgeTermine() {
+  //   return Align(
+  //     alignment: Alignment.centerLeft,
+  //     child: Container(
+  //       padding: EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //         color: Colors.grey,
+  //         borderRadius: BorderRadius.circular(5),
+  //       ),
+  //       child: Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(
+  //             LucideIcons.bookmark,
+  //             color: Colors.white,
+  //             size: 18,
+  //           ),
+  //           SizedBox(width: 10),
+  //           Text(
+  //             'Terminé',
+  //             style: TextStyle(color: Colors.white),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget getBadgeAVenir() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: Colors.green,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              LucideIcons.calendar,
-              color: Colors.white,
-              size: 18,
-            ),
-            SizedBox(width: 10),
-            Text(
-              'A venir',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Align getBadgeAVenir() {
+  //   return Align(
+  //     alignment: Alignment.centerLeft,
+  //     child: Container(
+  //       padding: EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //         color: Colors.green,
+  //         borderRadius: BorderRadius.circular(5),
+  //       ),
+  //       child: Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(
+  //             LucideIcons.calendar,
+  //             color: Colors.white,
+  //             size: 18,
+  //           ),
+  //           SizedBox(width: 10),
+  //           Text(
+  //             'A venir',
+  //             style: TextStyle(color: Colors.white),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget getBadgeEnAttente() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: Colors.orange,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              LucideIcons.hourglass,
-              color: Colors.white,
-              size: 18,
-            ),
-            SizedBox(width: 10),
-            Text(
-              'En attente',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Align getBadgeEnAttente() {
+  //   return Align(
+  //     alignment: Alignment.centerLeft,
+  //     child: Container(
+  //       padding: EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //         color: Colors.orange,
+  //         borderRadius: BorderRadius.circular(5),
+  //       ),
+  //       child: Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(
+  //             LucideIcons.hourglass,
+  //             color: Colors.white,
+  //             size: 18,
+  //           ),
+  //           SizedBox(width: 10),
+  //           Text(
+  //             'En attente',
+  //             style: TextStyle(color: Colors.white),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget getBadgeDisponible() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: Colors.green,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              LucideIcons.check,
-              color: Colors.white,
-              size: 18,
-            ),
-            SizedBox(width: 10),
-            Text(
-              'Disponible',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Align getBadgeDisponible() {
+  //   return Align(
+  //     alignment: Alignment.centerLeft,
+  //     child: Container(
+  //       padding: EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //         color: Colors.green,
+  //         borderRadius: BorderRadius.circular(5),
+  //       ),
+  //       child: Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(
+  //             LucideIcons.check,
+  //             color: Colors.white,
+  //             size: 18,
+  //           ),
+  //           SizedBox(width: 10),
+  //           Text(
+  //             'Disponible',
+  //             style: TextStyle(color: Colors.white),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget getBadge() {
-    switch (widget.guard.getStatus()) {
-      case 'En cours':
-        return getBadgeEnCours();
-      case 'Terminé':
-        return getBadgeTermine();
-      case "A venir":
-        return getBadgeAVenir();
-      case "En attente":
-        return getBadgeEnAttente();
-      default:
-        return getBadgeDisponible();
-    }
-  }
+  // Widget getBadge() {
+  //   GuardService guardService = GuardService();
+  //   GuardStatus status = guardService.getStatus(guard);
+  //   switch (status) {
+  //     case GuardStatus.enCours:
+  //       return getBadgeEnCours();
+  //     case GuardStatus.termine:
+  //       return getBadgeTermine();
+  //     case GuardStatus.aVenir:
+  //       return getBadgeAVenir();
+  //     case GuardStatus.enAttente:
+  //       return getBadgeEnAttente();
+  //     default:
+  //       return getBadgeDisponible();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    print('build');
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -198,10 +216,9 @@ class _GuardDetailsState extends State<GuardDetails> {
                     height: 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    image: AssetImage('assets/images/placeholders/plant.jpg'),
-                    // image: NetworkImage(
-                    //   'http://localhost:2000/uploads/${widget.guard.plant[0].image}',
-                    // ),
+                    image: NetworkImage(
+                      'http://${DataApi.getHost()}:2000/uploads/${guard.plants[0].image}',
+                    ),
                   ),
                   Positioned(
                     top: 30,
@@ -232,7 +249,10 @@ class _GuardDetailsState extends State<GuardDetails> {
                 child: Column(
                   children: [
                     //Badge de validation
-                    getBadge(),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: StatusBadge.getBadgeStatus(status),
+                    ),
                     SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,17 +260,17 @@ class _GuardDetailsState extends State<GuardDetails> {
                         Container(
                           child: Row(
                             children: [
-                              Icon(
-                                LucideIcons.user,
-                                color: Colors.grey,
-                                size: 18,
+                              CircleAvatar(
+                                radius: 16.0,
+                                backgroundImage:
+                                    NetworkImage(guard.owner.avatar),
+                                backgroundColor: Colors.transparent,
                               ),
                               SizedBox(width: 10),
                               Text(
-                                widget.guard.owner.firstname +
+                                guard.owner.firstname +
                                     " " +
-                                    widget.guard.owner.lastname
-                                        .substring(0, 1) +
+                                    guard.owner.lastname.substring(0, 1) +
                                     ".",
                                 style:
                                     TextStyle(color: textColor, fontSize: 16),
@@ -263,20 +283,20 @@ class _GuardDetailsState extends State<GuardDetails> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                widget.guard.startDate.day.toString() +
+                                guard.startDate.day.toString() +
                                     " " +
-                                    monthNames[widget.guard.startDate.month] +
+                                    monthNames[guard.startDate.month - 1] +
                                     " - " +
-                                    widget.guard.endDate.day.toString() +
+                                    guard.endDate.day.toString() +
                                     " " +
-                                    monthNames[widget.guard.endDate.month],
+                                    monthNames[guard.endDate.month - 1],
                                 style: TextStyle(
                                     color: textColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
-                                widget.guard.city + " " + widget.guard.zipCode,
+                                guard.city + " " + guard.zipCode,
                                 style: TextStyle(
                                     color: secondaryTextColor,
                                     fontSize: 12,
@@ -320,7 +340,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                       onPressed: () {},
                       label: 'Conseils de Botanistes',
                       textColor: textColor,
-                      buttonColor: Colors.white,
+                      buttonColor: secondaryColor,
                       icon: LucideIcons.flower2,
                     ),
                     SizedBox(height: 25),
@@ -338,7 +358,7 @@ class _GuardDetailsState extends State<GuardDetails> {
 
                     Column(
                       children: [
-                        for (var plant in widget.guard.plants)
+                        for (var plant in guard.plants)
                           CardPlant(
                             plant: plant,
                           ),

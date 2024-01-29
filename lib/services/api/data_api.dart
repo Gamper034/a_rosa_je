@@ -1,4 +1,3 @@
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -12,7 +11,7 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 class DataApi {
   final storage = new FlutterSecureStorage();
 
-  String getHost() {
+  static String getHost() {
     if (kIsWeb) {
       return 'localhost';
     }
@@ -25,7 +24,6 @@ class DataApi {
         return 'localhost';
     }
   }
-
 
   Future<Map<String, dynamic>> registerUser(String role, String firstname,
       String lastname, String email, String password) async {
@@ -84,7 +82,6 @@ class DataApi {
     }
   }
 
-
   Future<Map<String, dynamic>> getGuardList(
       List<String> selectedPlantTypeList, String selectedVille) async {
     try {
@@ -116,9 +113,6 @@ class DataApi {
       throw Exception('Failed to get guard list: $e');
     }
   }
-
-  
-
 
   Future<http.Response> addGuard(String startDate, String endDate,
       String address, String zipCode, String city, List plants) async {
@@ -161,7 +155,7 @@ class DataApi {
     }
   }
 
-   Future<Map<String, dynamic>> getPlantTypeList() async {
+  Future<Map<String, dynamic>> getPlantTypeList() async {
     try {
       String? jwt = await storage.read(key: 'jwt');
 
@@ -181,7 +175,7 @@ class DataApi {
       throw Exception('Failed to get guard list: $e');
     }
   }
-  
+
   Future<List<String>> getPlantsType() async {
     try {
       final response = await http.get(
@@ -205,6 +199,4 @@ class DataApi {
       throw Exception('Failed to get plants type: $e');
     }
   }
-    
-  
 }

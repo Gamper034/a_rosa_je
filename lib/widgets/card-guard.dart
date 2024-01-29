@@ -2,6 +2,7 @@ import 'package:a_rosa_je/Models/guard.dart';
 import 'package:a_rosa_je/Models/plant.dart';
 import 'package:a_rosa_je/Models/user.dart';
 import 'package:a_rosa_je/pages/guard_details/guard_details.dart';
+import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/theme/theme.dart';
@@ -55,7 +56,7 @@ class GuardCard extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20.0),
                             child: Image.network(
-                              'http://localhost:2000/uploads/${guard.plants[0].image}',
+                              'http://${DataApi.getHost()}:2000/uploads/${guard.plants[0].image}',
                               fit: BoxFit.cover,
                             ),
                             // child: Image.asset(

@@ -1,4 +1,5 @@
 import 'package:a_rosa_je/Models/plant.dart';
+import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/theme/color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,24 +20,24 @@ class CardPlant extends StatelessWidget {
         children: [
           Container(
             height: 80,
+            padding: EdgeInsets.all(5),
+            width: 80,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/placeholders/plant.jpg'),
-                // image: NetworkImage(
-                //   'http://localhost:2000/uploads/${plant.image}',
-                // ),
+                image: NetworkImage(
+                  'http://${DataApi.getHost()}:2000/uploads/${plant.image}',
+                ),
               ),
             ),
           ),
-
-          SizedBox(width: 10), // Ajoutez un espace entre l'image et le texte
+          SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                plant.name, // Remplacez par votre titre
+                plant.name,
                 style: TextStyle(
                   color: textColor,
                   fontSize: 16,
@@ -44,7 +45,7 @@ class CardPlant extends StatelessWidget {
                 ),
               ),
               Text(
-                plant.plantType, // Remplacez par votre description
+                plant.plantType,
                 style: TextStyle(
                   color: textColor,
                   fontSize: 14,
