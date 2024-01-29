@@ -1,10 +1,6 @@
-import 'dart:convert';
-
 import 'package:a_rosa_je/Models/guard.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
-import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/color.dart';
-import 'package:a_rosa_je/theme/textstyle.dart';
 import 'package:a_rosa_je/widgets/card-guard.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';

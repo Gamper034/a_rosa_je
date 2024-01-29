@@ -56,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.only(right: 20, left: 20, top: 30),
         child: Column(
           children: [
             //for each guard in guards we call the guardCard widget

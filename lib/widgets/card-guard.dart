@@ -98,7 +98,7 @@ class GuardCard extends StatelessWidget {
                                   )),
                             )),
                       ),
-                      myGuards ? badgeStatusGuard() : Container(),
+                      myGuards ? _badgeStatusGuard() : Container(),
                     ],
                   ),
                 ),
@@ -110,7 +110,7 @@ class GuardCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: isMade ? guardianStatus() : OwnerInfo(),
+                child: isMade ? _guardianStatus() : _OwnerInfo(),
               ),
               Container(
                 child: Column(
@@ -129,7 +129,7 @@ class GuardCard extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.w500),
                     ),
-                    isMade ? Container() : cityInfo(),
+                    isMade ? Container() : _cityInfo(),
                   ],
                 ),
               ),
@@ -140,7 +140,7 @@ class GuardCard extends StatelessWidget {
     );
   }
 
-  OwnerInfo() {
+  _OwnerInfo() {
     return Row(
       children: [
         CircleAvatar(
@@ -163,20 +163,21 @@ class GuardCard extends StatelessWidget {
     );
   }
 
-  guardianStatus() {
-    //TODO : Modifier et afficher 'Recherche de gardien' si pas de gardien
+  _guardianStatus() {
+    bool isGuard = guard.guardian != null;
+    print(isGuard);
     return Row(
       children: [
         Icon(
-          LucideIcons.check,
-          color: primaryColor,
+          isGuard ? LucideIcons.check : LucideIcons.hourglass,
+          color: isGuard ? primaryColor : warningColor,
           size: 18,
         ),
         SizedBox(width: 5),
         Text(
-          "Gardien validé",
+          isGuard ? "Gardien validé" : "Recherche de gardien",
           style: TextStyle(
-            color: primaryColor,
+            color: isGuard ? primaryColor : warningColor,
             fontSize: 14,
           ),
         ),
@@ -184,7 +185,7 @@ class GuardCard extends StatelessWidget {
     );
   }
 
-  cityInfo() {
+  _cityInfo() {
     return Text(
       guard.city + " " + guard.zipCode,
       style: TextStyle(
@@ -192,7 +193,7 @@ class GuardCard extends StatelessWidget {
     );
   }
 
-  badgeStatusGuard() {
+  _badgeStatusGuard() {
     //TODO: Ajouter Candidature en attente si Dans effectuées donc isMade = false et pas de gardien + Ajout opacité si terminée et revoir le traitement car Terminée affiché alors que guarde non passée
     String badgeText;
     Color badgeColor;

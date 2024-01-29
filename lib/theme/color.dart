@@ -8,3 +8,4 @@ const Color solidGreen = Color(0xFF2F7F33);
 const Color secondaryTextColor = Color(0xFF9B9B9B);
 const Color greenTitle = Color(0xFF0B1E0B);
 const Color blueBadge = Color(0xFF15AFE0);
+const Color warningColor = Color(0xFFF6B60E);
