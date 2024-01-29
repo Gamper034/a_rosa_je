@@ -1,4 +1,5 @@
-import 'package:a_rosa_je/Models/guard.dart';
+import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/services/guard.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/theme/theme.dart';
@@ -8,7 +9,7 @@ class GuardCard extends StatelessWidget {
       {super.key,
       required this.guard,
       required this.myGuards,
-      required this.isMade});
+      required this.byCurrentUser});
   DateTime now = DateTime.now();
 
   final monthNames = [
@@ -29,7 +30,7 @@ class GuardCard extends StatelessWidget {
   final Guard guard;
 
   bool myGuards;
-  bool isMade;
+  bool byCurrentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +111,7 @@ class GuardCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: isMade ? _guardianStatus() : _OwnerInfo(),
+                child: byCurrentUser ? _guardianStatus() : _OwnerInfo(),
               ),
               Container(
                 child: Column(
@@ -119,17 +120,17 @@ class GuardCard extends StatelessWidget {
                     Text(
                       guard.startDate.day.toString() +
                           " " +
-                          monthNames[guard.startDate.month] +
+                          monthNames[guard.startDate.month - 1] +
                           " - " +
                           guard.endDate.day.toString() +
                           " " +
-                          monthNames[guard.endDate.month],
+                          monthNames[guard.endDate.month - 1],
                       style: TextStyle(
                           color: textColor,
                           fontSize: 16,
                           fontWeight: FontWeight.w500),
                     ),
-                    isMade ? Container() : _cityInfo(),
+                    byCurrentUser ? Container() : _cityInfo(),
                   ],
                 ),
               ),
@@ -164,20 +165,20 @@ class GuardCard extends StatelessWidget {
   }
 
   _guardianStatus() {
-    bool isGuard = guard.guardian != null;
-    print(isGuard);
+    bool hasGuard = guard.guardianId != null;
+    print(hasGuard);
     return Row(
       children: [
         Icon(
-          isGuard ? LucideIcons.check : LucideIcons.hourglass,
-          color: isGuard ? primaryColor : warningColor,
+          hasGuard ? LucideIcons.check : LucideIcons.hourglass,
+          color: hasGuard ? primaryColor : warningColor,
           size: 18,
         ),
         SizedBox(width: 5),
         Text(
-          isGuard ? "Gardien validé" : "Recherche de gardien",
+          hasGuard ? "Gardien validé" : "Recherche de gardien",
           style: TextStyle(
-            color: isGuard ? primaryColor : warningColor,
+            color: hasGuard ? primaryColor : warningColor,
             fontSize: 14,
           ),
         ),
@@ -195,26 +196,27 @@ class GuardCard extends StatelessWidget {
 
   _badgeStatusGuard() {
     //TODO: Ajouter Candidature en attente si Dans effectuées donc isMade = false et pas de gardien + Ajout opacité si terminée et revoir le traitement car Terminée affiché alors que guarde non passée
-    String badgeText;
-    Color badgeColor;
-    IconData icon;
+    // String badgeText = "";
+    GuardService guardService = GuardService();
 
-    if (now.isBefore(guard.startDate)) {
-      // La date actuelle est avant la date de début de la garde
-      badgeText = "A venir";
-      badgeColor = blueBadge;
-      icon = LucideIcons.calendar;
-    } else if (now.isAfter(guard.endDate)) {
-      // La date actuelle est après la date de fin de la garde
-      badgeText = "Terminée";
-      badgeColor = greenTitle;
-      icon = LucideIcons.bookmarkMinus;
-    } else {
-      // La date actuelle est entre la date de début et la date de fin de la garde
-      badgeText = "En cours";
-      badgeColor = primaryColor;
-      icon = LucideIcons.hourglass;
-    }
+    Map<String, dynamic> statusInfo = guardService.getStatus(guard);
+    // String badgeText = "";
+
+    // if (now.isBefore(guard.startDate)) {
+    //   // La date actuelle est avant la date de début de la garde
+    //   badgeColor = blueBadge;
+    //   icon = LucideIcons.calendar;
+    // } else if (now.isAfter(guard.endDate)) {
+    //   // La date actuelle est après la date de fin de la garde
+    //   // badgeText = "Terminée";
+    //   badgeColor = greenTitle;
+    //   icon = LucideIcons.bookmarkMinus;
+    // } else {
+    //   // La date actuelle est entre la date de début et la date de fin de la garde
+    //   // badgeText = "En cours";
+    //   badgeColor = primaryColor;
+    //   icon = LucideIcons.hourglass;
+    // }
     //
     return Positioned(
       top: 0,
@@ -224,14 +226,14 @@ class GuardCard extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(7.0),
           child: Container(
-            color: badgeColor,
+            color: statusInfo['color'],
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    icon,
+                    statusInfo['icon'],
                     color: Colors.white,
                     size: 18,
                   ),
@@ -239,7 +241,7 @@ class GuardCard extends StatelessWidget {
                       width:
                           4.0), // Ajoutez un espace entre l'icône et le texte
                   Text(
-                    badgeText,
+                    statusInfo['text'],
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                 ],

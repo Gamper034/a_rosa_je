@@ -1,4 +1,4 @@
-import 'package:a_rosa_je/Models/guard.dart';
+import 'package:a_rosa_je/models/guard.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/widgets/card-guard.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
             //for each guard in guards we call the guardCard widget
 
             for (var guard in guards)
-              GuardCard(guard: guard, myGuards: false, isMade: false)
+              GuardCard(guard: guard, myGuards: false, byCurrentUser: false)
           ],
         ),
       ),

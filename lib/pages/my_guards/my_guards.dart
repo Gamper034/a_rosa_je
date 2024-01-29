@@ -1,4 +1,4 @@
-import 'package:a_rosa_je/Models/guard.dart';
+import 'package:a_rosa_je/models/guard.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/theme/color.dart';
 import 'package:a_rosa_je/widgets/card-guard.dart';
@@ -41,7 +41,7 @@ class _MyGuardsState extends State<MyGuards> {
                           getGuardList(guardsRequested);
                         })
                       },
-                      label: "Effectuées",
+                      label: "Postulées",
                       buttonColor:
                           guardsRequested ? secondaryColor : primaryColor,
                       textColor: guardsRequested ? textColor : Colors.white,
@@ -56,7 +56,7 @@ class _MyGuardsState extends State<MyGuards> {
                           getGuardList(guardsRequested);
                         })
                       },
-                      label: "Demandées",
+                      label: "Publiées",
                       buttonColor:
                           guardsRequested ? primaryColor : secondaryColor,
                       textColor: guardsRequested ? Colors.white : textColor,
@@ -109,8 +109,8 @@ class _MyGuardsState extends State<MyGuards> {
   // }
 
   Widget build_cards(BuildContext context) {
-    bool isMade = true;
-    if (guardsRequested == false) isMade = false;
+    bool byCurrentUser = true;
+    if (guardsRequested == false) byCurrentUser = false;
     return FutureBuilder<List<Guard>>(
       future: getGuardList(guardsRequested),
       builder: (context, snapshot) {
@@ -121,15 +121,29 @@ class _MyGuardsState extends State<MyGuards> {
         } else {
           // Vérifiez que snapshot.data n'est pas null avant d'y accéder
           List<Guard> guards = snapshot.data ?? [];
-          return Expanded(
-            child: ListView.builder(
-              itemCount: guards.length,
-              itemBuilder: (context, index) {
-                return GuardCard(
-                    guard: guards[index], myGuards: true, isMade: isMade);
-              },
-            ),
-          );
+          if (guards.isEmpty) {
+            return byCurrentUser
+                ? Text(
+                    'Vous n\'avez pas encore publié à une garde.',
+                    style: TextStyle(color: textColor),
+                  )
+                : Text(
+                    'Vous n\'avez pas encore postulé à une garde.',
+                    style: TextStyle(color: textColor),
+                  );
+          } else {
+            return Expanded(
+              child: ListView.builder(
+                itemCount: guards.length,
+                itemBuilder: (context, index) {
+                  return GuardCard(
+                      guard: guards[index],
+                      myGuards: true,
+                      byCurrentUser: byCurrentUser);
+                },
+              ),
+            );
+          }
         }
       },
     );
