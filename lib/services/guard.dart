@@ -38,6 +38,10 @@ class GuardService {
 
     DateTime today =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    DateTime startDate = DateTime(
+        guard.startDate.year, guard.startDate.month, guard.startDate.day);
+    DateTime endDate =
+        DateTime(guard.endDate.year, guard.endDate.month, guard.endDate.day);
 
     print(today);
 
@@ -53,7 +57,7 @@ class GuardService {
         guard.endDate.isBefore(today)) {
       //Date de début et de fin passées
       statusInfo['text'] = "Terminée";
-      statusInfo['color'] = greenTitle;
+      statusInfo['color'] = greenSolid;
       statusInfo['icon'] = LucideIcons.bookmarkMinus;
     } else {
       if (guard.applications != null && guard.applications!.length > 0) {

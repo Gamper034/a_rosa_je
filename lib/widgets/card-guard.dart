@@ -32,6 +32,15 @@ class GuardCard extends StatelessWidget {
   bool myGuards;
   bool byCurrentUser;
 
+  bool get isPassed {
+    DateTime endDate =
+        DateTime(guard.endDate.year, guard.endDate.month, guard.endDate.day);
+    DateTime today =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    print(endDate.isBefore(today));
+    return endDate.isBefore(today);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,10 +62,12 @@ class GuardCard extends StatelessWidget {
                         width: double.infinity,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
+
                           child: Image.network(
                             'http://localhost:2000/uploads/${guard.plants[0].image}',
                             fit: BoxFit.cover,
                           ),
+
                           // child: Image.asset(
                           //   //guard.plants[0].picture,
                           //   'assets/images/placeholders/plant.jpg',
@@ -64,6 +75,13 @@ class GuardCard extends StatelessWidget {
                           // ),
                         ),
                       ),
+                      if (isPassed)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -165,8 +183,8 @@ class GuardCard extends StatelessWidget {
   }
 
   _guardianStatus() {
-    bool hasGuard = guard.guardianId != null;
-    print(hasGuard);
+    bool hasGuard = guard.guardian != null;
+    // print(hasGuard);
     return Row(
       children: [
         Icon(

@@ -71,7 +71,7 @@ class ArosajeTextStyle {
   static final AppBarTextStyle = baseTextStyle.copyWith(
     fontWeight: FontWeight.w500,
     fontSize: 24,
-    color: greenTitle,
+    color: greenSolid,
   );
 
   static final titleFormTextStyle = baseTextStyle.copyWith(
