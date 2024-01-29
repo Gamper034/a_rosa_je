@@ -7,6 +7,7 @@ class CustomButton extends StatelessWidget {
   final Color buttonColor;
   final Color textColor;
   final IconData? icon;
+  final bool border;
 
   CustomButton({
     required this.onPressed,
@@ -14,6 +15,7 @@ class CustomButton extends StatelessWidget {
     this.buttonColor = Colors.white,
     this.textColor = primaryColor,
     this.icon,
+    this.border = false,
   });
 //OutlinedButton
   @override
@@ -21,7 +23,11 @@ class CustomButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-          backgroundColor: buttonColor, side: BorderSide.none),
+        backgroundColor: buttonColor,
+        side: border
+            ? BorderSide(color: secondaryColor, width: 2.0)
+            : BorderSide.none,
+      ),
       child: Container(
         width: double.infinity,
         height: 50,

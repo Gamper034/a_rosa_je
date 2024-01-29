@@ -6,7 +6,7 @@ import 'package:a_rosa_je/widgets/status_badge_guard/status_badge.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:a_rosa_je/Models/guard.dart';
+import 'package:a_rosa_je/models/guard.dart';
 
 class GuardDetails extends StatefulWidget {
   const GuardDetails({super.key, required this.guard});
@@ -44,163 +44,6 @@ class _GuardDetailsState extends State<GuardDetails> {
     'Déc.'
   ];
 
-  // Align getBadgeEnCours() {
-  //   return Align(
-  //     alignment: Alignment.centerLeft,
-  //     child: Container(
-  //       padding: EdgeInsets.all(5),
-  //       decoration: BoxDecoration(
-  //         color: Colors.blue,
-  //         borderRadius: BorderRadius.circular(5),
-  //       ),
-  //       child: Row(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           Icon(
-  //             LucideIcons.hourglass,
-  //             color: Colors.white,
-  //             size: 18,
-  //           ),
-  //           SizedBox(width: 10),
-  //           Text(
-  //             'En cours',
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Align getBadgeTermine() {
-  //   return Align(
-  //     alignment: Alignment.centerLeft,
-  //     child: Container(
-  //       padding: EdgeInsets.all(5),
-  //       decoration: BoxDecoration(
-  //         color: Colors.grey,
-  //         borderRadius: BorderRadius.circular(5),
-  //       ),
-  //       child: Row(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           Icon(
-  //             LucideIcons.bookmark,
-  //             color: Colors.white,
-  //             size: 18,
-  //           ),
-  //           SizedBox(width: 10),
-  //           Text(
-  //             'Terminé',
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Align getBadgeAVenir() {
-  //   return Align(
-  //     alignment: Alignment.centerLeft,
-  //     child: Container(
-  //       padding: EdgeInsets.all(5),
-  //       decoration: BoxDecoration(
-  //         color: Colors.green,
-  //         borderRadius: BorderRadius.circular(5),
-  //       ),
-  //       child: Row(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           Icon(
-  //             LucideIcons.calendar,
-  //             color: Colors.white,
-  //             size: 18,
-  //           ),
-  //           SizedBox(width: 10),
-  //           Text(
-  //             'A venir',
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Align getBadgeEnAttente() {
-  //   return Align(
-  //     alignment: Alignment.centerLeft,
-  //     child: Container(
-  //       padding: EdgeInsets.all(5),
-  //       decoration: BoxDecoration(
-  //         color: Colors.orange,
-  //         borderRadius: BorderRadius.circular(5),
-  //       ),
-  //       child: Row(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           Icon(
-  //             LucideIcons.hourglass,
-  //             color: Colors.white,
-  //             size: 18,
-  //           ),
-  //           SizedBox(width: 10),
-  //           Text(
-  //             'En attente',
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Align getBadgeDisponible() {
-  //   return Align(
-  //     alignment: Alignment.centerLeft,
-  //     child: Container(
-  //       padding: EdgeInsets.all(5),
-  //       decoration: BoxDecoration(
-  //         color: Colors.green,
-  //         borderRadius: BorderRadius.circular(5),
-  //       ),
-  //       child: Row(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           Icon(
-  //             LucideIcons.check,
-  //             color: Colors.white,
-  //             size: 18,
-  //           ),
-  //           SizedBox(width: 10),
-  //           Text(
-  //             'Disponible',
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget getBadge() {
-  //   GuardService guardService = GuardService();
-  //   GuardStatus status = guardService.getStatus(guard);
-  //   switch (status) {
-  //     case GuardStatus.enCours:
-  //       return getBadgeEnCours();
-  //     case GuardStatus.termine:
-  //       return getBadgeTermine();
-  //     case GuardStatus.aVenir:
-  //       return getBadgeAVenir();
-  //     case GuardStatus.enAttente:
-  //       return getBadgeEnAttente();
-  //     default:
-  //       return getBadgeDisponible();
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     print('build');
@@ -213,7 +56,7 @@ class _GuardDetailsState extends State<GuardDetails> {
               Stack(
                 children: [
                   Image(
-                    height: 200,
+                    height: 300,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     image: NetworkImage(
@@ -221,8 +64,8 @@ class _GuardDetailsState extends State<GuardDetails> {
                     ),
                   ),
                   Positioned(
-                    top: 30,
-                    left: 10,
+                    top: 60,
+                    left: 20,
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -245,7 +88,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                 ],
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   children: [
                     //Badge de validation
@@ -335,12 +178,13 @@ class _GuardDetailsState extends State<GuardDetails> {
                         )
                       ],
                     ),
-                    SizedBox(height: 40),
+                    SizedBox(height: 20),
                     CustomButton(
                       onPressed: () {},
                       label: 'Conseils de Botanistes',
                       textColor: textColor,
-                      buttonColor: secondaryColor,
+                      buttonColor: Colors.white,
+                      border: true,
                       icon: LucideIcons.flower2,
                     ),
                     SizedBox(height: 25),
@@ -349,7 +193,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                       child: Text(
                         'Plantes à garder',
                         style: TextStyle(
-                            color: textColor,
+                            color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500),
                       ),

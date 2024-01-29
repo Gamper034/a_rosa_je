@@ -1,5 +1,5 @@
-import 'package:a_rosa_je/Models/plant.dart';
-import 'package:a_rosa_je/Models/visit.dart';
+import 'package:a_rosa_je/models/plant.dart';
+import 'package:a_rosa_je/models/visit.dart';
 
 class PlantVisit {
   String id;

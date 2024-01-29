@@ -1,3 +1,5 @@
+import 'package:a_rosa_je/models/user.dart';
+import 'package:a_rosa_je/services/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -224,5 +226,4 @@ class DataApi {
     //   'body': jsonDecode(response()),
     // };
   }
-
 }

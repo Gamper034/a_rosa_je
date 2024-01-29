@@ -1,5 +1,8 @@
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/pages/guard_details/guard_details.dart';
+import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
+import 'package:a_rosa_je/widgets/status_badge_guard/status_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/theme/theme.dart';
@@ -47,114 +50,124 @@ class GuardCard extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 20),
       // margin: EdgeInsets.all(10),
       // height: 290,
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  height: 200,
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-
-                          child: Image.network(
-                            'http://localhost:2000/uploads/${guard.plants[0].image}',
-                            fit: BoxFit.cover,
-                          ),
-
-                          // child: Image.asset(
-                          //   //guard.plants[0].picture,
-                          //   'assets/images/placeholders/plant.jpg',
-                          //   fit: BoxFit.cover,
-                          // ),
-                        ),
-                      ),
-                      if (isPassed)
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GuardDetails(guard: guard),
+            ),
+          );
+        },
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 200,
+                    child: Stack(
+                      children: [
                         Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.5),
+                          width: double.infinity,
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(20.0),
+
+                            child: Image.network(
+                              'http://${DataApi.getHost()}:2000/uploads/${guard.plants[0].image}',
+                              fit: BoxFit.cover,
+                            ),
+
+                            // child: Image.asset(
+                            //   //guard.plants[0].picture,
+                            //   'assets/images/placeholders/plant.jpg',
+                            //   fit: BoxFit.cover,
+                            // ),
                           ),
                         ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        child: Container(
-                            margin: EdgeInsets.only(left: 10, bottom: 10),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(7.0),
-                              child: Container(
-                                  color: Colors.white,
-                                  height: 24,
-                                  width: 94,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Icon(
-                                        LucideIcons.flower2,
-                                        size: 18,
-                                      ),
-                                      if (guard.plants.length > 1)
-                                        Text(
-                                          guard.plants.length.toString() +
-                                              " plantes",
-                                          style: TextStyle(fontSize: 14),
+                        if (isPassed)
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          child: Container(
+                              margin: EdgeInsets.only(left: 10, bottom: 10),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(7.0),
+                                child: Container(
+                                    color: Colors.white,
+                                    height: 24,
+                                    width: 94,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Icon(
+                                          LucideIcons.flower2,
+                                          size: 18,
                                         ),
-                                      if (guard.plants.length <= 1)
-                                        Text(
-                                          guard.plants.length.toString() +
-                                              " plante",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                    ],
-                                  )),
-                            )),
+                                        if (guard.plants.length > 1)
+                                          Text(
+                                            guard.plants.length.toString() +
+                                                " plantes",
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        if (guard.plants.length <= 1)
+                                          Text(
+                                            guard.plants.length.toString() +
+                                                " plante",
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                      ],
+                                    )),
+                              )),
+                        ),
+                        myGuards ? _badgeStatusGuard() : Container(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: byCurrentUser ? _guardianStatus() : _OwnerInfo(),
+                ),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        guard.startDate.day.toString() +
+                            " " +
+                            monthNames[guard.startDate.month - 1] +
+                            " - " +
+                            guard.endDate.day.toString() +
+                            " " +
+                            monthNames[guard.endDate.month - 1],
+                        style: TextStyle(
+                            color: textColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
                       ),
-                      myGuards ? _badgeStatusGuard() : Container(),
+                      byCurrentUser ? Container() : _cityInfo(),
                     ],
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                child: byCurrentUser ? _guardianStatus() : _OwnerInfo(),
-              ),
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      guard.startDate.day.toString() +
-                          " " +
-                          monthNames[guard.startDate.month - 1] +
-                          " - " +
-                          guard.endDate.day.toString() +
-                          " " +
-                          monthNames[guard.endDate.month - 1],
-                      style: TextStyle(
-                          color: textColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    byCurrentUser ? Container() : _cityInfo(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -213,61 +226,9 @@ class GuardCard extends StatelessWidget {
   }
 
   _badgeStatusGuard() {
-    //TODO: Ajouter Candidature en attente si Dans effectuées donc isMade = false et pas de gardien + Ajout opacité si terminée et revoir le traitement car Terminée affiché alors que guarde non passée
-    // String badgeText = "";
     GuardService guardService = GuardService();
-
-    Map<String, dynamic> statusInfo = guardService.getStatus(guard);
-    // String badgeText = "";
-
-    // if (now.isBefore(guard.startDate)) {
-    //   // La date actuelle est avant la date de début de la garde
-    //   badgeColor = blueBadge;
-    //   icon = LucideIcons.calendar;
-    // } else if (now.isAfter(guard.endDate)) {
-    //   // La date actuelle est après la date de fin de la garde
-    //   // badgeText = "Terminée";
-    //   badgeColor = greenTitle;
-    //   icon = LucideIcons.bookmarkMinus;
-    // } else {
-    //   // La date actuelle est entre la date de début et la date de fin de la garde
-    //   // badgeText = "En cours";
-    //   badgeColor = primaryColor;
-    //   icon = LucideIcons.hourglass;
-    // }
-    //
+    GuardStatus status = guardService.getStatus(guard);
     return Positioned(
-      top: 0,
-      left: 0,
-      child: Container(
-        margin: EdgeInsets.only(left: 10, top: 10),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(7.0),
-          child: Container(
-            color: statusInfo['color'],
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    statusInfo['icon'],
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                  SizedBox(
-                      width:
-                          4.0), // Ajoutez un espace entre l'icône et le texte
-                  Text(
-                    statusInfo['text'],
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+        top: 10, left: 10, child: StatusBadge.getBadgeStatus(status));
   }
 }
