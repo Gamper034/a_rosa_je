@@ -13,10 +13,10 @@ class Guard {
   String zipCode;
   String city;
   User? guardian;
-  List<User>? applicants = [];
-  List<Plant> plants = [];
-  List<Visit>? visits = [];
-  List<Advice>? advices = [];
+  List<User>? applicants;
+  List<Plant> plants;
+  List<Visit>? visits;
+  List<Advice>? advices;
   Conversation? conversation;
   DateTime createdAt;
 
@@ -46,12 +46,13 @@ class Guard {
       address: json['address'],
       zipCode: json['zipCode'],
       city: json['city'],
-      applicants: null,
-      guardian: null,
+      applicants: [],
+      guardian:
+          json['guardian'] != null ? User.fromJson(json['guardian']) : null,
       plants:
           json['plants'].map<Plant>((plant) => Plant.fromJson(plant)).toList(),
-      visits: null,
-      advices: null,
+      visits: [],
+      advices: [],
       conversation: null,
       createdAt: DateTime.parse(json['createdAt']),
     );
