@@ -58,8 +58,8 @@ class DataApi {
           json['message'] == "Invalid email") {
         errorMessage = 'L\'email est invalide.';
       } else {
-        print('Failed to register user. Status code: ${response.statusCode}');
-        print('Response body: ${json}');
+        print(response.statusCode);
+        // print('Response body: ${json}');
 
         errorMessage = 'Une erreur est survenue.';
       }
@@ -109,8 +109,8 @@ class DataApi {
           json['message'] == "Invalid email") {
         errorMessage = 'L\'email est invalide.';
       } else {
-        print('Failed to register user. Status code: ${response.statusCode}');
-        print('Response body: ${json['message']}');
+        print(response.statusCode);
+        // print('Response body: ${json['message']}');
 
         errorMessage = 'Une erreur est survenue.';
       }
@@ -189,19 +189,19 @@ class DataApi {
       http.Response response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        print('Status code: ${response.statusCode}');
+        print(response.statusCode);
 
-        print('Created guard!!!!!!!!!!!');
+        // print('Created guard!!!!!!!!!!!');
         Navigator.pushReplacementNamed(context, '/home');
       } else if (response.statusCode == 401) {
         await storage.delete(key: 'jwt');
         final prefs = await SharedPreferences.getInstance();
         prefs.remove('user');
         Navigator.pushReplacementNamed(context, '/login');
-        print('Status code: ${response.statusCode}');
+        print(response.statusCode);
       } else {
-        print('Status code: ${response.statusCode}');
-        print('Reason phrase: ${response.reasonPhrase}');
+        print(response.statusCode);
+        // print('Reason phrase: ${response.reasonPhrase}');
       }
     } catch (e) {
       throw Exception('Failed to add guard: $e');

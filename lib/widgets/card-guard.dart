@@ -40,7 +40,7 @@ class GuardCard extends StatelessWidget {
         DateTime(guard.endDate.year, guard.endDate.month, guard.endDate.day);
     DateTime today =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    print(endDate.isBefore(today));
+    // print(endDate.isBefore(today));
     return endDate.isBefore(today);
   }
 

@@ -83,4 +83,10 @@ class ArosajeTextStyle {
     fontWeight: FontWeight.w400,
     fontSize: 14,
   );
+
+  static final titleLightTextStyle = baseTextStyle.copyWith(
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    color: greyColor,
+  );
 }

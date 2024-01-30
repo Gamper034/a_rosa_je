@@ -17,15 +17,6 @@ class UserService {
     String? userJson = prefs.getString('user');
 
     if (userJson != null) {
-      // Convertir la chaîne JSON en Map<String, dynamic>
-      Map<String, dynamic> userMap = jsonDecode(userJson);
-
-      // Construire l'objet User
-      User user = User.fromJson(userMap);
-
-      // Utiliser l'objet User
-      print(user);
-
       // Naviguer vers l'écran d'accueil si l'utilisateur est déjà connecté
       Navigator.pushReplacementNamed(context, '/home');
     } else {

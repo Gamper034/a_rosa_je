@@ -1,3 +1,4 @@
+import 'package:a_rosa_je/pages/advices/botanist_advices.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/color.dart';
@@ -26,7 +27,7 @@ class _GuardDetailsState extends State<GuardDetails> {
     guard = widget.guard;
     status = guardService.getStatus(guard);
     super.initState();
-    print('initState');
+    // print('initState');
   }
 
   final monthNames = [
@@ -46,7 +47,7 @@ class _GuardDetailsState extends State<GuardDetails> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
+    // print('build');
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -180,7 +181,14 @@ class _GuardDetailsState extends State<GuardDetails> {
                     ),
                     SizedBox(height: 20),
                     CustomButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BotanistAdvices(guard: guard),
+                          ),
+                        );
+                      },
                       label: 'Conseils de Botanistes',
                       textColor: textColor,
                       buttonColor: Colors.white,
