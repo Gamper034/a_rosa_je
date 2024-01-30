@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: CustomTextField(
                     color: Colors.white,
+                    colorText: Colors.white,
                     hintText: "Email",
                     onSaved: (value) => email = value ?? '',
                     validator: (value) => value?.isEmpty ?? true
@@ -64,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: CustomTextField(
                     color: Colors.white,
                     hintText: "Mot de passe",
+                    colorText: Colors.white,
                     obscureText: true,
                     onSaved: (value) => password = value ?? '',
                     validator: (value) => value?.isEmpty ?? true

@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/models/user.dart';
+import 'package:a_rosa_je/pages/advices/new_advice.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:a_rosa_je/services/user.dart';
 
 class BotanistAdvices extends StatefulWidget {
   final Guard guard;
@@ -20,14 +25,30 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
   late List<Advice> advices;
   late Guard guard;
   late Map<String, dynamic> json;
+  bool isBotanist = false;
 
   @override
   void initState() {
     guard = widget.guard;
     advices = widget.advices;
-    print(advices.length);
-    print(advices);
+    // print(advices.length);
+    // print(advices);
     super.initState();
+    getUserPreference();
+  }
+
+  getUserPreference() async {
+    UserService userService = UserService();
+    String? jsonString = await userService.getUserPreference('user');
+    if (jsonString == null) {
+      return;
+    }
+    Map<String, dynamic> userPreference = jsonDecode(jsonString);
+    if (userPreference['role'] == 'botanist') {
+      setState(() {
+        isBotanist = true;
+      });
+    }
   }
 
   @override
@@ -111,13 +132,23 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
               color: Colors.grey,
               height: 20,
             ),
-            SizedBox(height: 25),
-            CustomButton(
-              onPressed: () => {},
-              label: 'Donner un conseil',
-              buttonColor: primaryColor,
-              textColor: Colors.white,
-            ),
+            if (isBotanist) SizedBox(height: 25),
+            if (isBotanist)
+              CustomButton(
+                onPressed: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NewAdvice(
+                        guard: guard,
+                      ),
+                    ),
+                  )
+                },
+                label: 'Donner un conseil',
+                buttonColor: primaryColor,
+                textColor: Colors.white,
+              ),
             SizedBox(height: 25),
             advices.length > 0 ? _AdvicesList() : _noAdvices(),
           ],
@@ -177,10 +208,12 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
             ],
           ),
           SizedBox(height: 10),
-          Text(
-            content,
-            style: ArosajeTextStyle.contentTextStyle,
-            textAlign: TextAlign.start,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              content,
+              style: ArosajeTextStyle.contentTextStyle,
+            ),
           ),
         ],
       ),

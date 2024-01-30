@@ -1,7 +1,6 @@
 import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/models/visit.dart';
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:flutter/foundation.dart';
 
 class Advice {
   String id;

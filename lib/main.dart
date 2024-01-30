@@ -1,4 +1,3 @@
-import 'package:a_rosa_je/pages/guard_details/guard_details.dart';
 import 'package:a_rosa_je/pages/login/login_page.dart';
 import 'package:a_rosa_je/pages/splash_screen.dart';
 import 'package:flutter/material.dart';

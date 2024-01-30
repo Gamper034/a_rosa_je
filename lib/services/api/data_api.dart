@@ -303,4 +303,24 @@ class DataApi {
       'body': jsonDecode(response.body),
     };
   }
+
+  Future<Map<String, dynamic>> publishGuardAdvice(
+      String guardId, String content) async {
+    String? jwt = await storage.read(key: 'jwt');
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'Cookie': '$jwt',
+    };
+    var request = http.Request(
+        'POST', Uri.parse('http://${getHost()}:2000/api/advice/guard/add'));
+    request.body = json.encode({"guardId": guardId, "content": content});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    print(response.statusCode);
+    return {
+      'statusCode': response.statusCode,
+    };
+  }
 }

@@ -44,4 +44,9 @@ class UserService {
 
     throw Exception('No user found');
   }
+
+  Future<String?> getUserPreference(String key) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
 }
