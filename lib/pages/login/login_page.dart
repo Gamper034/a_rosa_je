@@ -6,8 +6,6 @@ import 'package:a_rosa_je/widgets/text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:a_rosa_je/pages/register/register_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:a_rosa_je/services/user.dart';
 import 'package:a_rosa_je/services/api/auth_api.dart';
 
 class LoginPage extends StatefulWidget {
@@ -47,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: CustomTextField(
                     color: Colors.white,
+                    colorText: Colors.white,
                     hintText: "Email",
                     onSaved: (value) => email = value ?? '',
                     validator: (value) => value?.isEmpty ?? true
@@ -64,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: CustomTextField(
                     color: Colors.white,
                     hintText: "Mot de passe",
+                    colorText: Colors.white,
                     obscureText: true,
                     onSaved: (value) => password = value ?? '',
                     validator: (value) => value?.isEmpty ?? true

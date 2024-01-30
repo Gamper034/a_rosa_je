@@ -3,6 +3,7 @@ import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/widgets/card-guard.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class SearchPage extends StatefulWidget {
   SearchPage(
       {super.key,
@@ -24,13 +25,13 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     super.initState();
     setGuardList();
-    print('set');
+    // print('set');
   }
 
   @override
   void didUpdateWidget(covariant SearchPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print('update');
+    // print('update');
     if (widget.selectedPlantTypeList != oldWidget.selectedPlantTypeList) {
       setGuardList();
     }
@@ -42,7 +43,7 @@ class _SearchPageState extends State<SearchPage> {
     Future<Map<String, dynamic>> futureMap = dataApi.getGuardList(
         widget.selectedPlantTypeList, widget.selectedVille);
     json = await futureMap;
-    print(json);
+    // print(json);
     setState(() {
       guards = json['body']['data']['guards']
           .map<Guard>((guard) => Guard.fromJson(guard))

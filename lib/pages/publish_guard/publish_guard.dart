@@ -1,12 +1,10 @@
 import 'package:a_rosa_je/services/api/data_api.dart';
-import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class PublishGuard extends StatefulWidget {
   const PublishGuard({super.key});
@@ -163,7 +161,7 @@ class _PublishGuardState extends State<PublishGuard> {
                     style: ArosajeTextStyle.labelFormTextStyle),
                 CustomTextField(
                   color: textColor,
-                  hintText: "Adresse",
+                  hintText: "",
                   onSaved: (value) => _address = value,
                   validator: (value) => value?.isEmpty ?? true
                       ? 'Ce champ est obligatoire'

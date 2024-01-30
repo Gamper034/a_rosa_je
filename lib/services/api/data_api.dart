@@ -58,8 +58,8 @@ class DataApi {
           json['message'] == "Invalid email") {
         errorMessage = 'L\'email est invalide.';
       } else {
-        print('Failed to register user. Status code: ${response.statusCode}');
-        print('Response body: ${json}');
+        print(response.statusCode);
+        // print('Response body: ${json}');
 
         errorMessage = 'Une erreur est survenue.';
       }
@@ -109,8 +109,8 @@ class DataApi {
           json['message'] == "Invalid email") {
         errorMessage = 'L\'email est invalide.';
       } else {
-        print('Failed to register user. Status code: ${response.statusCode}');
-        print('Response body: ${json['message']}');
+        print(response.statusCode);
+        // print('Response body: ${json['message']}');
 
         errorMessage = 'Une erreur est survenue.';
       }
@@ -188,20 +188,20 @@ class DataApi {
       http.StreamedResponse streamedResponse = await request.send();
       http.Response response = await http.Response.fromStream(streamedResponse);
 
-      if (response.statusCode == 200) {
-        print('Status code: ${response.statusCode}');
+      if (response.statusCode == 201) {
+        print(response.statusCode);
 
-        print('Created guard!!!!!!!!!!!');
+        // print('Created guard!!!!!!!!!!!');
         Navigator.pushReplacementNamed(context, '/home');
       } else if (response.statusCode == 401) {
         await storage.delete(key: 'jwt');
         final prefs = await SharedPreferences.getInstance();
         prefs.remove('user');
         Navigator.pushReplacementNamed(context, '/login');
-        print('Status code: ${response.statusCode}');
+        print(response.statusCode);
       } else {
-        print('Status code: ${response.statusCode}');
-        print('Reason phrase: ${response.reasonPhrase}');
+        print(response.statusCode);
+        // print('Reason phrase: ${response.reasonPhrase}');
       }
     } catch (e) {
       throw Exception('Failed to add guard: $e');
@@ -276,5 +276,51 @@ class DataApi {
     //   'statusCode': response.statusCode,
     //   'body': jsonDecode(response()),
     // };
+  }
+
+  Future<Map<String, dynamic>> getGuardAdvices(guardId) async {
+    //Récupérer le jwt
+    String? jwt = await storage.read(key: 'jwt');
+    // var headers = {
+    //   'Content-Type': 'application/json',
+    //   'Cookie': '$jwt',
+    // };
+    // var request = http.Request(
+    //     'GET', Uri.parse('http://localhost:2000/api/advice/guard/${guardId}'));
+    // request.body = '''''';
+    // request.headers.addAll(headers);
+
+    final response = await http.get(
+      Uri.parse('http://${getHost()}:2000/api/advice/guard/${guardId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': '$jwt',
+      },
+    );
+
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
+  }
+
+  Future<Map<String, dynamic>> publishGuardAdvice(
+      String guardId, String content) async {
+    String? jwt = await storage.read(key: 'jwt');
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'Cookie': '$jwt',
+    };
+    var request = http.Request(
+        'POST', Uri.parse('http://${getHost()}:2000/api/advice/guard/add'));
+    request.body = json.encode({"guardId": guardId, "content": content});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    // print(response.statusCode);
+    return {
+      'statusCode': response.statusCode,
+    };
   }
 }

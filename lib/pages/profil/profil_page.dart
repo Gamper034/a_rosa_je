@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'package:a_rosa_je/services/user.dart';
 import 'package:intl/intl.dart';
-import 'package:a_rosa_je/services/user.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({super.key});

@@ -39,14 +39,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Je suis:',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.black,
-                      ),
-                    ),
+                    child: Text('Je suis:',
+                        style: ArosajeTextStyle.titleLightTextStyle),
                   ),
                   SizedBox(height: 10),
                   Container(

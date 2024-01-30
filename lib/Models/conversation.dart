@@ -1,5 +1,4 @@
 import 'package:a_rosa_je/models/message.dart';
-import 'package:a_rosa_je/models/guard.dart';
 
 class Conversation {
   String id;

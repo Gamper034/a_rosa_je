@@ -1,15 +1,20 @@
+import 'package:a_rosa_je/theme/color.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final Color color;
+  final Color colorText;
   final FormFieldSetter<String>? onSaved;
   final FormFieldValidator<String>? validator;
   final Function(String)? onChanged;
   final Color? errorColor;
   final Function()? onTap;
   final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final int maxLines;
+  final int minLines;
 
   CustomTextField({
     required this.hintText,
@@ -21,6 +26,10 @@ class CustomTextField extends StatelessWidget {
     this.onTap,
     this.controller,
     this.onChanged,
+    this.keyboardType,
+    this.maxLines = 1,
+    this.minLines = 1,
+    this.colorText = greyColor,
   });
 
   @override
@@ -28,11 +37,12 @@ class CustomTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
+        keyboardType: keyboardType,
         cursorColor: color,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           hintText: hintText,
-          hintStyle: TextStyle(fontWeight: FontWeight.w400, color: color),
+          hintStyle: TextStyle(fontWeight: FontWeight.w400, color: colorText),
           filled: true,
           fillColor: Colors.transparent,
           border: OutlineInputBorder(
@@ -64,6 +74,8 @@ class CustomTextField extends StatelessWidget {
         onChanged: onChanged,
         onTap: onTap,
         controller: controller,
+        maxLines: maxLines,
+        minLines: minLines,
       ),
     );
   }

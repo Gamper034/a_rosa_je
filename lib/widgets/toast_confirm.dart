@@ -3,30 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 
 // ignore: must_be_immutable
-class ToastInfo extends StatelessWidget {
+class ToastConfirm extends StatelessWidget {
   final String title;
   final String content;
   final IconData icon;
   final double height;
-  String? theme;
+  String theme = "light";
+  final VoidCallback onPressedCancel;
   final VoidCallback onPressedConfirm;
 
   // Variables pour le thème
   final Color backgroundColor;
+  final Color cancelColor;
+  final Color cancelTextColor;
   final Color confirmColor;
   final Color confirmTextColor;
   final Color iconColor;
   final Color titleColor;
   final Color contentColor;
 
-  ToastInfo({
+  ToastConfirm({
     this.theme = "light",
     required this.title,
     required this.content,
     required this.icon,
     required this.height,
+    required this.onPressedCancel,
     required this.onPressedConfirm,
   })  : backgroundColor = theme == 'light' ? Colors.white : primaryColor,
+        cancelColor = theme == 'light' ? secondaryColor : secondaryColor,
+        cancelTextColor = theme == 'light' ? textColor : Colors.white,
         confirmColor = theme == 'light' ? primaryColor : Colors.white,
         confirmTextColor = theme == 'light' ? Colors.white : primaryColor,
         iconColor = theme == 'light' ? primaryColor : Colors.white,
@@ -73,11 +79,26 @@ class ToastInfo extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            CustomButton(
-              onPressed: onPressedConfirm,
-              label: "Fermer",
-              buttonColor: confirmColor,
-              textColor: confirmTextColor,
+            Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    onPressed: onPressedCancel,
+                    label: "Annuler",
+                    buttonColor: cancelColor,
+                    textColor: cancelTextColor,
+                  ),
+                ),
+                SizedBox(width: 20),
+                Expanded(
+                  child: CustomButton(
+                    onPressed: onPressedConfirm,
+                    label: "Valider",
+                    buttonColor: confirmColor,
+                    textColor: confirmTextColor,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
