@@ -4,6 +4,7 @@ import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
 import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/pages/advices/new_advice.dart';
+import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
@@ -143,6 +144,8 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
                         guard: guard,
                       ),
                     ),
+                  ).then(
+                    (_) => _getAdvices(),
                   )
                 },
                 label: 'Donner un conseil',
@@ -150,7 +153,9 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
                 textColor: Colors.white,
               ),
             SizedBox(height: 25),
-            advices.length > 0 ? _AdvicesList() : _noAdvices(),
+            Expanded(
+              child: advices.length > 0 ? _AdvicesList() : _noAdvices(),
+            )
           ],
         ),
       ),
@@ -218,5 +223,18 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
         ],
       ),
     );
+  }
+
+  _getAdvices() async {
+    advices = [];
+    DataApi dataApi = DataApi();
+
+    Future<Map<String, dynamic>> futureMap = dataApi.getGuardAdvices(guard.id);
+    Map<String, dynamic> json = await futureMap;
+    List<dynamic> jsonAdvices = json['body']['data']['advices'];
+    for (var advice in jsonAdvices) {
+      advices.add(Advice.fromJson(advice));
+    }
+    setState(() {});
   }
 }

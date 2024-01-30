@@ -1,10 +1,10 @@
 import 'package:a_rosa_je/models/guard.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
-import 'package:a_rosa_je/widgets/text_field.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 class NewAdvice extends StatefulWidget {
   final Guard guard;
@@ -117,8 +117,8 @@ class _NewAdviceState extends State<NewAdvice> {
               ),
               SizedBox(height: 25),
               CustomButton(
-                onPressed: () => {
-                  _submit(),
+                onPressed: () {
+                  _dialogInfo(context);
                 },
                 label: 'Publier le conseil',
                 buttonColor: primaryColor,
@@ -142,5 +142,32 @@ class _NewAdviceState extends State<NewAdvice> {
       var publishGuardAdvice = dataApi.publishGuardAdvice(guardId, content);
       print('publishGuardAdvice: $publishGuardAdvice.toString()');
     }
+  }
+
+  _dialogInfo(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastConfirm(
+              icon: LucideIcons.helpCircle,
+              title: "Publier le conseil",
+              content:
+                  "Êtes-vous sûr de vouloir publier ce conseil ? Vous ne pourrez plus le modifier.",
+              onPressedConfirm: () {
+                _submit();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              onPressedCancel: () {
+                Navigator.of(context).pop();
+              },
+              height: 270,
+            ),
+          ),
+        );
+      },
+    );
   }
 }
