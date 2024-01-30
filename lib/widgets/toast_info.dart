@@ -1,59 +1,83 @@
+import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:a_rosa_je/theme/theme.dart';
 
+// ignore: must_be_immutable
 class ToastInfo extends StatelessWidget {
-  final Color backgroundColor;
-  final Color textColor;
-  final String firstText;
-  final String secondText;
-  final Widget icon;
+  final String title;
+  final String content;
+  final IconData icon;
   final double height;
+  String? theme;
+  final VoidCallback onPressedConfirm;
+
+  // Variables pour le thème
+  final Color backgroundColor;
+  final Color confirmColor;
+  final Color confirmTextColor;
+  final Color iconColor;
+  final Color titleColor;
+  final Color contentColor;
 
   ToastInfo({
-    required this.backgroundColor,
-    required this.textColor,
-    required this.firstText,
-    required this.secondText,
+    this.theme = "light",
+    required this.title,
+    required this.content,
     required this.icon,
     required this.height,
-  });
+    required this.onPressedConfirm,
+  })  : backgroundColor = theme == 'light' ? Colors.white : primaryColor,
+        confirmColor = theme == 'light' ? primaryColor : Colors.white,
+        confirmTextColor = theme == 'light' ? Colors.white : primaryColor,
+        iconColor = theme == 'light' ? primaryColor : Colors.white,
+        titleColor = theme == 'light' ? textColor : Colors.white,
+        contentColor = theme == 'light' ? textColor : Colors.white;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: icon,
+            Icon(
+              icon,
+              color: iconColor,
+              size: 48,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Text(
-                firstText,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                ),
+            SizedBox(height: 20),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: titleColor,
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Text(
-                secondText,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.w300,
-                ),
+            SizedBox(height: 5),
+            Text(
+              content,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: contentColor,
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
               ),
+            ),
+            SizedBox(height: 20),
+            CustomButton(
+              onPressed: onPressedConfirm,
+              label: "Fermer",
+              buttonColor: confirmColor,
+              textColor: confirmTextColor,
             ),
           ],
         ),

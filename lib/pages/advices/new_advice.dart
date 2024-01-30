@@ -118,7 +118,7 @@ class _NewAdviceState extends State<NewAdvice> {
               SizedBox(height: 25),
               CustomButton(
                 onPressed: () {
-                  _dialogInfo(context);
+                  _dialogConfirm(context);
                 },
                 label: 'Publier le conseil',
                 buttonColor: primaryColor,
@@ -144,7 +144,7 @@ class _NewAdviceState extends State<NewAdvice> {
     }
   }
 
-  _dialogInfo(BuildContext context) {
+  _dialogConfirm(BuildContext context) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -158,12 +158,35 @@ class _NewAdviceState extends State<NewAdvice> {
               onPressedConfirm: () {
                 _submit();
                 Navigator.of(context).pop();
-                Navigator.of(context).pop();
+                _dialogDone(context);
               },
               onPressedCancel: () {
                 Navigator.of(context).pop();
               },
               height: 270,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _dialogDone(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastInfo(
+              icon: LucideIcons.badgeCheck,
+              title: "Conseil publié",
+              content: "Votre conseil a été publié.",
+              onPressedConfirm: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              height: 240,
+              theme: "primary",
             ),
           ),
         );

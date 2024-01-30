@@ -58,7 +58,7 @@ class ToastConfirm extends StatelessWidget {
               color: iconColor,
               size: 48,
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             Text(
               title,
               textAlign: TextAlign.center,
