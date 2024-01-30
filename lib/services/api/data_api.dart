@@ -318,7 +318,7 @@ class DataApi {
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
-    print(response.statusCode);
+    // print(response.statusCode);
     return {
       'statusCode': response.statusCode,
     };

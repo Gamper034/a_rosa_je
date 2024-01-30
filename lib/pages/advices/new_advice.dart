@@ -134,8 +134,8 @@ class _NewAdviceState extends State<NewAdvice> {
   _submit() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_content);
-      print(widget.guard.id);
+      // print(_content);
+      // print(widget.guard.id);
       String content = _content ?? '';
       String guardId = widget.guard.id ?? '';
       DataApi dataApi = DataApi();
