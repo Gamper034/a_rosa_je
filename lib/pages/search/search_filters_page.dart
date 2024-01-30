@@ -210,105 +210,127 @@ class _searchFiltersPageState extends State<searchFiltersPage> {
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            // margin: EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Container(
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Localisation",
-                            style: ArosajeTextStyle.titleFormTextStyle),
-                      ),
-                      // Container(
-                      //   child: TextField(
-                      //     controller: controller,
-                      //     decoration: InputDecoration(
-                      //       hintText: 'Ville',
-                      //       suffixIcon: Icon(LucideIcons.mapPin),
-                      //     ),
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         selectedVille = value;
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
-                      Container(
-                        child: CustomTextField(
-                          controller: controller,
-                          color: textColor,
-                          hintText: "Ville",
-                          onChanged: (value) {
-                            setState(() {
-                              selectedVille = value;
-                            });
-                          },
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              // margin: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Container(
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text("Localisation",
+                              style: ArosajeTextStyle.titleFormTextStyle),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  // margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Types de plantes",
-                            style: ArosajeTextStyle.titleFormTextStyle),
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          children: [
-                            Container(
-                              // margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child:
-                                  Column(children: _buildSelectedPlantTypes()),
-                            ),
-                            Container(
-                              // margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Column(
-                                  children: _buildUnselectedPlantTypes()),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 40,
-            left: 20,
-            right: 20,
-            child: CustomButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(
-                      selectedPlantTypeList: widget.selectedPlantTypeList,
-                      selectedVille: selectedVille,
+                        // Container(
+                        //   child: TextField(
+                        //     controller: controller,
+                        //     decoration: InputDecoration(
+                        //       hintText: 'Ville',
+                        //       suffixIcon: Icon(LucideIcons.mapPin),
+                        //     ),
+                        //     onChanged: (value) {
+                        //       setState(() {
+                        //         selectedVille = value;
+                        //       });
+                        //     },
+                        //   ),
+                        // ),
+                        Container(
+                          child: CustomTextField(
+                            controller: controller,
+                            color: textColor,
+                            hintText: "Ville",
+                            onChanged: (value) {
+                              setState(() {
+                                selectedVille = value;
+                              });
+                            },
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                );
-              },
-              label: 'Enregistrer',
-              textColor: Colors.white,
-              buttonColor: primaryColor,
-              icon: LucideIcons.save,
+                  Container(
+                    // margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text("Types de plantes",
+                              style: ArosajeTextStyle.titleFormTextStyle),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            children: [
+                              Container(
+                                // margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                child: Column(
+                                    children: _buildSelectedPlantTypes()),
+                              ),
+                              Container(
+                                // margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                child: Column(
+                                    children: _buildUnselectedPlantTypes()),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            // Positioned(
+            //   bottom: 40,
+            //   left: 20,
+            //   right: 20,
+            //   child: CustomButton(
+            //     onPressed: () {
+            //       Navigator.pushReplacement(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => HomePage(
+            //             selectedPlantTypeList: widget.selectedPlantTypeList,
+            //             selectedVille: selectedVille,
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //     label: 'Enregistrer',
+            //     textColor: Colors.white,
+            //     buttonColor: primaryColor,
+            //     icon: LucideIcons.save,
+            //   ),
+            // ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 40, left: 20, right: 20),
+        child: CustomButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(
+                  selectedPlantTypeList: widget.selectedPlantTypeList,
+                  selectedVille: selectedVille,
+                ),
+              ),
+            );
+          },
+          label: 'Enregistrer',
+          textColor: Colors.white,
+          buttonColor: primaryColor,
+          icon: LucideIcons.save,
+        ),
       ),
     );
   }
