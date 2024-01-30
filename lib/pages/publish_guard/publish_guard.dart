@@ -163,7 +163,7 @@ class _PublishGuardState extends State<PublishGuard> {
                     style: ArosajeTextStyle.labelFormTextStyle),
                 CustomTextField(
                   color: textColor,
-                  hintText: "Adresse",
+                  hintText: "",
                   onSaved: (value) => _address = value,
                   validator: (value) => value?.isEmpty ?? true
                       ? 'Ce champ est obligatoire'

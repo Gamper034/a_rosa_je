@@ -1,27 +1,34 @@
+import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-class BotanistAdvices extends StatelessWidget {
+class BotanistAdvices extends StatefulWidget {
   final Guard guard;
+  final List<Advice> advices;
 
-  static const List<String> monthNames = [
-    'Janv.',
-    'Fév.',
-    'Mars',
-    'Avr.',
-    'Mai',
-    'Juin',
-    'Juil.',
-    'août',
-    'Sept.',
-    'Oct.',
-    'Nov.',
-    'Déc.'
-  ];
+  const BotanistAdvices(
+      {super.key, required this.guard, required this.advices});
 
-  const BotanistAdvices({super.key, required this.guard});
+  @override
+  State<BotanistAdvices> createState() => _BotanistAdvicesState();
+}
+
+class _BotanistAdvicesState extends State<BotanistAdvices> {
+  late List<Advice> advices;
+  late Guard guard;
+  late Map<String, dynamic> json;
+
+  @override
+  void initState() {
+    guard = widget.guard;
+    advices = widget.advices;
+    print(advices.length);
+    print(advices);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +80,14 @@ class BotanistAdvices extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          guard.startDate.day.toString() +
+                          widget.guard.startDate.day.toString() +
                               " " +
-                              monthNames[guard.startDate.month - 1] +
+                              GuardService
+                                  .monthNames[guard.startDate.month - 1] +
                               " - " +
                               guard.endDate.day.toString() +
                               " " +
-                              monthNames[guard.endDate.month - 1],
+                              GuardService.monthNames[guard.endDate.month - 1],
                           style: TextStyle(
                               color: textColor,
                               fontSize: 16,
@@ -111,16 +119,70 @@ class BotanistAdvices extends StatelessWidget {
               textColor: Colors.white,
             ),
             SizedBox(height: 25),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 50),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text('Aucun conseil pour le moment.',
-                    style: ArosajeTextStyle.regularGreyTextStyle),
-              ),
-            )
+            advices.length > 0 ? _AdvicesList() : _noAdvices(),
           ],
         ),
+      ),
+    );
+  }
+
+  _noAdvices() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 50),
+      child: Align(
+        alignment: Alignment.center,
+        child: Text('Aucun conseil pour le moment.',
+            style: ArosajeTextStyle.regularGreyTextStyle),
+      ),
+    );
+  }
+
+  _AdvicesList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: advices.length,
+      itemBuilder: (context, index) {
+        String botanistName = advices[index].user.firstname +
+            " " +
+            advices[index].user.lastname.substring(0, 1) +
+            ".";
+        return _AdviceItem(
+            botanistName, advices[index].user.avatar, advices[index].content);
+      },
+    );
+  }
+
+  _AdviceItem(String botanistName, String bontanistAvatar, String content) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: secondaryColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 16.0,
+                backgroundImage: NetworkImage(bontanistAvatar),
+                backgroundColor: Colors.transparent,
+              ),
+              SizedBox(width: 10),
+              Text(
+                botanistName,
+                style: ArosajeTextStyle.contentTextStyle,
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Text(
+            content,
+            style: ArosajeTextStyle.contentTextStyle,
+            textAlign: TextAlign.start,
+          ),
+        ],
       ),
     );
   }

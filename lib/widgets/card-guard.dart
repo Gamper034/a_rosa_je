@@ -15,20 +15,20 @@ class GuardCard extends StatelessWidget {
       required this.byCurrentUser});
   DateTime now = DateTime.now();
 
-  final monthNames = [
-    'Janv.',
-    'Fév.',
-    'Mars',
-    'Avr.',
-    'Mai',
-    'Juin',
-    'Juil.',
-    'août',
-    'Sept.',
-    'Oct.',
-    'Nov.',
-    'Déc.'
-  ];
+  // final monthNames = [
+  //   'Janv.',
+  //   'Fév.',
+  //   'Mars',
+  //   'Avr.',
+  //   'Mai',
+  //   'Juin',
+  //   'Juil.',
+  //   'août',
+  //   'Sept.',
+  //   'Oct.',
+  //   'Nov.',
+  //   'Déc.'
+  // ];
 
   final Guard guard;
 
@@ -150,11 +150,11 @@ class GuardCard extends StatelessWidget {
                       Text(
                         guard.startDate.day.toString() +
                             " " +
-                            monthNames[guard.startDate.month - 1] +
+                            GuardService.monthNames[guard.startDate.month - 1] +
                             " - " +
                             guard.endDate.day.toString() +
                             " " +
-                            monthNames[guard.endDate.month - 1],
+                            GuardService.monthNames[guard.endDate.month - 1],
                         style: TextStyle(
                             color: textColor,
                             fontSize: 16,

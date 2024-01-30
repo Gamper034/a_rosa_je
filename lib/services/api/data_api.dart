@@ -188,7 +188,7 @@ class DataApi {
       http.StreamedResponse streamedResponse = await request.send();
       http.Response response = await http.Response.fromStream(streamedResponse);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         print(response.statusCode);
 
         // print('Created guard!!!!!!!!!!!');
@@ -276,5 +276,31 @@ class DataApi {
     //   'statusCode': response.statusCode,
     //   'body': jsonDecode(response()),
     // };
+  }
+
+  Future<Map<String, dynamic>> getGuardAdvices(guardId) async {
+    //Récupérer le jwt
+    String? jwt = await storage.read(key: 'jwt');
+    // var headers = {
+    //   'Content-Type': 'application/json',
+    //   'Cookie': '$jwt',
+    // };
+    // var request = http.Request(
+    //     'GET', Uri.parse('http://localhost:2000/api/advice/guard/${guardId}'));
+    // request.body = '''''';
+    // request.headers.addAll(headers);
+
+    final response = await http.get(
+      Uri.parse('http://${getHost()}:2000/api/advice/guard/${guardId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': '$jwt',
+      },
+    );
+
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
   }
 }

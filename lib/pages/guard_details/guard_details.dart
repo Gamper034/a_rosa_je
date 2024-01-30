@@ -1,3 +1,6 @@
+//TODO: Bug authentification retour a la page de login
+
+import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/pages/advices/botanist_advices.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
@@ -18,7 +21,9 @@ class GuardDetails extends StatefulWidget {
 }
 
 class _GuardDetailsState extends State<GuardDetails> {
+  List<Advice> advices = [];
   late Guard guard;
+  late Map<String, dynamic> json;
   GuardService guardService = GuardService();
   late GuardStatus status;
 
@@ -29,21 +34,6 @@ class _GuardDetailsState extends State<GuardDetails> {
     super.initState();
     // print('initState');
   }
-
-  final monthNames = [
-    'Janv.',
-    'Fév.',
-    'Mars',
-    'Avr.',
-    'Mai',
-    'Juin',
-    'Juil.',
-    'août',
-    'Sept.',
-    'Oct.',
-    'Nov.',
-    'Déc.'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -129,11 +119,13 @@ class _GuardDetailsState extends State<GuardDetails> {
                               Text(
                                 guard.startDate.day.toString() +
                                     " " +
-                                    monthNames[guard.startDate.month - 1] +
+                                    GuardService
+                                        .monthNames[guard.startDate.month - 1] +
                                     " - " +
                                     guard.endDate.day.toString() +
                                     " " +
-                                    monthNames[guard.endDate.month - 1],
+                                    GuardService
+                                        .monthNames[guard.endDate.month - 1],
                                 style: TextStyle(
                                     color: textColor,
                                     fontSize: 16,
@@ -181,11 +173,29 @@ class _GuardDetailsState extends State<GuardDetails> {
                     ),
                     SizedBox(height: 20),
                     CustomButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        advices = [];
+                        DataApi dataApi = DataApi();
+
+                        Future<Map<String, dynamic>> futureMap =
+                            dataApi.getGuardAdvices(guard.id);
+                        Map<String, dynamic> json = await futureMap;
+                        // print(await futureMap);
+                        List<dynamic> jsonAdvices =
+                            json['body']['data']['advices'];
+                        // print(jsonAdvices);
+                        // advices = jsonAdvices
+                        //     .map((advice) => Advice.fromJson(advice))
+                        //     .toList();
+                        for (var advice in jsonAdvices) {
+                          advices.add(Advice.fromJson(advice));
+                        }
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => BotanistAdvices(guard: guard),
+                            builder: (context) =>
+                                BotanistAdvices(guard: guard, advices: advices),
                           ),
                         );
                       },
@@ -195,7 +205,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                       border: true,
                       icon: LucideIcons.flower2,
                     ),
-                    SizedBox(height: 25),
+                    SizedBox(height: 50),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -206,7 +216,6 @@ class _GuardDetailsState extends State<GuardDetails> {
                             fontWeight: FontWeight.w500),
                       ),
                     ),
-                    SizedBox(height: 10),
 
                     Column(
                       children: [
