@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/pages/advices/new_advice.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';

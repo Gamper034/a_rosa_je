@@ -6,8 +6,6 @@ import 'package:a_rosa_je/widgets/text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:a_rosa_je/pages/register/register_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:a_rosa_je/services/user.dart';
 import 'package:a_rosa_je/services/api/auth_api.dart';
 
 class LoginPage extends StatefulWidget {

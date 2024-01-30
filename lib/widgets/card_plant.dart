@@ -1,7 +1,6 @@
 import 'package:a_rosa_je/models/plant.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/theme/color.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CardPlant extends StatelessWidget {

@@ -1,10 +1,6 @@
-import 'dart:convert';
-
 import 'package:a_rosa_je/pages/home/home_page.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
-import 'package:a_rosa_je/theme/color.dart';
 import 'package:a_rosa_je/theme/theme.dart';
-import 'package:a_rosa_je/widgets/text_field.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';

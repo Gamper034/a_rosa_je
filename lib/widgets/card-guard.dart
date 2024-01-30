@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 
+// ignore: must_be_immutable
 class GuardCard extends StatelessWidget {
   GuardCard(
       {super.key,

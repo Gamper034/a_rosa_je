@@ -3,6 +3,7 @@ import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/widgets/card-guard.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class SearchPage extends StatefulWidget {
   SearchPage(
       {super.key,
