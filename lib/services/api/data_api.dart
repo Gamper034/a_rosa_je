@@ -179,7 +179,7 @@ class DataApi {
 
       for (var i = 0; i < plants.length; i++) {
         request.fields['plantName${i + 1}'] = plants[i]['plantName'];
-        request.fields['plantType${i + 1}'] = plants[i]['plantType'];
+        request.fields['plantType${i + 1}'] = plants[i]['selectedPlantType'];
         var multipartFile = await http.MultipartFile.fromPath(
           'plantImage',
           plants[i]['plantImageUrl'],
