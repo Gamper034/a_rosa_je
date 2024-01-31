@@ -348,4 +348,43 @@ class DataApi {
       'body': jsonDecode(response.body),
     };
   }
+
+  Future<Map<String, dynamic>> addVisit(BuildContext context, String visitDate,
+      String comment, List plantImages, String guardId) async {
+    String? jwt = await storage.read(key: 'jwt');
+    var headers = {
+      'Cookie': '$jwt',
+    };
+    // print(jwt);
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('http://${getHost()}:2000/api/visit/add/${guardId}'));
+    request.fields.addAll({
+      'date': visitDate,
+      'comment': comment,
+    });
+
+    for (var i = 0; i < plantImages.length; i++) {
+      var multipartFile = await http.MultipartFile.fromPath(
+        'plantImage',
+        plantImages[i],
+        contentType: MediaType('image', 'jpeg'),
+      );
+      request.files.add(multipartFile);
+    }
+    //
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse streamedResponse = await request.send();
+    http.Response response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 401) {
+      UserService.logout(context);
+    }
+
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
+  }
 }

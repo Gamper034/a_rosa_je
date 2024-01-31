@@ -4,7 +4,10 @@ import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'dart:io';
 
 import '../../widgets/widgets.dart';
 
@@ -19,9 +22,12 @@ class NewVisit extends StatefulWidget {
 class _NewVisitState extends State<NewVisit> {
   late Guard guard = widget.guard;
   late List<Plant> plants = widget.guard.plants;
-  String? _visitDate;
+  String _visitDate = '';
   final _visitDateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  String _commentaire = '';
+  List<XFile?> plantImages = [];
+  List<String> plantImagesPaths = [];
 
   @override
   void initState() {
@@ -29,9 +35,9 @@ class _NewVisitState extends State<NewVisit> {
     guard = widget.guard;
     // print(advices.length);
     // print(advices);
-    super.initState();
     plants = widget.guard.plants;
-    print(plants);
+    plantImages = List.filled(plants.length, null);
+    super.initState();
   }
 
   @override
@@ -120,7 +126,7 @@ class _NewVisitState extends State<NewVisit> {
                   height: 20,
                 ),
                 SizedBox(height: 30),
-                Text('Date:', style: ArosajeTextStyle.contentTextStyle),
+                Text('Date', style: ArosajeTextStyle.contentTextStyle),
                 CustomTextField(
                   controller: _visitDateController,
                   onTap: () async {
@@ -159,14 +165,34 @@ class _NewVisitState extends State<NewVisit> {
                   },
                   color: textColor,
                   hintText: "Entrez une date",
-                  onSaved: (value) => _visitDate = value,
+                  onSaved: (value) => _visitDate = value ?? '',
                   validator: (value) => value?.isEmpty ?? true
                       ? 'Ce champ est obligatoire'
                       : null,
                 ),
                 SizedBox(height: 30),
-                PlantListVisit(
-                  plants: plants,
+                _listPlant(),
+                SizedBox(height: 30),
+                Text('Commentaire', style: ArosajeTextStyle.contentTextStyle),
+                CustomTextField(
+                  color: textColor,
+                  minLines: 5,
+                  maxLines: 5,
+                  keyboardType: TextInputType.multiline,
+                  hintText: "Ajoutez votre conseil ici.",
+                  onSaved: (value) => _commentaire = value ?? '',
+                  validator: (value) => value?.isEmpty ?? true
+                      ? 'Veuillez ajouter votre conseil.'
+                      : null,
+                ),
+                SizedBox(height: 30),
+                CustomButton(
+                  onPressed: () {
+                    _submit();
+                  },
+                  label: 'Ajouter une nouvelle visite',
+                  buttonColor: primaryColor,
+                  textColor: Colors.white,
                 )
               ],
             ),
@@ -174,5 +200,130 @@ class _NewVisitState extends State<NewVisit> {
         ),
       ),
     );
+  }
+
+  _submit() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      print(_commentaire);
+      print(_visitDate);
+      print(plantImages);
+      print(widget.guard.id);
+      //TODO: optimiser le code pour récupérer direct les paths des images & ajout 401 dans tous les services et scroll plantes
+      plantImagesPaths = plantImages.map((xfile) => xfile?.path ?? '').toList();
+      var addVisit = await DataApi().addVisit(
+        context,
+        _visitDate,
+        _commentaire,
+        plantImagesPaths,
+        widget.guard.id,
+      );
+      print(addVisit['statusCode']);
+    }
+  }
+
+  _listPlant() {
+    return Container(
+      height: 200,
+      child: ListView.builder(
+        itemCount: plants.length,
+        itemBuilder: (context, index) {
+          final plant = plants[index];
+          return _plantItem(plant, index);
+        },
+      ),
+    );
+  }
+
+  _plantItem(plant, int index) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      margin: EdgeInsets.only(bottom: 15),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      height: 80,
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(plant.name, style: ArosajeTextStyle.titleFormTextStyle),
+                Text(plant.plantType,
+                    style: ArosajeTextStyle.labelFormTextStyle),
+              ],
+            ),
+          ),
+          Container(
+            // width: 150,
+            child: plantImages[index] == null
+                ? Expanded(
+                    child: CustomButton(
+                      onPressed: () => _addImage(index),
+                      label: 'Ajouter photo',
+                      buttonColor: primaryColor,
+                      textColor: Colors.white,
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.file(
+                      File(plantImages[index]!.path),
+                      width: 66,
+                      height: 66,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _addImage(int index) async {
+    final ImagePicker _picker = ImagePicker();
+    final ImageSource? source = await showDialog<ImageSource>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Align(
+              alignment: Alignment.center,
+              child: Text('Ajouter une photo'),
+            ),
+            backgroundColor: Colors.white,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(LucideIcons.camera), // Icône de la caméra
+                title: Text('Prendre une photo', textAlign: TextAlign.center),
+                onTap: () {
+                  Navigator.pop(context, ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: Icon(LucideIcons.image), // Icône de la caméra
+                title: Text('Choisir depuis la galerie',
+                    textAlign: TextAlign.center),
+                onTap: () {
+                  Navigator.pop(context, ImageSource.gallery);
+                },
+              ),
+            ],
+          );
+        });
+
+    if (source != null) {
+      final XFile? image = await _picker.pickImage(source: source);
+
+      if (image != null) {
+        // plants[index]['plantImage'] = Image.file(File(image.path));
+
+        setState(() {
+          plantImages[index] = image;
+        });
+      }
+    }
   }
 }

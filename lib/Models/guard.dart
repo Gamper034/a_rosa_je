@@ -5,7 +5,7 @@ import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/models/visit.dart';
 
 class Guard {
-  String? id;
+  String id;
   User owner;
   DateTime startDate;
   DateTime endDate;
@@ -22,7 +22,7 @@ class Guard {
   DateTime createdAt;
 
   Guard({
-    this.id,
+    required this.id,
     required this.owner,
     required this.startDate,
     required this.endDate,
