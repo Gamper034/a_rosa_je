@@ -131,7 +131,7 @@ class _NewAdviceState extends State<NewAdvice> {
     );
   }
 
-  _submit() {
+  _submit() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       // print(_content);
@@ -139,9 +139,39 @@ class _NewAdviceState extends State<NewAdvice> {
       String content = _content ?? '';
       String guardId = widget.guard.id ?? '';
       DataApi dataApi = DataApi();
-      var publishGuardAdvice = dataApi.publishGuardAdvice(guardId, content);
-      print('publishGuardAdvice: $publishGuardAdvice.toString()');
+      var publishGuardAdvice =
+          await dataApi.publishGuardAdvice(guardId, content);
+      // print('publishGuardAdvice: $publishGuardAdvice.toString()');
+      Navigator.of(context).pop();
+
+      if (publishGuardAdvice['statusCode'] == 201) {
+        _dialogDone(context);
+      } else {}
+      _dialogError(context);
     }
+  }
+
+  _dialogError(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastError(
+              icon: LucideIcons.badgeX,
+              title: "Impossible de publier",
+              content: "un problème est survenu, veuillez réessayer.",
+              onPressedConfirm: () {
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pop();
+                // });
+              },
+              height: 250,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   _dialogConfirm(BuildContext context) {
@@ -157,8 +187,6 @@ class _NewAdviceState extends State<NewAdvice> {
                   "Êtes-vous sûr de vouloir publier ce conseil ? Vous ne pourrez plus le modifier.",
               onPressedConfirm: () {
                 _submit();
-                Navigator.of(context).pop();
-                _dialogDone(context);
               },
               onPressedCancel: () {
                 Navigator.of(context).pop();
