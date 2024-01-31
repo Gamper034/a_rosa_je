@@ -1,3 +1,4 @@
+import 'package:a_rosa_je/pages/guard_details/guard_candidatures.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/color.dart';
@@ -20,13 +21,16 @@ class _GuardDetailsState extends State<GuardDetails> {
   late Guard guard;
   GuardService guardService = GuardService();
   late GuardStatus status;
+  DataApi dataApi = DataApi();
 
   @override
   void initState() {
     guard = widget.guard;
     status = guardService.getStatus(guard);
+    status = GuardStatus.enAttente;
     super.initState();
     print('initState');
+    print(guard);
   }
 
   final monthNames = [
@@ -91,93 +95,210 @@ class _GuardDetailsState extends State<GuardDetails> {
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: StatusBadge.getBadgeStatus(status),
+                        ),
+                        if (status == GuardStatus.enCours ||
+                            status == GuardStatus.enAttente)
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  guard.startDate.day.toString() +
+                                      " " +
+                                      monthNames[guard.startDate.month - 1] +
+                                      " - " +
+                                      guard.endDate.day.toString() +
+                                      " " +
+                                      monthNames[guard.endDate.month - 1],
+                                  style: TextStyle(
+                                      color: textColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  guard.city + " " + guard.zipCode,
+                                  style: TextStyle(
+                                      color: secondaryTextColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
                     //Badge de validation
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: StatusBadge.getBadgeStatus(status),
-                    ),
                     SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 16.0,
-                                backgroundImage:
-                                    NetworkImage(guard.owner.avatar),
-                                backgroundColor: Colors.transparent,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                guard.owner.firstname +
-                                    " " +
-                                    guard.owner.lastname.substring(0, 1) +
-                                    ".",
-                                style:
-                                    TextStyle(color: textColor, fontSize: 16),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                guard.startDate.day.toString() +
-                                    " " +
-                                    monthNames[guard.startDate.month - 1] +
-                                    " - " +
-                                    guard.endDate.day.toString() +
-                                    " " +
-                                    monthNames[guard.endDate.month - 1],
-                                style: TextStyle(
-                                    color: textColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                guard.city + " " + guard.zipCode,
-                                style: TextStyle(
-                                    color: secondaryTextColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 5),
-                            child: CustomButton(
-                              onPressed: () {},
-                              label: 'Visites',
-                              buttonColor: primaryColor,
-                              textColor: Colors.white,
+                    if (status != GuardStatus.enCours &&
+                        status != GuardStatus.enAttente)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 16.0,
+                                  backgroundImage:
+                                      NetworkImage(guard.owner.avatar),
+                                  backgroundColor: Colors.transparent,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  guard.owner.firstname +
+                                      " " +
+                                      guard.owner.lastname.substring(0, 1) +
+                                      ".",
+                                  style:
+                                      TextStyle(color: textColor, fontSize: 16),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: CustomButton(
-                              onPressed: () {},
-                              label: 'Messages',
-                              buttonColor: secondaryColor,
-                              textColor: textColor,
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  guard.startDate.day.toString() +
+                                      " " +
+                                      monthNames[guard.startDate.month - 1] +
+                                      " - " +
+                                      guard.endDate.day.toString() +
+                                      " " +
+                                      monthNames[guard.endDate.month - 1],
+                                  style: TextStyle(
+                                      color: textColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  guard.city + " " + guard.zipCode,
+                                  style: TextStyle(
+                                      color: secondaryTextColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ],
                             ),
                           ),
-                        )
-                      ],
-                    ),
+                        ],
+                      ),
+                    if (status == GuardStatus.enCours)
+                      Container(
+                        decoration: BoxDecoration(
+                          color: secondaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(child: Text("Guardien :")),
+                            Container(
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 10),
+                                  Text(
+                                    guard.owner.firstname +
+                                        " " +
+                                        guard.owner.lastname.substring(0, 1) +
+                                        ".",
+                                    style: TextStyle(
+                                        color: textColor, fontSize: 16),
+                                  ),
+                                  SizedBox(width: 10),
+                                  CircleAvatar(
+                                    radius: 16.0,
+                                    backgroundImage:
+                                        NetworkImage(guard.owner.avatar),
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (status != GuardStatus.enAttente &&
+                        status != GuardStatus.aVenir)
+                      Column(
+                        children: [
+                          SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 5),
+                                  child: CustomButton(
+                                    onPressed: () {},
+                                    label: 'Visites',
+                                    buttonColor: primaryColor,
+                                    textColor: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: CustomButton(
+                                    onPressed: () {},
+                                    label: 'Messages',
+                                    buttonColor: secondaryColor,
+                                    textColor: textColor,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    if (status == GuardStatus.aVenir)
+                      Column(
+                        children: [
+                          SizedBox(height: 20),
+                          CustomButton(
+                            onPressed: () {
+                              dataApi.applyToGuard(guard.id!);
+                            },
+                            label: 'Postuler',
+                            textColor: Colors.white,
+                            buttonColor: primaryColor,
+                            border: true,
+                          ),
+                        ],
+                      ),
+
+                    if (status == GuardStatus.enAttente)
+                      Column(
+                        children: [
+                          SizedBox(height: 20),
+                          CustomButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      GuardCandidature(guard: guard),
+                                ),
+                              );
+                            },
+                            label: 'Candidatures',
+                            textColor: Colors.white,
+                            buttonColor: primaryColor,
+                            border: true,
+                          ),
+                        ],
+                      ),
                     SizedBox(height: 20),
                     CustomButton(
                       onPressed: () {},
@@ -187,6 +308,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                       border: true,
                       icon: LucideIcons.flower2,
                     ),
+
                     SizedBox(height: 25),
                     Align(
                       alignment: Alignment.centerLeft,

@@ -1,4 +1,5 @@
 import 'package:a_rosa_je/models/advice.dart';
+import 'package:a_rosa_je/models/application.dart';
 import 'package:a_rosa_je/models/conversation.dart';
 import 'package:a_rosa_je/models/plant.dart';
 import 'package:a_rosa_je/models/user.dart';
@@ -16,7 +17,7 @@ class Guard {
   String city;
   String? guardianId;
   User? guardian;
-  List<User>? applicants;
+  List<Application>? applications;
   List<Plant> plants;
   List<Visit>? visits;
   List<Advice>? advices;
@@ -32,7 +33,7 @@ class Guard {
     required this.zipCode,
     required this.city,
     this.guardianId,
-    this.applicants,
+    this.applications,
     this.guardian,
     required this.plants,
     this.visits,
@@ -52,7 +53,12 @@ class Guard {
       zipCode: json['zipCode'],
       city: json['city'],
       guardianId: json['guardianId'],
-      applicants: [],
+      applications: json["applications"] != null
+          ? json["applications"]
+              .map<Application>(
+                  (application) => Application.fromJson(application))
+              .toList()
+          : [],
       guardian:
           json['guardian'] != null ? User.fromJson(json['guardian']) : null,
       plants:
@@ -70,6 +76,6 @@ class Guard {
 
   @override
   String toString() {
-    return 'Guard{id: $id, owner: $owner, startDate: $startDate, endDate: $endDate, address: $address, zipCode: $zipCode, city: $city, applicants: $applicants, guardian: $guardian, plants: $plants, visits: $visits, advices: $advices, conversation: $conversation, createdAt: $createdAt}';
+    return 'Guard{id: $id, owner: $owner, startDate: $startDate, endDate: $endDate, address: $address, zipCode: $zipCode, city: $city, applicants: $applications, guardian: $guardian, plants: $plants, visits: $visits, advices: $advices, conversation: $conversation, createdAt: $createdAt}';
   }
 }

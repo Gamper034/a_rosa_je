@@ -277,4 +277,72 @@ class DataApi {
     //   'body': jsonDecode(response()),
     // };
   }
+
+  Future<Map<String, dynamic>> applyToGuard(String guardId) async {
+    try {
+      String? jwt = await storage.read(key: 'jwt');
+
+      final response = await http.get(
+        Uri.parse('http://${getHost()}:2000/api/guard/apply/${guardId}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Cookie': '$jwt',
+        },
+      );
+
+      print(response.statusCode);
+      print(response.body);
+
+      return {
+        'statusCode': response.statusCode,
+        'body': jsonDecode(response.body),
+      };
+    } catch (e) {
+      throw Exception('Failed to get guard list: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> removeApply(String applicationId) async {
+    try {
+      String? jwt = await storage.read(key: 'jwt');
+
+      final response = await http.get(
+        Uri.parse(
+            'http://${getHost()}:2000/api/guard/apply/remove/${applicationId}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Cookie': '$jwt',
+        },
+      );
+
+      return {
+        'statusCode': response.statusCode,
+        'body': jsonDecode(response.body),
+      };
+    } catch (e) {
+      throw Exception('Failed to get guard list: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> confirmApply(String applicationId) async {
+    try {
+      String? jwt = await storage.read(key: 'jwt');
+
+      final response = await http.get(
+        Uri.parse(
+            'http://${getHost()}:2000/api/guard/apply/confirm/${applicationId}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Cookie': '$jwt',
+        },
+      );
+
+      return {
+        'statusCode': response.statusCode,
+        'body': jsonDecode(response.body),
+      };
+    } catch (e) {
+      throw Exception('Failed to get guard list: $e');
+    }
+  }
 }
