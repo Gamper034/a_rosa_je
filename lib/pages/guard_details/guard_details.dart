@@ -1,11 +1,10 @@
-//TODO: Bug authentification retour a la page de login
-
 import 'package:a_rosa_je/models/advice.dart';
+import 'package:a_rosa_je/models/visit.dart';
 import 'package:a_rosa_je/pages/advices/botanist_advices.dart';
+import 'package:a_rosa_je/pages/visits/guard_visits.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/color.dart';
-import 'package:a_rosa_je/widgets/card_plant.dart';
 import 'package:a_rosa_je/widgets/status_badge_guard/status_badge.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +21,7 @@ class GuardDetails extends StatefulWidget {
 
 class _GuardDetailsState extends State<GuardDetails> {
   List<Advice> advices = [];
+  List<Visit> visits = [];
   late Guard guard;
   late Map<String, dynamic> json;
   GuardService guardService = GuardService();
@@ -151,7 +151,32 @@ class _GuardDetailsState extends State<GuardDetails> {
                           child: Padding(
                             padding: const EdgeInsets.only(right: 5),
                             child: CustomButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                visits = [];
+                                DataApi dataApi = DataApi();
+
+                                Future<Map<String, dynamic>> futureMap =
+                                    dataApi.getGuardVisits(context, guard.id);
+                                Map<String, dynamic> json = await futureMap;
+                                // print(json);
+                                List<dynamic> jsonVisits =
+                                    json['body']['data']['visits'];
+                                // print(jsonAdvices);
+                                // visits = jsonVisits
+                                //     .map((visit) => Visit.fromJson(visit))
+                                //     .toList();
+                                for (var visit in jsonVisits) {
+                                  visits.add(Visit.fromJson(visit));
+                                }
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GuardVisitList(
+                                        guard: guard, visits: visits),
+                                  ),
+                                );
+                              },
                               label: 'Visites',
                               buttonColor: primaryColor,
                               textColor: Colors.white,
@@ -178,7 +203,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                         DataApi dataApi = DataApi();
 
                         Future<Map<String, dynamic>> futureMap =
-                            dataApi.getGuardAdvices(guard.id);
+                            dataApi.getGuardAdvices(context, guard.id);
                         Map<String, dynamic> json = await futureMap;
                         // print(await futureMap);
                         List<dynamic> jsonAdvices =

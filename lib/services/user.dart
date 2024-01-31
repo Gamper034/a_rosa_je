@@ -25,7 +25,8 @@ class UserService {
     }
   }
 
-  void logout(context) async {
+  static Future<void> logout(context) async {
+    final storage = FlutterSecureStorage();
     await storage.delete(key: 'jwt');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('user');

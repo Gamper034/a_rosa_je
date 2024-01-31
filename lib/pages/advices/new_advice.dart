@@ -28,103 +28,105 @@ class _NewAdviceState extends State<NewAdvice> {
           style: ArosajeTextStyle.AppBarTextStyle,
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Garde:', style: ArosajeTextStyle.titleLightTextStyle),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  color: secondaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 16.0,
-                            backgroundImage:
-                                NetworkImage(widget.guard.owner.avatar),
-                            backgroundColor: Colors.transparent,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            widget.guard.owner.firstname +
-                                " " +
-                                widget.guard.owner.lastname.substring(0, 1) +
-                                ".",
-                            style: TextStyle(color: textColor, fontSize: 16),
-                          ),
-                        ],
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Garde:', style: ArosajeTextStyle.titleLightTextStyle),
+                SizedBox(height: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    color: secondaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 16.0,
+                              backgroundImage:
+                                  NetworkImage(widget.guard.owner.avatar),
+                              backgroundColor: Colors.transparent,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              widget.guard.owner.firstname +
+                                  " " +
+                                  widget.guard.owner.lastname.substring(0, 1) +
+                                  ".",
+                              style: TextStyle(color: textColor, fontSize: 16),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            widget.guard.startDate.day.toString() +
-                                " " +
-                                GuardService.monthNames[
-                                    widget.guard.startDate.month - 1] +
-                                " - " +
-                                widget.guard.endDate.day.toString() +
-                                " " +
-                                GuardService
-                                    .monthNames[widget.guard.endDate.month - 1],
-                            style: TextStyle(
-                                color: textColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            widget.guard.city + " " + widget.guard.zipCode,
-                            style: TextStyle(
-                                color: greyColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ],
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              widget.guard.startDate.day.toString() +
+                                  " " +
+                                  GuardService.monthNames[
+                                      widget.guard.startDate.month - 1] +
+                                  " - " +
+                                  widget.guard.endDate.day.toString() +
+                                  " " +
+                                  GuardService.monthNames[
+                                      widget.guard.endDate.month - 1],
+                              style: TextStyle(
+                                  color: textColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              widget.guard.city + " " + widget.guard.zipCode,
+                              style: TextStyle(
+                                  color: greyColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 25),
-              Divider(
-                color: Colors.grey,
-                height: 20,
-              ),
-              SizedBox(height: 25),
-              CustomTextField(
-                color: textColor,
-                minLines: 10,
-                maxLines: 10,
-                keyboardType: TextInputType.multiline,
-                hintText: "Ajoutez votre conseil ici.",
-                onSaved: (value) => _content = value,
-                validator: (value) => value?.isEmpty ?? true
-                    ? 'Veuillez ajouter votre conseil.'
-                    : null,
-              ),
-              SizedBox(height: 25),
-              CustomButton(
-                onPressed: () {
-                  _dialogConfirm(context);
-                },
-                label: 'Publier le conseil',
-                buttonColor: primaryColor,
-                textColor: Colors.white,
-              )
-            ],
+                SizedBox(height: 25),
+                Divider(
+                  color: Colors.grey,
+                  height: 20,
+                ),
+                SizedBox(height: 25),
+                CustomTextField(
+                  color: textColor,
+                  minLines: 10,
+                  maxLines: 10,
+                  keyboardType: TextInputType.multiline,
+                  hintText: "Ajoutez votre conseil ici.",
+                  onSaved: (value) => _content = value,
+                  validator: (value) => value?.isEmpty ?? true
+                      ? 'Veuillez ajouter votre conseil.'
+                      : null,
+                ),
+                SizedBox(height: 25),
+                CustomButton(
+                  onPressed: () {
+                    _dialogConfirm(context);
+                  },
+                  label: 'Publier le conseil',
+                  buttonColor: primaryColor,
+                  textColor: Colors.white,
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -146,8 +148,9 @@ class _NewAdviceState extends State<NewAdvice> {
 
       if (publishGuardAdvice['statusCode'] == 201) {
         _dialogDone(context);
-      } else {}
-      _dialogError(context);
+      } else {
+        _dialogError(context);
+      }
     }
   }
 

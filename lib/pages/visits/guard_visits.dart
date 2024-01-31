@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:a_rosa_je/pages/advices/new_advice.dart';
+import 'package:a_rosa_je/models/visit.dart';
+import 'package:a_rosa_je/pages/visits/new_visit.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
@@ -10,19 +10,18 @@ import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/services/user.dart';
 
-class BotanistAdvices extends StatefulWidget {
+class GuardVisitList extends StatefulWidget {
   final Guard guard;
-  final List<Advice> advices;
+  final List<Visit> visits;
 
-  const BotanistAdvices(
-      {super.key, required this.guard, required this.advices});
+  const GuardVisitList({super.key, required this.guard, required this.visits});
 
   @override
-  State<BotanistAdvices> createState() => _BotanistAdvicesState();
+  State<GuardVisitList> createState() => _BotanistAdvicesState();
 }
 
-class _BotanistAdvicesState extends State<BotanistAdvices> {
-  late List<Advice> advices;
+class _BotanistAdvicesState extends State<GuardVisitList> {
+  late List<Visit> visits;
   late Guard guard;
   late Map<String, dynamic> json;
   bool isBotanist = false;
@@ -30,11 +29,12 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
   @override
   void initState() {
     guard = widget.guard;
-    advices = widget.advices;
+    visits = widget.visits;
     // print(advices.length);
     // print(advices);
     super.initState();
     getUserPreference();
+    print(visits);
   }
 
   getUserPreference() async {
@@ -57,12 +57,12 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
       appBar: AppBar(
         centerTitle: false,
         title: Text(
-          'Conseils de Botanistes',
+          'Liste des visites',
           style: ArosajeTextStyle.AppBarTextStyle,
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -127,113 +127,109 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
                 ],
               ),
             ),
-            SizedBox(height: 25),
+            SizedBox(height: 30),
             Divider(
               color: Colors.grey,
               height: 20,
             ),
-            if (isBotanist) SizedBox(height: 25),
-            if (isBotanist)
-              CustomButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NewAdvice(
-                        guard: guard,
-                      ),
+            SizedBox(height: 30),
+            CustomButton(
+              onPressed: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NewVisit(
+                      guard: guard,
                     ),
-                  ).then(
-                    (_) => _getAdvices(),
-                  )
-                },
-                label: 'Donner un conseil',
-                buttonColor: primaryColor,
-                textColor: Colors.white,
-              ),
-            SizedBox(height: 25),
-            Expanded(
-              child: advices.length > 0 ? _AdvicesList() : _noAdvices(),
-            )
+                  ),
+                ).then(
+                  (_) => _getVisits(),
+                )
+              },
+              label: 'Ajouter une visite',
+              buttonColor: primaryColor,
+              textColor: Colors.white,
+            ),
+            _noVisit(),
           ],
         ),
       ),
     );
   }
 
-  _noAdvices() {
+  _noVisit() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 50),
       child: Align(
         alignment: Alignment.center,
-        child: Text('Aucun conseil pour le moment.',
+        child: Text('Aucune visite pour le moment.',
             style: ArosajeTextStyle.regularGreyTextStyle),
       ),
     );
   }
 
-  _AdvicesList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: advices.length,
-      itemBuilder: (context, index) {
-        String botanistName = advices[index].user.firstname +
-            " " +
-            advices[index].user.lastname.substring(0, 1) +
-            ".";
-        return _AdviceItem(
-            botanistName, advices[index].user.avatar, advices[index].content);
-      },
-    );
-  }
+  // _VisitsList() {
+  //   return ListView.builder(
+  //     shrinkWrap: true,
+  //     itemCount: visits.length,
+  //     itemBuilder: (context, index) {
+  //       String botanistName = advices[index].user.firstname +
+  //           " " +
+  //           visits[index].user.lastname.substring(0, 1) +
+  //           ".";
+  //       return _VisitItem(
+  //           botanistName, advices[index].user.avatar, advices[index].content);
+  //     },
+  //   );
+  // }
 
-  _AdviceItem(String botanistName, String bontanistAvatar, String content) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 20),
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 16.0,
-                backgroundImage: NetworkImage(bontanistAvatar),
-                backgroundColor: Colors.transparent,
-              ),
-              SizedBox(width: 10),
-              Text(
-                botanistName,
-                style: ArosajeTextStyle.contentTextStyle,
-              ),
-            ],
-          ),
-          SizedBox(height: 10),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              content,
-              style: ArosajeTextStyle.contentTextStyle,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // _VisitItem(String botanistName, String bontanistAvatar, String content) {
+  //   return Container(
+  //     margin: EdgeInsets.only(bottom: 20),
+  //     padding: EdgeInsets.all(20),
+  //     decoration: BoxDecoration(
+  //       color: secondaryColor,
+  //       borderRadius: BorderRadius.circular(10),
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Row(
+  //           children: [
+  //             CircleAvatar(
+  //               radius: 16.0,
+  //               backgroundImage: NetworkImage(bontanistAvatar),
+  //               backgroundColor: Colors.transparent,
+  //             ),
+  //             SizedBox(width: 10),
+  //             Text(
+  //               botanistName,
+  //               style: ArosajeTextStyle.contentTextStyle,
+  //             ),
+  //           ],
+  //         ),
+  //         SizedBox(height: 10),
+  //         Align(
+  //           alignment: Alignment.centerLeft,
+  //           child: Text(
+  //             content,
+  //             style: ArosajeTextStyle.contentTextStyle,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  _getAdvices() async {
-    advices = [];
+  _getVisits() async {
+    visits = [];
     DataApi dataApi = DataApi();
 
     Future<Map<String, dynamic>> futureMap =
-        dataApi.getGuardAdvices(context, guard.id);
+        dataApi.getGuardVisits(context, guard.id);
     Map<String, dynamic> json = await futureMap;
-    List<dynamic> jsonAdvices = json['body']['data']['advices'];
-    for (var advice in jsonAdvices) {
-      advices.add(Advice.fromJson(advice));
+    List<dynamic> jsonVisits = json['body']['data']['visits'];
+    for (var visit in jsonVisits) {
+      visits.add(Visit.fromJson(visit));
     }
     setState(() {});
   }
