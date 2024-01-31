@@ -153,8 +153,14 @@ class DataApi {
     }
   }
 
-  Future<void> addGuard(BuildContext context, String startDate, String endDate,
-      String address, String zipCode, String city, List plants) async {
+  Future<Map<String, dynamic>> addGuard(
+      BuildContext context,
+      String startDate,
+      String endDate,
+      String address,
+      String zipCode,
+      String city,
+      List plants) async {
     try {
       String? jwt = await storage.read(key: 'jwt');
       var headers = {
@@ -188,21 +194,51 @@ class DataApi {
       http.StreamedResponse streamedResponse = await request.send();
       http.Response response = await http.Response.fromStream(streamedResponse);
 
-      if (response.statusCode == 201) {
-        print(response.statusCode);
-
-        // print('Created guard!!!!!!!!!!!');
-        Navigator.pushReplacementNamed(context, '/home');
-      } else if (response.statusCode == 401) {
+      if (response.statusCode != 401) {
+        return {
+          'statusCode': response.statusCode,
+          'body': jsonDecode(response.body),
+        };
+      } else {
         await storage.delete(key: 'jwt');
         final prefs = await SharedPreferences.getInstance();
         prefs.remove('user');
         Navigator.pushReplacementNamed(context, '/login');
         print(response.statusCode);
-      } else {
-        print(response.statusCode);
-        // print('Reason phrase: ${response.reasonPhrase}');
+        return {
+          'statusCode': response.statusCode,
+          'body': jsonDecode(response.body),
+        };
       }
+
+      // if (response.statusCode == 201) {
+      //   print(response.statusCode);
+
+      //   // print('Created guard!!!!!!!!!!!');
+      //   // Navigator.pushReplacementNamed(context, '/home');
+      //   return {
+      //     'statusCode': response.statusCode,
+      //     'body': jsonDecode(response.body),
+      //   };
+      // } else if (response.statusCode == 401) {
+      //   await storage.delete(key: 'jwt');
+      //   final prefs = await SharedPreferences.getInstance();
+      //   prefs.remove('user');
+      //   Navigator.pushReplacementNamed(context, '/login');
+      //   print(response.statusCode);
+
+      //   return {
+      //     'statusCode': response.statusCode,
+      //     'body': jsonDecode(response.body),
+      //   };
+      // } else {
+      //   print(response.statusCode);
+      //   // print('Reason phrase: ${response.reasonPhrase}');
+      //   return {
+      //     'statusCode': response.statusCode,
+      //     'body': jsonDecode(response.body),
+      //   };
+      // }
     } catch (e) {
       throw Exception('Failed to add guard: $e');
     }

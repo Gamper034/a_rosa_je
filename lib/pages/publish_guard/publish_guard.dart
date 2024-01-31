@@ -1,3 +1,4 @@
+import 'package:a_rosa_je/pages/home/home_page.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -227,7 +228,7 @@ class _PublishGuardState extends State<PublishGuard> {
                   height: 20,
                 ),
                 CustomButton(
-                  onPressed: _submit,
+                  onPressed: () => _submit(),
                   label: 'Publier la demande de garde',
                   buttonColor: primaryColor,
                   textColor: Colors.white,
@@ -245,7 +246,7 @@ class _PublishGuardState extends State<PublishGuard> {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
 
       DataApi dataApi = DataApi();
-      dataApi.addGuard(
+      var addGuard = await dataApi.addGuard(
         context,
         _startDate!,
         _endDate!,
@@ -254,7 +255,60 @@ class _PublishGuardState extends State<PublishGuard> {
         _city!,
         plants,
       );
+      addGuard['statusCode'];
+
+      if (addGuard['statusCode'] == 201) {
+        _dialogDone(context);
+      } else {}
+      _dialogError(context);
     }
+  }
+
+  _dialogDone(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastInfo(
+              icon: LucideIcons.badgeCheck,
+              title: "Garde publiée",
+              content: "Votre garde a bien été publiée.",
+              onPressedConfirm: () {
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacementNamed(context, '/home');
+                // });
+              },
+              height: 240,
+              theme: "light",
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _dialogError(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastError(
+              icon: LucideIcons.badgeX,
+              title: "Impossible de publier",
+              content: "un problème est survenu, veuillez réessayer.",
+              onPressedConfirm: () {
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pop();
+                // });
+              },
+              height: 250,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   List<Map<String, dynamic>> plants = [];
@@ -361,7 +415,7 @@ class _PublishGuardState extends State<PublishGuard> {
                             return DropdownMenuItem(
                               value: plantType,
                               child: Container(
-                                width: 102,
+                                width: 90,
                                 child: Text(
                                   '$plantType',
                                   overflow: TextOverflow.ellipsis,
