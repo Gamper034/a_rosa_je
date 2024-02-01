@@ -77,6 +77,7 @@ class ArosajeTextStyle {
   static final titleFormTextStyle = baseTextStyle.copyWith(
     fontWeight: FontWeight.w500,
     fontSize: 16,
+    color: contentColor,
   );
 
   static final labelFormTextStyle = baseTextStyle.copyWith(
@@ -94,5 +95,11 @@ class ArosajeTextStyle {
     fontWeight: FontWeight.w400,
     fontSize: 14,
     color: greyColor,
+  );
+
+  static final secondarySubTitle = baseTextStyle.copyWith(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+    color: secondaryTextColor,
   );
 }

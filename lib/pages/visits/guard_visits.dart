@@ -30,11 +30,10 @@ class _BotanistAdvicesState extends State<GuardVisitList> {
   void initState() {
     guard = widget.guard;
     visits = widget.visits;
-    // print(advices.length);
-    // print(advices);
+    print(visits.length);
+    // print(visits);
     super.initState();
     getUserPreference();
-    print(visits);
   }
 
   getUserPreference() async {
@@ -146,11 +145,12 @@ class _BotanistAdvicesState extends State<GuardVisitList> {
                   (_) => _getVisits(),
                 )
               },
-              label: 'Ajouter une visite',
+              label: 'Ajouter une nouvelle visite',
               buttonColor: primaryColor,
               textColor: Colors.white,
             ),
-            _noVisit(),
+            SizedBox(height: 30),
+            if (visits.length > 0) _VisitsList() else _noVisit(),
           ],
         ),
       ),
@@ -168,57 +168,43 @@ class _BotanistAdvicesState extends State<GuardVisitList> {
     );
   }
 
-  // _VisitsList() {
-  //   return ListView.builder(
-  //     shrinkWrap: true,
-  //     itemCount: visits.length,
-  //     itemBuilder: (context, index) {
-  //       String botanistName = advices[index].user.firstname +
-  //           " " +
-  //           visits[index].user.lastname.substring(0, 1) +
-  //           ".";
-  //       return _VisitItem(
-  //           botanistName, advices[index].user.avatar, advices[index].content);
-  //     },
-  //   );
-  // }
+  _VisitsList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: visits.length,
+      itemBuilder: (context, index) {
+        String date = visits[index].date.day.toString() +
+            " " +
+            GuardService.monthNames[visits[index].date.month - 1];
+        String indexString = (index + 1).toString();
+        return _VisitItem(date, indexString);
+      },
+    );
+  }
 
-  // _VisitItem(String botanistName, String bontanistAvatar, String content) {
-  //   return Container(
-  //     margin: EdgeInsets.only(bottom: 20),
-  //     padding: EdgeInsets.all(20),
-  //     decoration: BoxDecoration(
-  //       color: secondaryColor,
-  //       borderRadius: BorderRadius.circular(10),
-  //     ),
-  //     child: Column(
-  //       children: [
-  //         Row(
-  //           children: [
-  //             CircleAvatar(
-  //               radius: 16.0,
-  //               backgroundImage: NetworkImage(bontanistAvatar),
-  //               backgroundColor: Colors.transparent,
-  //             ),
-  //             SizedBox(width: 10),
-  //             Text(
-  //               botanistName,
-  //               style: ArosajeTextStyle.contentTextStyle,
-  //             ),
-  //           ],
-  //         ),
-  //         SizedBox(height: 10),
-  //         Align(
-  //           alignment: Alignment.centerLeft,
-  //           child: Text(
-  //             content,
-  //             style: ArosajeTextStyle.contentTextStyle,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+  _VisitItem(String date, String index) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: backgroundContainer,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      height: 60,
+      child: Row(
+        children: [
+          Text(
+            '${index}#',
+            style: ArosajeTextStyle.secondarySubTitle,
+          ),
+          SizedBox(width: 10),
+          Text(
+            date,
+            style: ArosajeTextStyle.titleFormTextStyle,
+          )
+        ],
+      ),
+    );
+  }
 
   _getVisits() async {
     visits = [];

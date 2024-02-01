@@ -158,13 +158,14 @@ class _GuardDetailsState extends State<GuardDetails> {
                                 Future<Map<String, dynamic>> futureMap =
                                     dataApi.getGuardVisits(context, guard.id);
                                 Map<String, dynamic> json = await futureMap;
-                                // print(json);
+                                print(json);
                                 List<dynamic> jsonVisits =
                                     json['body']['data']['visits'];
-                                // print(jsonAdvices);
+                                // print(jsonVisits);
                                 // visits = jsonVisits
                                 //     .map((visit) => Visit.fromJson(visit))
                                 //     .toList();
+
                                 for (var visit in jsonVisits) {
                                   visits.add(Visit.fromJson(visit));
                                 }

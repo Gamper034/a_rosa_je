@@ -139,7 +139,7 @@ class _NewAdviceState extends State<NewAdvice> {
       // print(_content);
       // print(widget.guard.id);
       String content = _content ?? '';
-      String guardId = widget.guard.id ?? '';
+      String guardId = widget.guard.id;
       DataApi dataApi = DataApi();
       var publishGuardAdvice =
           await dataApi.publishGuardAdvice(guardId, content);

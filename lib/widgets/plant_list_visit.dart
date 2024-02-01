@@ -45,9 +45,9 @@ class _PlantListVisitState extends State<PlantListVisit> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(plant.name,
+                      Text(plant.name ?? '',
                           style: ArosajeTextStyle.titleFormTextStyle),
-                      Text(plant.plantType,
+                      Text(plant.plantType ?? '',
                           style: ArosajeTextStyle.labelFormTextStyle),
                     ],
                   ),

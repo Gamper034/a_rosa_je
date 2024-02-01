@@ -188,7 +188,7 @@ class _NewVisitState extends State<NewVisit> {
                 SizedBox(height: 30),
                 CustomButton(
                   onPressed: () {
-                    _submit();
+                    _dialogConfirm(context);
                   },
                   label: 'Ajouter une nouvelle visite',
                   buttonColor: primaryColor,
@@ -218,22 +218,36 @@ class _NewVisitState extends State<NewVisit> {
         plantImagesPaths,
         widget.guard.id,
       );
+
+      Navigator.of(context).pop();
+
       print(addVisit['statusCode']);
+      if (addVisit['statusCode'] == 201) {
+        _dialogDone(context);
+      } else {
+        _dialogError(context);
+      }
     }
   }
 
   _listPlant() {
-    return Container(
-      height: 200,
-      child: ListView.builder(
-        itemCount: plants.length,
-        itemBuilder: (context, index) {
-          final plant = plants[index];
-          return _plantItem(plant, index);
-        },
-      ),
-    );
+    for (int i = 0; i < plants.length; i++) {
+      final plant = plants[i];
+      return _plantItem(plant, i);
+    }
   }
+  // _listPlant() {
+  //   return Container(
+  //     height: 200,
+  //     child: ListView.builder(
+  //       itemCount: plants.length,
+  //       itemBuilder: (context, index) {
+  //         final plant = plants[index];
+  //         return _plantItem(plant, index);
+  //       },
+  //     ),
+  //   );
+  // }
 
   _plantItem(plant, int index) {
     return Container(
@@ -243,7 +257,7 @@ class _NewVisitState extends State<NewVisit> {
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(10),
       ),
-      height: 80,
+      height: 85,
       child: Row(
         children: [
           Expanded(
@@ -258,7 +272,7 @@ class _NewVisitState extends State<NewVisit> {
             ),
           ),
           Container(
-            // width: 150,
+            // width: 145,
             child: plantImages[index] == null
                 ? Expanded(
                     child: CustomButton(
@@ -325,5 +339,76 @@ class _NewVisitState extends State<NewVisit> {
         });
       }
     }
+  }
+
+  _dialogConfirm(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastConfirm(
+              icon: LucideIcons.helpCircle,
+              title: "Publier la visite",
+              content:
+                  "Êtes-vous sûr de vouloir publier cette visite ? Vous ne pourrez plus la modifier.",
+              onPressedConfirm: () {
+                _submit();
+              },
+              onPressedCancel: () {
+                Navigator.of(context).pop();
+              },
+              height: 270,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _dialogDone(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastInfo(
+              icon: LucideIcons.badgeCheck,
+              title: "Visite publiée",
+              content: "Votre visite a été publiée.",
+              onPressedConfirm: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              height: 240,
+              theme: "primary",
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _dialogError(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastError(
+              icon: LucideIcons.badgeX,
+              title: "Impossible de publier",
+              content: "un problème est survenu, veuillez réessayer.",
+              onPressedConfirm: () {
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pop();
+                // });
+              },
+              height: 250,
+            ),
+          ),
+        );
+      },
+    );
   }
 }
