@@ -16,21 +16,6 @@ class GuardCard extends StatelessWidget {
       required this.byCurrentUser});
   DateTime now = DateTime.now();
 
-  // final monthNames = [
-  //   'Janv.',
-  //   'Fév.',
-  //   'Mars',
-  //   'Avr.',
-  //   'Mai',
-  //   'Juin',
-  //   'Juil.',
-  //   'août',
-  //   'Sept.',
-  //   'Oct.',
-  //   'Nov.',
-  //   'Déc.'
-  // ];
-
   final Guard guard;
 
   bool myGuards;
@@ -41,7 +26,7 @@ class GuardCard extends StatelessWidget {
         DateTime(guard.endDate.year, guard.endDate.month, guard.endDate.day);
     DateTime today =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    // print(endDate.isBefore(today));
+
     return endDate.isBefore(today);
   }
 
@@ -49,8 +34,6 @@ class GuardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 20),
-      // margin: EdgeInsets.all(10),
-      // height: 290,
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -61,10 +44,8 @@ class GuardCard extends StatelessWidget {
           );
         },
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              // mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
                   child: Container(
@@ -75,17 +56,10 @@ class GuardCard extends StatelessWidget {
                           width: double.infinity,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20.0),
-
                             child: Image.network(
                               'http://${DataApi.getHost()}:2000/uploads/${guard.plants[0].image}',
                               fit: BoxFit.cover,
                             ),
-
-                            // child: Image.asset(
-                            //   //guard.plants[0].picture,
-                            //   'assets/images/placeholders/plant.jpg',
-                            //   fit: BoxFit.cover,
-                            // ),
                           ),
                         ),
                         if (isPassed)
@@ -178,9 +152,6 @@ class GuardCard extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 16.0,
-          // backgroundImage: AssetImage(
-          //     //guard.user.profilePicture,
-          //     guard.owner.avatar),
           backgroundImage: NetworkImage(guard.owner.avatar),
           backgroundColor: Colors.transparent,
         ),
@@ -198,7 +169,6 @@ class GuardCard extends StatelessWidget {
 
   _guardianStatus() {
     bool hasGuard = guard.guardianId != null;
-    // print(hasGuard);
     return Row(
       children: [
         Icon(

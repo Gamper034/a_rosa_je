@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:a_rosa_je/pages/home/home_page.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/theme/theme.dart';
@@ -40,7 +41,6 @@ class _PublishGuardState extends State<PublishGuard> {
     var result = await dataApi.getPlantsType();
     setState(() {
       plantTypes = result;
-      // print(plantTypes);
     });
   }
 
@@ -489,8 +489,8 @@ class _PublishGuardState extends State<PublishGuard> {
                                 .infinity, // Utilise toute la largeur disponible
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image:
-                                    AssetImage(plants[index]['plantImageUrl']),
+                                image: FileImage(
+                                    File(plants[index]['plantImageUrl'])),
                                 fit: BoxFit.cover,
                               ),
                             ),
