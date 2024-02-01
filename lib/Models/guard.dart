@@ -56,7 +56,9 @@ class Guard {
       plants: json['plants'] != null
           ? json['plants'].map<Plant>((item) => Plant.fromJson(item)).toList()
           : [],
-      visits: [],
+      visits: json['visits'] != null
+          ? json['visits'].map<Visit>((item) => Visit.fromJson(item)).toList()
+          : [],
       advices: [],
       conversation: null,
       createdAt: DateTime.parse(json['createdAt']),
