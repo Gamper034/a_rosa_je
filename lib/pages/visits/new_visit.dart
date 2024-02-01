@@ -205,10 +205,6 @@ class _NewVisitState extends State<NewVisit> {
   _submit() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_commentaire);
-      print(_visitDate);
-      print(plantImages);
-      print(widget.guard.id);
       //TODO: optimiser le code pour récupérer direct les paths des images & ajout 401 dans tous les services et scroll plantes
       plantImagesPaths = plantImages.map((xfile) => xfile?.path ?? '').toList();
       var addVisit = await DataApi().addVisit(
