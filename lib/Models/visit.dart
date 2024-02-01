@@ -33,10 +33,12 @@ class Visit {
       //         .map((advice) => Advice.fromJson(advice))
       //         .toList()
       //     : null,
-      guard: json['guard'] != null ? Guard.fromJson(json['guard']) : null,
-      plants: (json['plants'] as List<dynamic>)
-          .map((item) => PlantVisit.fromJson(item as Map<String, dynamic>))
-          .toList(),
+      // guard: json['guard'] != null ? Guard.fromJson(json['guard']) : null,
+      plants: json['plant'] != null
+          ? json['plants']
+              .map<PlantVisit>((item) => PlantVisit.fromJson(item))
+              .toList()
+          : null,
     );
   }
 }

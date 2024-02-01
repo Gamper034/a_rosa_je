@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum GuardStatus { aVenir, enCours, termine, enAttente, defaultStatus }
 
@@ -32,6 +36,7 @@ class GuardService {
     'Novembre',
     'Décembre'
   ];
+
   GuardStatus getStatus(Guard guard) {
     DateTime today =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);

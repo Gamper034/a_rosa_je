@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/pages/guard_details/guard_candidatures.dart';
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/visit.dart';
@@ -11,10 +14,14 @@ import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../theme/theme.dart';
 
 class GuardDetails extends StatefulWidget {
-  const GuardDetails({super.key, required this.guard});
+  const GuardDetails({super.key, required this.guard, required this.user});
   final Guard guard;
+  final User user;
 
   @override
   State<GuardDetails> createState() => _GuardDetailsState();
@@ -23,7 +30,8 @@ class GuardDetails extends StatefulWidget {
 class _GuardDetailsState extends State<GuardDetails> {
   List<Advice> advices = [];
   late List<Visit> visitsList;
-  List<Visit> visits = [];
+  late List<Visit> visits;
+  late User user;
 
   late Map<String, dynamic> json;
   Guard? guard;
@@ -34,6 +42,8 @@ class _GuardDetailsState extends State<GuardDetails> {
   @override
   void initState() {
     visitsList = widget.guard.visits!;
+    user = widget.user;
+    print(user.id);
     super.initState();
     setGuard();
   }
@@ -52,7 +62,9 @@ class _GuardDetailsState extends State<GuardDetails> {
       return Container(
         color: Colors.white,
         child: Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: primaryColor,
+          ),
         ),
       );
     } else {
@@ -208,12 +220,18 @@ class _GuardDetailsState extends State<GuardDetails> {
                             color: secondaryColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                          padding: EdgeInsets.all(10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(child: Text("Guardien :")),
+                              Container(
+                                  child: Text(
+                                "Gardien :",
+                                style: TextStyle(
+                                    color: textColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              )),
                               Container(
                                 child: Row(
                                   children: [
@@ -224,8 +242,8 @@ class _GuardDetailsState extends State<GuardDetails> {
                                           guard!.guardian!.lastname
                                               .substring(0, 1) +
                                           ".",
-                                      style: TextStyle(
-                                          color: textColor, fontSize: 16),
+                                      style:
+                                          ArosajeTextStyle.labelFormTextStyle,
                                     ),
                                     SizedBox(width: 10),
                                     CircleAvatar(
@@ -304,25 +322,27 @@ class _GuardDetailsState extends State<GuardDetails> {
                             ),
                           ],
                         ),
-                      if (status == GuardStatus.aVenir ||
-                          (status == GuardStatus.enCours &&
-                              guard!.guardian == null))
+                      if ((status == GuardStatus.aVenir ||
+                              (status == GuardStatus.enCours &&
+                                  guard!.guardian == null)) &&
+                          guard!.owner.id != user.id)
                         Column(
                           children: [
                             SizedBox(height: 20),
                             CustomButton(
                               onPressed: () {
-                                dataApi.applyToGuard(guard!.id);
+                                _dialogConfirm(context);
+                                // dataApi.applyToGuard(guard!.id);
                               },
                               label: 'Postuler',
                               textColor: Colors.white,
                               buttonColor: primaryColor,
-                              border: true,
                             ),
                           ],
                         ),
 
-                      if (status == GuardStatus.enAttente)
+                      if (status == GuardStatus.enAttente &&
+                          guard!.owner.id == user.id)
                         Column(
                           children: [
                             SizedBox(height: 20),
@@ -406,5 +426,80 @@ class _GuardDetailsState extends State<GuardDetails> {
         ),
       );
     }
+  }
+
+  _dialogConfirm(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastConfirm(
+              icon: LucideIcons.helpCircle,
+              title: "Postuler pour cette garde",
+              content: "Êtes-vous sûr de vouloir postuler pour cette garde ?",
+              onPressedConfirm: () async {
+                var applyGuard = await dataApi.applyToGuard(guard!.id);
+                if (applyGuard['statusCode'] == 201) {
+                  _dialogDone(context);
+                } else {
+                  _dialogError(context);
+                }
+              },
+              onPressedCancel: () {
+                Navigator.of(context).pop();
+              },
+              height: 270,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _dialogDone(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastInfo(
+              icon: LucideIcons.badgeCheck,
+              title: "Visite publiée",
+              content: "Votre visite a été publiée.",
+              onPressedConfirm: () {
+                Navigator.of(context).pop();
+              },
+              height: 240,
+              theme: "primary",
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _dialogError(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastError(
+              icon: LucideIcons.badgeX,
+              title: "Impossible de postuler",
+              content: "un problème est survenu, veuillez réessayer.",
+              onPressedConfirm: () {
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                // });
+              },
+              height: 250,
+            ),
+          ),
+        );
+      },
+    );
   }
 }
