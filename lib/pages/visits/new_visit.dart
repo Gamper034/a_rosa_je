@@ -27,7 +27,7 @@ class _NewVisitState extends State<NewVisit> {
   final _formKey = GlobalKey<FormState>();
   String _commentaire = '';
   List<String?> plantImages = [];
-  List<String> plantImagesPaths = [];
+  bool errorPhoto = false;
 
   @override
   void initState() {
@@ -172,6 +172,14 @@ class _NewVisitState extends State<NewVisit> {
                 ),
                 SizedBox(height: 30),
                 _listPlant(),
+                if (errorPhoto == true)
+                  Padding(
+                    padding: EdgeInsets.only(left: 15),
+                    child: Text(
+                      'Chaque plante doit avoir une photo',
+                      style: TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 SizedBox(height: 30),
                 Text('Commentaire', style: ArosajeTextStyle.contentTextStyle),
                 CustomTextField(
@@ -188,7 +196,7 @@ class _NewVisitState extends State<NewVisit> {
                 SizedBox(height: 30),
                 CustomButton(
                   onPressed: () {
-                    _dialogConfirm(context);
+                    _submit();
                   },
                   label: 'Ajouter une nouvelle visite',
                   buttonColor: primaryColor,
@@ -206,29 +214,20 @@ class _NewVisitState extends State<NewVisit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       //TODO: optimiser le code pour récupérer direct les paths des images & ajout 401 dans tous les services et scroll plantes
-      // plantImagesPaths = plantImages.map((xfile) => xfile?.path ?? '').toList();
-      print(plantImages);
-      // var addVisit = await DataApi().addVisit(
-      //   context,
-      //   _visitDate,
-      //   _commentaire,
-      //   plantImages,
-      //   widget.guard.id,
-      // );
-
-      // Navigator.of(context).pop();
-
-      // print(addVisit['statusCode']);
-      // if (addVisit['statusCode'] == 201) {
-      //   _dialogDone(context);
-      // } else {
-      //   _dialogError(context);
-      // }
+      // print(plantImages);
+      // Vérifiez si toutes les images de plantes ne sont pas null
+      if (plantImages.any((image) => image == null)) {
+        // Si l'une des images est null, affichez toastError
+        _dialogError(context);
+      } else {
+        // Si toutes les images ne sont pas null, appelez DataApi.addVisit
+        _dialogConfirm(context);
+      }
     }
   }
 
   _listPlant() {
-    for (int i = 0; i < plants.length; i++) {
+    for (int i = 0; i < plants.length;) {
       final plant = plants[i];
       return _plantItem(plant, i);
     }
@@ -349,8 +348,23 @@ class _NewVisitState extends State<NewVisit> {
               title: "Publier la visite",
               content:
                   "Êtes-vous sûr de vouloir publier cette visite ? Vous ne pourrez plus la modifier.",
-              onPressedConfirm: () {
-                _submit();
+              onPressedConfirm: () async {
+                var addVisit = await DataApi().addVisit(
+                  context,
+                  _visitDate,
+                  _commentaire,
+                  plantImages,
+                  widget.guard.id,
+                );
+
+                Navigator.of(context).pop();
+
+                print(addVisit['statusCode']);
+                if (addVisit['statusCode'] == 201) {
+                  _dialogDone(context);
+                } else {
+                  _dialogError(context);
+                }
               },
               onPressedCancel: () {
                 Navigator.of(context).pop();

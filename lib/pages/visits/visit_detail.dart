@@ -32,7 +32,7 @@ class _VisitDetailState extends State<VisitDetail> {
   void initState() {
     visit = widget.visit;
     guard = widget.guard;
-    plantsVisit = visit.plants ?? [];
+    plantsVisit = visit.plants;
     print(plantsVisit.length);
     // print(visit);
 
