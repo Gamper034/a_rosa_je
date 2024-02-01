@@ -43,7 +43,6 @@ class Guard {
   });
 
   factory Guard.fromJson(Map<String, dynamic> json) {
-    // print('JSON before parsing: $json');
     return Guard(
       id: json['id'],
       owner: User.fromJson(json['owner']),

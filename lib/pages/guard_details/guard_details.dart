@@ -18,6 +18,7 @@ class GuardDetails extends StatefulWidget {
 }
 
 class _GuardDetailsState extends State<GuardDetails> {
+  late Map<String, dynamic> json;
   late Guard guard;
   GuardService guardService = GuardService();
   late GuardStatus status;
@@ -25,12 +26,8 @@ class _GuardDetailsState extends State<GuardDetails> {
 
   @override
   void initState() {
-    guard = widget.guard;
-    status = guardService.getStatus(guard);
-    status = GuardStatus.enAttente;
     super.initState();
-    print('initState');
-    print(guard);
+    setGuard();
   }
 
   final monthNames = [
@@ -48,9 +45,17 @@ class _GuardDetailsState extends State<GuardDetails> {
     'Déc.'
   ];
 
+  void setGuard() async {
+    Future<Map<String, dynamic>> futureMap = dataApi.getGuard(widget.guard.id!);
+    json = await futureMap;
+    setState(() {
+      guard = Guard.fromJson(json['body']['data']['guard']);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print('build');
+    status = guardService.getStatus(guard);
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -208,9 +213,10 @@ class _GuardDetailsState extends State<GuardDetails> {
                                 children: [
                                   SizedBox(width: 10),
                                   Text(
-                                    guard.owner.firstname +
+                                    guard.guardian!.firstname +
                                         " " +
-                                        guard.owner.lastname.substring(0, 1) +
+                                        guard.guardian!.lastname
+                                            .substring(0, 1) +
                                         ".",
                                     style: TextStyle(
                                         color: textColor, fontSize: 16),
@@ -219,7 +225,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                                   CircleAvatar(
                                     radius: 16.0,
                                     backgroundImage:
-                                        NetworkImage(guard.owner.avatar),
+                                        NetworkImage(guard.guardian!.avatar),
                                     backgroundColor: Colors.transparent,
                                   ),
                                 ],

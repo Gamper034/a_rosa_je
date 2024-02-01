@@ -290,9 +290,6 @@ class DataApi {
         },
       );
 
-      print(response.statusCode);
-      print(response.body);
-
       return {
         'statusCode': response.statusCode,
         'body': jsonDecode(response.body),
@@ -331,6 +328,27 @@ class DataApi {
       final response = await http.get(
         Uri.parse(
             'http://${getHost()}:2000/api/guard/apply/confirm/${applicationId}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Cookie': '$jwt',
+        },
+      );
+
+      return {
+        'statusCode': response.statusCode,
+        'body': jsonDecode(response.body),
+      };
+    } catch (e) {
+      throw Exception('Failed to get guard list: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> getGuard(String guardId) async {
+    try {
+      String? jwt = await storage.read(key: 'jwt');
+
+      final response = await http.get(
+        Uri.parse('http://${getHost()}:2000/api/guard/detail/${guardId}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Cookie': '$jwt',

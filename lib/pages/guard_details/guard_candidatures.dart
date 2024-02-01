@@ -60,10 +60,11 @@ class _GuardCandidatureState extends State<GuardCandidature> {
                 CircleAvatar(
                   radius: 16.0,
                   backgroundImage: NetworkImage(guard.owner.avatar),
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
                 ),
                 SizedBox(width: 10),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       application.userFirstName +
@@ -114,7 +115,9 @@ class _GuardCandidatureState extends State<GuardCandidature> {
                 onTap: () {
                   dataApi.confirmApply(application.id);
                   setState(() {
+                    Application temp = application;
                     guard.applications!.clear();
+                    guard.applications!.add(temp);
                   });
                 },
                 child: Container(

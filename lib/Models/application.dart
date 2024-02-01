@@ -19,10 +19,10 @@ class Application {
     return Application(
       id: json['id'],
       userId: json['user']['id'],
-      userFirstName: json['user']['firstName'],
-      userLastName: json['user']['lastName'],
+      userFirstName: json['user']['firstname'],
+      userLastName: json['user']['lastname'],
       userAvatar: json['user']['avatar'],
-      nbGuardsDonebyUser: json['user']['nbGuardsDone'],
+      nbGuardsDonebyUser: json['user']["_count"]['guardsMade'],
     );
   }
 }
