@@ -4,7 +4,6 @@ import 'package:a_rosa_je/pages/advices/botanist_advices.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/color.dart';
-import 'package:a_rosa_je/widgets/card_plant.dart';
 import 'package:a_rosa_je/widgets/status_badge_guard/status_badge.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +19,9 @@ class GuardDetails extends StatefulWidget {
 }
 
 class _GuardDetailsState extends State<GuardDetails> {
-
   late Map<String, dynamic> json;
   List<Advice> advices = [];
   late Guard guard;
-  late Map<String, dynamic> json;
   GuardService guardService = GuardService();
   late GuardStatus status;
   DataApi dataApi = DataApi();

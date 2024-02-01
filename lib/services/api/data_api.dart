@@ -278,7 +278,6 @@ class DataApi {
     // };
   }
 
-
   Future<Map<String, dynamic>> applyToGuard(String guardId) async {
     try {
       String? jwt = await storage.read(key: 'jwt');
@@ -363,6 +362,8 @@ class DataApi {
     } catch (e) {
       throw Exception('Failed to get guard list: $e');
     }
+  }
+
   Future<Map<String, dynamic>> getGuardAdvices(guardId) async {
     //Récupérer le jwt
     String? jwt = await storage.read(key: 'jwt');
