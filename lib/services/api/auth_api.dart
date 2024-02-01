@@ -43,8 +43,8 @@ class AuthApi {
       var responseBody = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        print(response.body);
-        print('Login successful');
+        // print(response.body);
+        // print('Login successful');
         String rawCookie = response.headers['set-cookie']!;
         int index = rawCookie.indexOf(';');
         String jwt = (index == -1) ? rawCookie : rawCookie.substring(0, index);
@@ -66,16 +66,15 @@ class AuthApi {
         return '';
       } else if (response.statusCode == 401 &&
           responseBody['message'] == 'Identifiants incorrects') {
-        print(response.body);
+        print(response.statusCode);
         return 'Identifiants incorrects. Veuillez réessayez.';
       } else if (responseBody['message'] ==
           'Votre compte est en attente de validation') {
-        print(response.body);
-        print('not verified');
+        print(response.statusCode);
         return 'Votre compte est en attente de validation par un administrateur.';
       } else {
-        print(response.body);
-        print(body);
+        print(response.statusCode);
+        // print(body);
         return 'Problème de connexion. Veuillez réessayer.';
       }
     } catch (e) {

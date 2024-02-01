@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/widgets/button.dart';
 import 'package:a_rosa_je/widgets/text_field.dart';
 import 'package:a_rosa_je/theme/theme.dart';
-import 'package:a_rosa_je/services/botanist.dart';
 
 class BotanistForm extends StatefulWidget {
   @override

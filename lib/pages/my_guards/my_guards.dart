@@ -19,8 +19,6 @@ class _MyGuardsState extends State<MyGuards> {
   void initState() {
     super.initState();
     getGuardList(guardsRequested);
-
-    print('set');
   }
 
   @override
@@ -88,7 +86,7 @@ class _MyGuardsState extends State<MyGuards> {
 
     Future<Map<String, dynamic>> futureMap = dataApi.getOwnerGuards();
     json = await futureMap;
-    print(json);
+    // print(json);
 
     List<Guard> guards = json['body']['data']['$guarType']
         .map<Guard>((guard) => Guard.fromJson(guard))

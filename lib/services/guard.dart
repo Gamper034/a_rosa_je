@@ -3,6 +3,20 @@ import 'package:a_rosa_je/models/guard.dart';
 enum GuardStatus { aVenir, enCours, termine, enAttente, defaultStatus }
 
 class GuardService {
+  static const List<String> monthNames = [
+    'Janv.',
+    'Fév.',
+    'Mars',
+    'Avr.',
+    'Mai',
+    'Juin',
+    'Juil.',
+    'août',
+    'Sept.',
+    'Oct.',
+    'Nov.',
+    'Déc.'
+  ];
   GuardStatus getStatus(Guard guard) {
     DateTime today =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 
+// ignore: must_be_immutable
 class GuardCard extends StatelessWidget {
   GuardCard(
       {super.key,
@@ -15,20 +16,7 @@ class GuardCard extends StatelessWidget {
       required this.byCurrentUser});
   DateTime now = DateTime.now();
 
-  final monthNames = [
-    'Janv.',
-    'Fév.',
-    'Mars',
-    'Avr.',
-    'Mai',
-    'Juin',
-    'Juil.',
-    'août',
-    'Sept.',
-    'Oct.',
-    'Nov.',
-    'Déc.'
-  ];
+
 
   final Guard guard;
 
@@ -40,6 +28,7 @@ class GuardCard extends StatelessWidget {
         DateTime(guard.endDate.year, guard.endDate.month, guard.endDate.day);
     DateTime today =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
     return endDate.isBefore(today);
   }
 
@@ -149,11 +138,11 @@ class GuardCard extends StatelessWidget {
                       Text(
                         guard.startDate.day.toString() +
                             " " +
-                            monthNames[guard.startDate.month - 1] +
+                            GuardService.monthNames[guard.startDate.month - 1] +
                             " - " +
                             guard.endDate.day.toString() +
                             " " +
-                            monthNames[guard.endDate.month - 1],
+                            GuardService.monthNames[guard.endDate.month - 1],
                         style: TextStyle(
                             color: textColor,
                             fontSize: 16,

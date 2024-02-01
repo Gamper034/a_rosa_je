@@ -1,4 +1,6 @@
 import 'package:a_rosa_je/pages/guard_details/guard_candidatures.dart';
+import 'package:a_rosa_je/models/advice.dart';
+import 'package:a_rosa_je/pages/advices/botanist_advices.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/color.dart';
@@ -18,8 +20,11 @@ class GuardDetails extends StatefulWidget {
 }
 
 class _GuardDetailsState extends State<GuardDetails> {
+
   late Map<String, dynamic> json;
+  List<Advice> advices = [];
   late Guard guard;
+  late Map<String, dynamic> json;
   GuardService guardService = GuardService();
   late GuardStatus status;
   DataApi dataApi = DataApi();
@@ -307,7 +312,32 @@ class _GuardDetailsState extends State<GuardDetails> {
                       ),
                     SizedBox(height: 20),
                     CustomButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        advices = [];
+                        DataApi dataApi = DataApi();
+
+                        Future<Map<String, dynamic>> futureMap =
+                            dataApi.getGuardAdvices(guard.id);
+                        Map<String, dynamic> json = await futureMap;
+                        // print(await futureMap);
+                        List<dynamic> jsonAdvices =
+                            json['body']['data']['advices'];
+                        // print(jsonAdvices);
+                        // advices = jsonAdvices
+                        //     .map((advice) => Advice.fromJson(advice))
+                        //     .toList();
+                        for (var advice in jsonAdvices) {
+                          advices.add(Advice.fromJson(advice));
+                        }
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BotanistAdvices(guard: guard, advices: advices),
+                          ),
+                        );
+                      },
                       label: 'Conseils de Botanistes',
                       textColor: textColor,
                       buttonColor: Colors.white,
@@ -316,6 +346,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                     ),
 
                     SizedBox(height: 25),
+
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -326,7 +357,6 @@ class _GuardDetailsState extends State<GuardDetails> {
                             fontWeight: FontWeight.w500),
                       ),
                     ),
-                    SizedBox(height: 10),
 
                     Column(
                       children: [

@@ -7,6 +7,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/pages/profil/profil_page.dart';
 import 'package:a_rosa_je/pages/publish_guard/publish_guard.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
   HomePage(
       {super.key,

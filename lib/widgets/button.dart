@@ -23,6 +23,10 @@ class CustomButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              10), // Ajoutez cette ligne pour un bouton carré
+        ),
         backgroundColor: buttonColor,
         side: border
             ? BorderSide(color: secondaryColor, width: 2.0)
