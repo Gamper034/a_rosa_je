@@ -53,8 +53,9 @@ class Guard {
       applicants: [],
       guardian:
           json['guardian'] != null ? User.fromJson(json['guardian']) : null,
-      plants:
-          json['plants'].map<Plant>((plant) => Plant.fromJson(plant)).toList(),
+      plants: json['plants'] != null
+          ? json['plants'].map<Plant>((item) => Plant.fromJson(item)).toList()
+          : [],
       visits: [],
       advices: [],
       conversation: null,

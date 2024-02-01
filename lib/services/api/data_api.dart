@@ -340,9 +340,10 @@ class DataApi {
       },
     );
 
-    // if (response.statusCode == 401) {
-    //   UserService.logout(context);
-    // }
+    if (response.statusCode == 401) {
+      UserService.logout(context);
+    }
+
     return {
       'statusCode': response.statusCode,
       'body': jsonDecode(response.body),
@@ -382,6 +383,28 @@ class DataApi {
       UserService.logout(context);
     }
 
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
+  }
+
+  Future<Map<String, dynamic>> getVisit(
+      BuildContext context, String visitId) async {
+    String? jwt = await storage.read(key: 'jwt');
+    // print(jwt);
+
+    final response = await http.get(
+      Uri.parse('http://${getHost()}:2000/api/visit/${visitId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': '$jwt',
+      },
+    );
+
+    if (response.statusCode == 401) {
+      UserService.logout(context);
+    }
     return {
       'statusCode': response.statusCode,
       'body': jsonDecode(response.body),

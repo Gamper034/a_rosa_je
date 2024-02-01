@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:a_rosa_je/models/guard.dart';
 import 'package:a_rosa_je/models/visit.dart';
 import 'package:a_rosa_je/pages/visits/new_visit.dart';
+import 'package:a_rosa_je/pages/visits/visit_detail.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
@@ -177,31 +178,58 @@ class _BotanistAdvicesState extends State<GuardVisitList> {
             " " +
             GuardService.monthNames[visits[index].date.month - 1];
         String indexString = (index + 1).toString();
-        return _VisitItem(date, indexString);
+
+        return _VisitItem(date, indexString, visits[index]);
       },
     );
   }
 
-  _VisitItem(String date, String index) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: backgroundContainer,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      height: 60,
-      child: Row(
-        children: [
-          Text(
-            '${index}#',
-            style: ArosajeTextStyle.secondarySubTitle,
+  _VisitItem(String date, String index, Visit visit) {
+    return GestureDetector(
+      onTap: () async {
+        DataApi dataApi = DataApi();
+
+        Future<Map<String, dynamic>> futureMap =
+            dataApi.getVisit(context, visit.id);
+        Map<String, dynamic> json = await futureMap;
+        // print(await futureMap);
+        Map<String, dynamic> jsonVisit = json['body']['data']['visit'];
+        // print(jsonVisit);
+        visit = Visit.fromJson(jsonVisit);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VisitDetail(
+              visit: visit,
+              guard: guard,
+            ),
           ),
-          SizedBox(width: 10),
-          Text(
-            date,
-            style: ArosajeTextStyle.titleFormTextStyle,
-          )
-        ],
+        ).then(
+          (_) => _getVisits(),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: backgroundContainer,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        height: 60,
+        child: Row(
+          children: [
+            Text(
+              '${index}#',
+              style: ArosajeTextStyle.secondarySubTitle,
+            ),
+            SizedBox(width: 10),
+            Text(
+              date,
+              style: ArosajeTextStyle.titleFormTextStyle,
+            )
+          ],
+        ),
       ),
     );
   }

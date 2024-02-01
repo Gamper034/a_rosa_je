@@ -1,19 +1,23 @@
 import 'package:a_rosa_je/models/advice.dart';
+import 'package:a_rosa_je/models/guard.dart';
 import 'package:a_rosa_je/models/plant.dart';
+import 'package:a_rosa_je/models/plant_visit.dart';
 
 class Visit {
   String id;
   String guardId;
   DateTime date;
   String? comment;
+  Guard? guard;
   List<Advice>? botanistAdvice = [];
-  List<Plant>? plants = [];
+  List<PlantVisit>? plants = [];
 
   Visit({
     required this.id,
     required this.guardId,
     required this.date,
     this.comment,
+    this.guard,
     this.botanistAdvice,
     this.plants,
   });
@@ -29,11 +33,10 @@ class Visit {
       //         .map((advice) => Advice.fromJson(advice))
       //         .toList()
       //     : null,
-      plants: json['plants'] != null
-          ? (json['plants'] as List)
-              .map((plant) => Plant.fromJson(plant))
-              .toList()
-          : null,
+      guard: json['guard'] != null ? Guard.fromJson(json['guard']) : null,
+      plants: (json['plants'] as List<dynamic>)
+          .map((item) => PlantVisit.fromJson(item as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

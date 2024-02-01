@@ -17,6 +17,21 @@ class GuardService {
     'Nov.',
     'Déc.'
   ];
+
+  static const List<String> fullMonthNames = [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet.',
+    'août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre'
+  ];
   GuardStatus getStatus(Guard guard) {
     DateTime today =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
