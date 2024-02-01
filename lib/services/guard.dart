@@ -28,7 +28,7 @@ class GuardService {
         (endDate.isAfter(today) || endDate.isAtSameMomentAs(today))) {
       return GuardStatus.enCours;
     } else if (startDate.isAfter(today)) {
-      if (guard.applicants!.length > 0) {
+      if (guard.applications!.length > 0) {
         return GuardStatus.enAttente;
       } else {
         return GuardStatus.aVenir;

@@ -25,13 +25,11 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     super.initState();
     setGuardList();
-    // print('set');
   }
 
   @override
   void didUpdateWidget(covariant SearchPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // print('update');
     if (widget.selectedPlantTypeList != oldWidget.selectedPlantTypeList) {
       setGuardList();
     }
@@ -43,7 +41,6 @@ class _SearchPageState extends State<SearchPage> {
     Future<Map<String, dynamic>> futureMap = dataApi.getGuardList(
         widget.selectedPlantTypeList, widget.selectedVille);
     json = await futureMap;
-    // print(json);
     setState(() {
       guards = json['body']['data']['guards']
           .map<Guard>((guard) => Guard.fromJson(guard))
