@@ -272,24 +272,26 @@ class _GuardDetailsState extends State<GuardDetails> {
                                     padding: const EdgeInsets.only(right: 5),
                                     child: CustomButton(
                                       onPressed: () async {
-                                        // visits = [];
-                                        // DataApi dataApi = DataApi();
+                                        visits = [];
+                                        DataApi dataApi = DataApi();
 
-                                        // Future<Map<String, dynamic>> futureMap =
-                                        //     dataApi.getGuardVisits(context, guard.id);
-                                        // Map<String, dynamic> json = await futureMap;
+                                        Future<Map<String, dynamic>> futureMap =
+                                            dataApi.getGuardVisits(
+                                                context, guard!.id);
+                                        Map<String, dynamic> json =
+                                            await futureMap;
                                         // print(json);
-                                        // List<dynamic> jsonVisits =
-                                        //     json['body']['data']['visits'];
-                                        // // print(jsonVisits);
-                                        // // visits = jsonVisits
-                                        // //     .map((visit) => Visit.fromJson(visit))
-                                        // //     .toList();
+                                        List<dynamic> jsonVisits =
+                                            json['body']['data']['visits'];
+                                        // print(jsonVisits);
+                                        // visits = jsonVisits
+                                        //     .map((visit) => Visit.fromJson(visit))
+                                        //     .toList();
 
-                                        // if (jsonVisits != [])
-                                        //   for (var visit in jsonVisits) {
-                                        //     visits.add(Visit.fromJson(visit));
-                                        //   }
+                                        if (jsonVisits != [])
+                                          for (var visit in jsonVisits) {
+                                            visits.add(Visit.fromJson(visit));
+                                          }
 
                                         Navigator.push(
                                           context,
@@ -297,7 +299,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                                             builder: (context) =>
                                                 GuardVisitList(
                                                     guard: guard!,
-                                                    visits: visitsList),
+                                                    visits: visits),
                                           ),
                                         );
                                       },

@@ -26,7 +26,7 @@ class _NewVisitState extends State<NewVisit> {
   final _visitDateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String _commentaire = '';
-  List<XFile?> plantImages = [];
+  List<String?> plantImages = [];
   List<String> plantImagesPaths = [];
 
   @override
@@ -206,23 +206,24 @@ class _NewVisitState extends State<NewVisit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       //TODO: optimiser le code pour récupérer direct les paths des images & ajout 401 dans tous les services et scroll plantes
-      plantImagesPaths = plantImages.map((xfile) => xfile?.path ?? '').toList();
-      var addVisit = await DataApi().addVisit(
-        context,
-        _visitDate,
-        _commentaire,
-        plantImagesPaths,
-        widget.guard.id,
-      );
+      // plantImagesPaths = plantImages.map((xfile) => xfile?.path ?? '').toList();
+      print(plantImages);
+      // var addVisit = await DataApi().addVisit(
+      //   context,
+      //   _visitDate,
+      //   _commentaire,
+      //   plantImages,
+      //   widget.guard.id,
+      // );
 
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
 
-      print(addVisit['statusCode']);
-      if (addVisit['statusCode'] == 201) {
-        _dialogDone(context);
-      } else {
-        _dialogError(context);
-      }
+      // print(addVisit['statusCode']);
+      // if (addVisit['statusCode'] == 201) {
+      //   _dialogDone(context);
+      // } else {
+      //   _dialogError(context);
+      // }
     }
   }
 
@@ -281,7 +282,7 @@ class _NewVisitState extends State<NewVisit> {
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: Image.file(
-                      File(plantImages[index]!.path),
+                      File(plantImages[index]!),
                       width: 66,
                       height: 66,
                       fit: BoxFit.cover,
@@ -331,7 +332,7 @@ class _NewVisitState extends State<NewVisit> {
         // plants[index]['plantImage'] = Image.file(File(image.path));
 
         setState(() {
-          plantImages[index] = image;
+          plantImages[index] = image.path;
         });
       }
     }

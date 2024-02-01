@@ -26,14 +26,14 @@ class _VisitDetailState extends State<VisitDetail> {
   List<Advice> advices = [];
 
   late Guard guard;
-  late List<PlantVisit> plantsVisit = [];
+  late List<PlantVisit> plantsVisit;
 
   @override
   void initState() {
     visit = widget.visit;
     guard = widget.guard;
-    plantsVisit = plantsVisit = visit.plants!;
-    // print(plantsVisit.length);
+    plantsVisit = visit.plants ?? [];
+    print(plantsVisit.length);
     // print(visit);
 
     super.initState();
