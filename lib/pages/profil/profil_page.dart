@@ -52,13 +52,13 @@ class ProfilPage extends StatelessWidget {
                               color: Colors.grey,
                             ),
                           ),
-                          Text(
-                            '20 Plantes gardées',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          // Text(
+                          //   '20 Plantes gardées',
+                          //   style: TextStyle(
+                          //     fontSize: 12,
+                          //     color: Colors.grey,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ],
@@ -79,7 +79,7 @@ class ProfilPage extends StatelessWidget {
                   ),
                   //Bouton pour déconnecter l'utilisateur
                   ProfilButton(
-                    onPressed: () => UserService().logout(context),
+                    onPressed: () => UserService.logout(context),
                     text: "Déconnexion",
                     icon: LucideIcons.logOut,
                   )

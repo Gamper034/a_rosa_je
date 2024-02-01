@@ -36,7 +36,7 @@ class CardPlant extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                plant.name,
+                plant.name ?? '',
                 style: TextStyle(
                   color: textColor,
                   fontSize: 16,
@@ -44,7 +44,7 @@ class CardPlant extends StatelessWidget {
                 ),
               ),
               Text(
-                plant.plantType,
+                plant.plantType ?? '',
                 style: TextStyle(
                   color: textColor,
                   fontSize: 14,

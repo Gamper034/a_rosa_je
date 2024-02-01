@@ -205,6 +205,14 @@ class _searchFiltersPageState extends State<searchFiltersPage> {
                 //   },
                 //   child: Icon(LucideIcons.delete),
                 // ),
+                IconButton(
+                    icon: Icon(LucideIcons.x), // Changer l'icône si nécessaire
+                    onPressed: () => {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          )
+                        }),
               ],
             ),
           ),

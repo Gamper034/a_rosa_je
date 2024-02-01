@@ -16,9 +16,9 @@ class Plant {
   factory Plant.fromJson(Map<String, dynamic> json) {
     return Plant(
       id: json['id'],
-      guardId: json['guardId'],
-      name: json['name'],
-      plantType: json['type'],
+      guardId: json['guardId'] ?? null,
+      name: json['name'] ?? null,
+      plantType: json['type'] ?? null,
       image: json['image'],
     );
   }

@@ -6,7 +6,7 @@ import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/models/visit.dart';
 
 class Guard {
-  String? id;
+  String id;
   User owner;
   DateTime startDate;
   DateTime endDate;
@@ -23,7 +23,7 @@ class Guard {
   DateTime createdAt;
 
   Guard({
-    this.id,
+    required this.id,
     required this.owner,
     required this.startDate,
     required this.endDate,
@@ -58,9 +58,12 @@ class Guard {
           : [],
       guardian:
           json['guardian'] != null ? User.fromJson(json['guardian']) : null,
-      plants:
-          json['plants'].map<Plant>((plant) => Plant.fromJson(plant)).toList(),
-      visits: [],
+      plants: json['plants'] != null
+          ? json['plants'].map<Plant>((item) => Plant.fromJson(item)).toList()
+          : [],
+      visits: json['visits'] != null
+          ? json['visits'].map<Visit>((item) => Visit.fromJson(item)).toList()
+          : [],
       advices: [],
       conversation: null,
       createdAt: DateTime.parse(json['createdAt']),

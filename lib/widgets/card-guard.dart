@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/pages/guard_details/guard_details.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
+import 'package:a_rosa_je/services/user.dart';
 import 'package:a_rosa_je/widgets/status_badge_guard/status_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/theme/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class GuardCard extends StatelessWidget {
@@ -35,11 +40,18 @@ class GuardCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(bottom: 20),
       child: GestureDetector(
-        onTap: () {
+        onTap: () async {
+          UserService userService = UserService();
+          String? jsonString = await userService.getUserPreference('user');
+          User user = User.fromJson(jsonDecode(jsonString!));
+
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => GuardDetails(guard: guard),
+              builder: (context) => GuardDetails(
+                guard: guard,
+                user: user,
+              ),
             ),
           );
         },

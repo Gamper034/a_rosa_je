@@ -153,8 +153,14 @@ class DataApi {
     }
   }
 
-  Future<void> addGuard(BuildContext context, String startDate, String endDate,
-      String address, String zipCode, String city, List plants) async {
+  Future<Map<String, dynamic>> addGuard(
+      BuildContext context,
+      String startDate,
+      String endDate,
+      String address,
+      String zipCode,
+      String city,
+      List plants) async {
     try {
       String? jwt = await storage.read(key: 'jwt');
       var headers = {
@@ -173,7 +179,7 @@ class DataApi {
 
       for (var i = 0; i < plants.length; i++) {
         request.fields['plantName${i + 1}'] = plants[i]['plantName'];
-        request.fields['plantType${i + 1}'] = plants[i]['plantType'];
+        request.fields['plantType${i + 1}'] = plants[i]['selectedPlantType'];
         var multipartFile = await http.MultipartFile.fromPath(
           'plantImage',
           plants[i]['plantImageUrl'],
@@ -188,21 +194,13 @@ class DataApi {
       http.StreamedResponse streamedResponse = await request.send();
       http.Response response = await http.Response.fromStream(streamedResponse);
 
-      if (response.statusCode == 201) {
-        print(response.statusCode);
-
-        // print('Created guard!!!!!!!!!!!');
-        Navigator.pushReplacementNamed(context, '/home');
-      } else if (response.statusCode == 401) {
-        await storage.delete(key: 'jwt');
-        final prefs = await SharedPreferences.getInstance();
-        prefs.remove('user');
-        Navigator.pushReplacementNamed(context, '/login');
-        print(response.statusCode);
-      } else {
-        print(response.statusCode);
-        // print('Reason phrase: ${response.reasonPhrase}');
+      if (response.statusCode == 401) {
+        UserService.logout(context);
       }
+      return {
+        'statusCode': response.statusCode,
+        'body': jsonDecode(response.body),
+      };
     } catch (e) {
       throw Exception('Failed to add guard: $e');
     }
@@ -364,7 +362,8 @@ class DataApi {
     }
   }
 
-  Future<Map<String, dynamic>> getGuardAdvices(guardId) async {
+  Future<Map<String, dynamic>> getGuardAdvices(
+      BuildContext context, guardId) async {
     //Récupérer le jwt
     String? jwt = await storage.read(key: 'jwt');
 
@@ -375,6 +374,10 @@ class DataApi {
         'Cookie': '$jwt',
       },
     );
+
+    if (response.statusCode == 401) {
+      UserService.logout(context);
+    }
 
     return {
       'statusCode': response.statusCode,
@@ -399,6 +402,132 @@ class DataApi {
     // print(response.statusCode);
     return {
       'statusCode': response.statusCode,
+    };
+  }
+
+  Future<Map<String, dynamic>> publishVisitAdvice(
+      String visitId, String content) async {
+    String? jwt = await storage.read(key: 'jwt');
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'Cookie': '$jwt',
+    };
+    var request = http.Request(
+        'POST', Uri.parse('http://${getHost()}:2000/api/advice/visit/add'));
+    request.body = json.encode({"visitId": visitId, "content": content});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    // print(response.statusCode);
+    return {
+      'statusCode': response.statusCode,
+    };
+  }
+
+  Future<Map<String, dynamic>> getGuardVisits(
+      BuildContext context, guardId) async {
+    String? jwt = await storage.read(key: 'jwt');
+    // print(jwt);
+
+    final response = await http.get(
+      Uri.parse('http://${getHost()}:2000/api/visit/guard/${guardId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': '$jwt',
+      },
+    );
+
+    if (response.statusCode == 401) {
+      UserService.logout(context);
+    }
+
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
+  }
+
+  Future<Map<String, dynamic>> addVisit(BuildContext context, String visitDate,
+      String comment, List plantImages, String guardId) async {
+    String? jwt = await storage.read(key: 'jwt');
+    var headers = {
+      'Cookie': '$jwt',
+    };
+    // print(jwt);
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('http://${getHost()}:2000/api/visit/add/${guardId}'));
+    request.fields.addAll({
+      'date': visitDate,
+      'comment': comment,
+    });
+
+    for (var i = 0; i < plantImages.length; i++) {
+      var multipartFile = await http.MultipartFile.fromPath(
+        'plantImage',
+        plantImages[i],
+        contentType: MediaType('image', 'jpeg'),
+      );
+      request.files.add(multipartFile);
+    }
+    //
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse streamedResponse = await request.send();
+    http.Response response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 401) {
+      UserService.logout(context);
+    }
+
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
+  }
+
+  Future<Map<String, dynamic>> getVisit(
+      BuildContext context, String visitId) async {
+    String? jwt = await storage.read(key: 'jwt');
+    // print(jwt);
+
+    final response = await http.get(
+      Uri.parse('http://${getHost()}:2000/api/visit/${visitId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': '$jwt',
+      },
+    );
+
+    if (response.statusCode == 401) {
+      UserService.logout(context);
+    }
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
+  }
+
+  Future<Map<String, dynamic>> getVisitAdvices(
+      BuildContext context, String visitId) async {
+    String? jwt = await storage.read(key: 'jwt');
+    // print(jwt);
+
+    final response = await http.get(
+      Uri.parse('http://${getHost()}:2000/api/advice/visit/${visitId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': '$jwt',
+      },
+    );
+
+    if (response.statusCode == 401) {
+      UserService.logout(context);
+    }
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
     };
   }
 }

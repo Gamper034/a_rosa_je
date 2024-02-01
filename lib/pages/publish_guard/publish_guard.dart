@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:a_rosa_je/pages/home/home_page.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +28,7 @@ class _PublishGuardState extends State<PublishGuard> {
   List<Widget> plantContainers = [];
 
   List<String> plantTypes = [];
+  // String? _selectedPlantType;
 
   @override
   void initState() {
@@ -228,7 +229,7 @@ class _PublishGuardState extends State<PublishGuard> {
                   height: 20,
                 ),
                 CustomButton(
-                  onPressed: _submit,
+                  onPressed: () => _submit(),
                   label: 'Publier la demande de garde',
                   buttonColor: primaryColor,
                   textColor: Colors.white,
@@ -245,8 +246,9 @@ class _PublishGuardState extends State<PublishGuard> {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
 
+      // print(plants);
       DataApi dataApi = DataApi();
-      dataApi.addGuard(
+      var addGuard = await dataApi.addGuard(
         context,
         _startDate!,
         _endDate!,
@@ -255,7 +257,66 @@ class _PublishGuardState extends State<PublishGuard> {
         _city!,
         plants,
       );
+      addGuard['statusCode'];
+
+      if (addGuard['statusCode'] == 201) {
+        _dialogDone(context);
+      } else {
+        _dialogError(context);
+      }
     }
+  }
+
+  _dialogDone(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastInfo(
+              icon: LucideIcons.badgeCheck,
+              title: "Garde publiée",
+              content: "Votre garde a bien été publiée.",
+              onPressedConfirm: () {
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomePage()), // Remplacez HomePage() par votre widget de page d'accueil
+                  ModalRoute.withName('/'),
+                );
+                // });
+              },
+              height: 240,
+              theme: "light",
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _dialogError(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: ToastError(
+              icon: LucideIcons.badgeX,
+              title: "Impossible de publier",
+              content: "un problème est survenu, veuillez réessayer.",
+              onPressedConfirm: () {
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pop();
+                // });
+              },
+              height: 250,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   List<Map<String, dynamic>> plants = [];
@@ -267,6 +328,7 @@ class _PublishGuardState extends State<PublishGuard> {
         'plantType': null,
         'plantImage': null,
         'plantImageUrl': null,
+        'selectedPlantType': null,
       };
       plants.add(plant);
     }
@@ -337,39 +399,74 @@ class _PublishGuardState extends State<PublishGuard> {
                           style: ArosajeTextStyle.labelFormTextStyle),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: DropdownButtonFormField(
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(width: 0.5, color: textColor),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  BorderSide(width: 0.5, color: textColor),
-                            ),
+                        // child: DropdownButtonFormField(
+                        //   decoration: InputDecoration(
+                        //     contentPadding: EdgeInsets.symmetric(
+                        //         horizontal: 15, vertical: 15),
+                        //     border: OutlineInputBorder(
+                        //       borderRadius: BorderRadius.circular(10),
+                        //       borderSide:
+                        //           BorderSide(width: 0.5, color: textColor),
+                        //     ),
+                        //     focusedBorder: OutlineInputBorder(
+                        //       borderRadius: BorderRadius.circular(10),
+                        //       borderSide:
+                        //           BorderSide(width: 0.5, color: textColor),
+                        //     ),
+                        //   ),
+                        //   value: plants[index]['plantType'],
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       plants[index]['plantType'] = value;
+                        //     });
+                        //   },
+                        //   items: plantTypes.map((plantType) {
+                        //     return DropdownMenuItem(
+                        //       value: plantType,
+                        //       child: Container(
+                        //         width: 90,
+                        //         child: Text(
+                        //           '$plantType',
+                        //           overflow: TextOverflow.ellipsis,
+                        //         ),
+                        //       ),
+                        //     );
+                        //   }).toList(),
+                        // ),
+
+                        child: Container(
+                          height: 55,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: textColor, width: 0.7),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          value: plants[index]['plantType'],
-                          onChanged: (value) {
-                            setState(() {
-                              plants[index]['plantType'] = value;
-                            });
-                          },
-                          items: plantTypes.map((plantType) {
-                            return DropdownMenuItem(
-                              value: plantType,
-                              child: Container(
-                                width: 102,
+                          child: Row(
+                            children: [
+                              Expanded(
                                 child: Text(
-                                  '$plantType',
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                                    plants[index]['selectedPlantType'] ?? ''),
                               ),
-                            );
-                          }).toList(),
+                              PopupMenuButton<String>(
+                                color: Colors.white,
+                                onSelected: (String value) {
+                                  setState(() {
+                                    plants[index]['selectedPlantType'] = value;
+                                    plants[index]['plantType'] = value;
+                                  });
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return plantTypes.map((String plantType) {
+                                    return PopupMenuItem<String>(
+                                      value: plantType,
+                                      child: Text(plantType),
+                                    );
+                                  }).toList();
+                                },
+                                icon: Icon(Icons.arrow_drop_down),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
