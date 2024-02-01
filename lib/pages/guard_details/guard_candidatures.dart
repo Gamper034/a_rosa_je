@@ -1,9 +1,7 @@
 import 'package:a_rosa_je/models/application.dart';
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/theme/color.dart';
-import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
