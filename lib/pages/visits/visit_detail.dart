@@ -2,7 +2,7 @@ import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
 import 'package:a_rosa_je/models/plant_visit.dart';
 import 'package:a_rosa_je/models/visit.dart';
-import 'package:a_rosa_je/pages/advices/visit/botanist_advices.dart';
+import 'package:a_rosa_je/pages/advices/visit/botanist_visit_advices.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';

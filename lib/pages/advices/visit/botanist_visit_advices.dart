@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:a_rosa_je/pages/advices/guard/new_advice.dart';
+import 'package:a_rosa_je/models/visit.dart';
+import 'package:a_rosa_je/pages/advices/visit/new_visit_advice.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
@@ -10,27 +10,29 @@ import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/services/user.dart';
 
-class BotanistGuardAdvices extends StatefulWidget {
-  final Guard guard;
+class BotanistVisitAdvices extends StatefulWidget {
+  final Visit visit;
   final List<Advice> advices;
 
-  const BotanistGuardAdvices(
-      {super.key, required this.guard, required this.advices});
+  const BotanistVisitAdvices(
+      {super.key, required this.visit, required this.advices});
 
   @override
-  State<BotanistGuardAdvices> createState() => _BotanistAdvicesState();
+  State<BotanistVisitAdvices> createState() => _BotanistAdvicesState();
 }
 
-class _BotanistAdvicesState extends State<BotanistGuardAdvices> {
+class _BotanistAdvicesState extends State<BotanistVisitAdvices> {
   late List<Advice> advices;
+  late Visit visit;
   late Guard guard;
   late Map<String, dynamic> json;
   bool isBotanist = false;
 
   @override
   void initState() {
-    guard = widget.guard;
+    visit = widget.visit;
     advices = widget.advices;
+    guard = visit.guard!;
     // print(advices.length);
     // print(advices);
     super.initState();
@@ -53,6 +55,7 @@ class _BotanistAdvicesState extends State<BotanistGuardAdvices> {
 
   @override
   Widget build(BuildContext context) {
+    var day = visit.date.day == 1 ? "${visit.date.day}er" : visit.date.day;
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -101,7 +104,7 @@ class _BotanistAdvicesState extends State<BotanistGuardAdvices> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          widget.guard.startDate.day.toString() +
+                          guard.startDate.day.toString() +
                               " " +
                               GuardService
                                   .monthNames[guard.startDate.month - 1] +
@@ -127,6 +130,9 @@ class _BotanistAdvicesState extends State<BotanistGuardAdvices> {
                 ],
               ),
             ),
+            Text(
+                'Visite du ${day} ${GuardService.fullMonthNames[visit.date.month - 1]}',
+                style: ArosajeTextStyle.titleLightTextStyle),
             SizedBox(height: 25),
             Divider(
               color: Colors.grey,
@@ -139,7 +145,8 @@ class _BotanistAdvicesState extends State<BotanistGuardAdvices> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => NewGuardAdvice(
+                      builder: (context) => NewVisitAdvice(
+                        visit: visit,
                         guard: guard,
                       ),
                     ),
@@ -229,7 +236,7 @@ class _BotanistAdvicesState extends State<BotanistGuardAdvices> {
     DataApi dataApi = DataApi();
 
     Future<Map<String, dynamic>> futureMap =
-        dataApi.getGuardAdvices(context, guard.id);
+        dataApi.getVisitAdvices(context, visit.id);
     Map<String, dynamic> json = await futureMap;
     List<dynamic> jsonAdvices = json['body']['data']['advices'];
     for (var advice in jsonAdvices) {

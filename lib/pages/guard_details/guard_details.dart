@@ -1,6 +1,6 @@
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/visit.dart';
-import 'package:a_rosa_je/pages/advices/guard/botanist_advices.dart';
+import 'package:a_rosa_je/pages/advices/guard/botanist_guard_advices.dart';
 import 'package:a_rosa_je/pages/visits/guard_visits.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
