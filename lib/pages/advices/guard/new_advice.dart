@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-class NewAdvice extends StatefulWidget {
+class NewGuardAdvice extends StatefulWidget {
   final Guard guard;
-  const NewAdvice({super.key, required this.guard});
+  const NewGuardAdvice({super.key, required this.guard});
 
   @override
-  State<NewAdvice> createState() => _NewAdviceState();
+  State<NewGuardAdvice> createState() => _NewAdviceState();
 }
 
-class _NewAdviceState extends State<NewAdvice> {
+class _NewAdviceState extends State<NewGuardAdvice> {
   final _formKey = GlobalKey<FormState>();
   String? _content;
 

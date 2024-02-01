@@ -327,6 +327,26 @@ class DataApi {
     };
   }
 
+  Future<Map<String, dynamic>> publishVisitAdvice(
+      String visitId, String content) async {
+    String? jwt = await storage.read(key: 'jwt');
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'Cookie': '$jwt',
+    };
+    var request = http.Request(
+        'POST', Uri.parse('http://${getHost()}:2000/api/advice/visit/add'));
+    request.body = json.encode({"visitId": visitId, "content": content});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    // print(response.statusCode);
+    return {
+      'statusCode': response.statusCode,
+    };
+  }
+
   Future<Map<String, dynamic>> getGuardVisits(
       BuildContext context, guardId) async {
     String? jwt = await storage.read(key: 'jwt');
@@ -396,6 +416,28 @@ class DataApi {
 
     final response = await http.get(
       Uri.parse('http://${getHost()}:2000/api/visit/${visitId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': '$jwt',
+      },
+    );
+
+    if (response.statusCode == 401) {
+      UserService.logout(context);
+    }
+    return {
+      'statusCode': response.statusCode,
+      'body': jsonDecode(response.body),
+    };
+  }
+
+  Future<Map<String, dynamic>> getVisitAdvices(
+      BuildContext context, String visitId) async {
+    String? jwt = await storage.read(key: 'jwt');
+    // print(jwt);
+
+    final response = await http.get(
+      Uri.parse('http://${getHost()}:2000/api/advice/visit/${visitId}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Cookie': '$jwt',

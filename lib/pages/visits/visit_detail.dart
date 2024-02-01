@@ -1,7 +1,8 @@
+import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:a_rosa_je/models/plant.dart';
 import 'package:a_rosa_je/models/plant_visit.dart';
 import 'package:a_rosa_je/models/visit.dart';
+import 'package:a_rosa_je/pages/advices/visit/botanist_advices.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
@@ -22,6 +23,8 @@ class VisitDetail extends StatefulWidget {
 
 class _VisitDetailState extends State<VisitDetail> {
   late Visit visit;
+  List<Advice> advices = [];
+
   late Guard guard;
   late List<PlantVisit> plantsVisit = [];
 
@@ -30,7 +33,7 @@ class _VisitDetailState extends State<VisitDetail> {
     visit = widget.visit;
     guard = widget.guard;
     plantsVisit = plantsVisit = visit.plants!;
-    print(plantsVisit.length);
+    // print(plantsVisit.length);
     // print(visit);
 
     super.initState();
@@ -115,7 +118,31 @@ class _VisitDetailState extends State<VisitDetail> {
               ),
               SizedBox(height: 30),
               CustomButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  advices = [];
+                  DataApi dataApi = DataApi();
+
+                  Future<Map<String, dynamic>> futureMap =
+                      dataApi.getVisitAdvices(context, visit.id);
+                  Map<String, dynamic> json = await futureMap;
+                  // print(await futureMap);
+                  List<dynamic> jsonAdvices = json['body']['data']['advices'];
+                  // print(jsonAdvices);
+                  // advices = jsonAdvices
+                  //     .map((advice) => Advice.fromJson(advice))
+                  //     .toList();
+                  for (var advice in jsonAdvices) {
+                    advices.add(Advice.fromJson(advice));
+                  }
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          BotanistVisitAdvices(visit: visit, advices: advices),
+                    ),
+                  );
+                },
                 label: 'Conseils de Botanistes',
                 textColor: textColor,
                 buttonColor: Colors.white,
@@ -155,7 +182,7 @@ class _VisitDetailState extends State<VisitDetail> {
   }
 
   _plantItem(plant) {
-    print(plant);
+    // print(plant);
     return Container(
       padding: EdgeInsets.all(5),
       margin: EdgeInsets.only(bottom: 15),
@@ -188,7 +215,7 @@ class _VisitDetailState extends State<VisitDetail> {
                 child: Image(
                   fit: BoxFit.cover,
                   image: NetworkImage(
-                    'http://${DataApi.getHost()}:2000/uploads/${plant.plantInfo.image}',
+                    'http://${DataApi.getHost()}:2000/uploads/${plant.image}',
                   ),
                 ),
               ),

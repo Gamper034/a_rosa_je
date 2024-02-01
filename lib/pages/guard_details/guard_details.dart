@@ -1,6 +1,6 @@
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/visit.dart';
-import 'package:a_rosa_je/pages/advices/botanist_advices.dart';
+import 'package:a_rosa_je/pages/advices/guard/botanist_advices.dart';
 import 'package:a_rosa_je/pages/visits/guard_visits.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
@@ -166,9 +166,10 @@ class _GuardDetailsState extends State<GuardDetails> {
                                 //     .map((visit) => Visit.fromJson(visit))
                                 //     .toList();
 
-                                for (var visit in jsonVisits) {
-                                  visits.add(Visit.fromJson(visit));
-                                }
+                                if (jsonVisits != [])
+                                  for (var visit in jsonVisits) {
+                                    visits.add(Visit.fromJson(visit));
+                                  }
 
                                 Navigator.push(
                                   context,
@@ -206,7 +207,7 @@ class _GuardDetailsState extends State<GuardDetails> {
                         Future<Map<String, dynamic>> futureMap =
                             dataApi.getGuardAdvices(context, guard.id);
                         Map<String, dynamic> json = await futureMap;
-                        // print(await futureMap);
+                        print(await futureMap);
                         List<dynamic> jsonAdvices =
                             json['body']['data']['advices'];
                         // print(jsonAdvices);
@@ -220,8 +221,8 @@ class _GuardDetailsState extends State<GuardDetails> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                BotanistAdvices(guard: guard, advices: advices),
+                            builder: (context) => BotanistGuardAdvices(
+                                guard: guard, advices: advices),
                           ),
                         );
                       },

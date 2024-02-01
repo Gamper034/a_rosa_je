@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:a_rosa_je/pages/advices/new_advice.dart';
+import 'package:a_rosa_je/pages/advices/guard/new_advice.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
@@ -10,18 +10,18 @@ import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:a_rosa_je/services/user.dart';
 
-class BotanistAdvices extends StatefulWidget {
+class BotanistGuardAdvices extends StatefulWidget {
   final Guard guard;
   final List<Advice> advices;
 
-  const BotanistAdvices(
+  const BotanistGuardAdvices(
       {super.key, required this.guard, required this.advices});
 
   @override
-  State<BotanistAdvices> createState() => _BotanistAdvicesState();
+  State<BotanistGuardAdvices> createState() => _BotanistAdvicesState();
 }
 
-class _BotanistAdvicesState extends State<BotanistAdvices> {
+class _BotanistAdvicesState extends State<BotanistGuardAdvices> {
   late List<Advice> advices;
   late Guard guard;
   late Map<String, dynamic> json;
@@ -139,7 +139,7 @@ class _BotanistAdvicesState extends State<BotanistAdvices> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => NewAdvice(
+                      builder: (context) => NewGuardAdvice(
                         guard: guard,
                       ),
                     ),
