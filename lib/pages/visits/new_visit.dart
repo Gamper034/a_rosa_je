@@ -26,8 +26,8 @@ class _NewVisitState extends State<NewVisit> {
   final _visitDateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String _commentaire = '';
-  List<String?> plantImages = [];
-  bool errorPhoto = false;
+  List<XFile?> plantImages = [];
+  List<String> plantImagesPaths = [];
 
   @override
   void initState() {
@@ -171,15 +171,7 @@ class _NewVisitState extends State<NewVisit> {
                       : null,
                 ),
                 SizedBox(height: 30),
-                _listPlant(),
-                if (errorPhoto == true)
-                  Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Text(
-                      'Chaque plante doit avoir une photo',
-                      style: TextStyle(color: Colors.red, fontSize: 12),
-                    ),
-                  ),
+                _buildPlant(),
                 SizedBox(height: 30),
                 Text('Commentaire', style: ArosajeTextStyle.contentTextStyle),
                 CustomTextField(
@@ -214,24 +206,18 @@ class _NewVisitState extends State<NewVisit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       //TODO: optimiser le code pour récupérer direct les paths des images & ajout 401 dans tous les services et scroll plantes
-      // print(plantImages);
-      // Vérifiez si toutes les images de plantes ne sont pas null
-      if (plantImages.any((image) => image == null)) {
-        // Si l'une des images est null, affichez toastError
-        _dialogError(context);
-      } else {
-        // Si toutes les images ne sont pas null, appelez DataApi.addVisit
-        _dialogConfirm(context);
-      }
+      _dialogConfirm(context);
     }
   }
 
-  _listPlant() {
-    for (int i = 0; i < plants.length;) {
-      final plant = plants[i];
-      return _plantItem(plant, i);
-    }
+  _buildPlant() {
+    return Column(
+      children: [
+        for (var i = 0; i < plants.length; i++) _plantItem(plants[i], i),
+      ],
+    );
   }
+
   // _listPlant() {
   //   return Container(
   //     height: 200,
@@ -281,7 +267,7 @@ class _NewVisitState extends State<NewVisit> {
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: Image.file(
-                      File(plantImages[index]!),
+                      File(plantImages[index]!.path),
                       width: 66,
                       height: 66,
                       fit: BoxFit.cover,
@@ -331,7 +317,7 @@ class _NewVisitState extends State<NewVisit> {
         // plants[index]['plantImage'] = Image.file(File(image.path));
 
         setState(() {
-          plantImages[index] = image.path;
+          plantImages[index] = image;
         });
       }
     }
@@ -349,11 +335,13 @@ class _NewVisitState extends State<NewVisit> {
               content:
                   "Êtes-vous sûr de vouloir publier cette visite ? Vous ne pourrez plus la modifier.",
               onPressedConfirm: () async {
+                plantImagesPaths =
+                    plantImages.map((xfile) => xfile?.path ?? '').toList();
                 var addVisit = await DataApi().addVisit(
                   context,
                   _visitDate,
                   _commentaire,
-                  plantImages,
+                  plantImagesPaths,
                   widget.guard.id,
                 );
 
