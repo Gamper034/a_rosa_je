@@ -119,7 +119,7 @@ class _NewAdviceState extends State<NewGuardAdvice> {
                 SizedBox(height: 25),
                 CustomButton(
                   onPressed: () {
-                    _dialogConfirm(context);
+                    _submit();
                   },
                   label: 'Publier le conseil',
                   buttonColor: primaryColor,
@@ -138,19 +138,7 @@ class _NewAdviceState extends State<NewGuardAdvice> {
       _formKey.currentState!.save();
       // print(_content);
       // print(widget.guard.id);
-      String content = _content ?? '';
-      String guardId = widget.guard.id;
-      DataApi dataApi = DataApi();
-      var publishGuardAdvice =
-          await dataApi.publishGuardAdvice(guardId, content);
-      // print('publishGuardAdvice: $publishGuardAdvice.toString()');
-      Navigator.of(context).pop();
-
-      if (publishGuardAdvice['statusCode'] == 201) {
-        _dialogDone(context);
-      } else {
-        _dialogError(context);
-      }
+      _dialogConfirm(context);
     }
   }
 
@@ -188,8 +176,20 @@ class _NewAdviceState extends State<NewGuardAdvice> {
               title: "Publier le conseil",
               content:
                   "Êtes-vous sûr de vouloir publier ce conseil ? Vous ne pourrez plus le modifier.",
-              onPressedConfirm: () {
-                _submit();
+              onPressedConfirm: () async {
+                String content = _content ?? '';
+                String guardId = widget.guard.id;
+                DataApi dataApi = DataApi();
+                var publishGuardAdvice =
+                    await dataApi.publishGuardAdvice(guardId, content);
+                // print('publishGuardAdvice: $publishGuardAdvice.toString()');
+                Navigator.of(context).pop();
+
+                if (publishGuardAdvice['statusCode'] == 201) {
+                  _dialogDone(context);
+                } else {
+                  _dialogError(context);
+                }
               },
               onPressedCancel: () {
                 Navigator.of(context).pop();

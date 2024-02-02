@@ -13,9 +13,13 @@ import 'package:a_rosa_je/services/user.dart';
 class BotanistVisitAdvices extends StatefulWidget {
   final Visit visit;
   final List<Advice> advices;
+  final Guard guard;
 
   const BotanistVisitAdvices(
-      {super.key, required this.visit, required this.advices});
+      {super.key,
+      required this.visit,
+      required this.advices,
+      required this.guard});
 
   @override
   State<BotanistVisitAdvices> createState() => _BotanistAdvicesState();
@@ -32,7 +36,7 @@ class _BotanistAdvicesState extends State<BotanistVisitAdvices> {
   void initState() {
     visit = widget.visit;
     advices = widget.advices;
-    guard = visit.guard!;
+    guard = widget.guard;
     // print(advices.length);
     // print(advices);
     super.initState();
@@ -132,7 +136,7 @@ class _BotanistAdvicesState extends State<BotanistVisitAdvices> {
             ),
             Text(
                 'Visite du ${day} ${GuardService.fullMonthNames[visit.date.month - 1]}',
-                style: ArosajeTextStyle.titleLightTextStyle),
+                style: ArosajeTextStyle.smallLightTextStyle),
             SizedBox(height: 25),
             Divider(
               color: Colors.grey,

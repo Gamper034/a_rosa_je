@@ -17,7 +17,7 @@ class Guard {
   User? guardian;
   List<Application>? applications;
   List<Plant> plants;
-  List<Visit>? visits;
+  // List<Visit>? visits;
   List<Advice>? advices;
   Conversation? conversation;
   DateTime createdAt;
@@ -34,7 +34,7 @@ class Guard {
     this.applications,
     this.guardian,
     required this.plants,
-    this.visits,
+    // this.visits,
     this.advices,
     this.conversation,
     required this.createdAt,
@@ -61,9 +61,9 @@ class Guard {
       plants: json['plants'] != null
           ? json['plants'].map<Plant>((item) => Plant.fromJson(item)).toList()
           : [],
-      visits: json['visits'] != null
-          ? json['visits'].map<Visit>((item) => Visit.fromJson(item)).toList()
-          : [],
+      // visits: json['visits'] != null
+      //     ? json['visits'].map<Visit>((item) => Visit.fromJson(item)).toList()
+      //     : [],
       advices: [],
       conversation: null,
       createdAt: DateTime.parse(json['createdAt']),
@@ -76,6 +76,6 @@ class Guard {
 
   @override
   String toString() {
-    return 'Guard{id: $id, owner: $owner, startDate: $startDate, endDate: $endDate, address: $address, zipCode: $zipCode, city: $city, applicants: $applications, guardian: $guardian, plants: $plants, visits: $visits, advices: $advices, conversation: $conversation, createdAt: $createdAt}';
+    return 'Guard{id: $id, owner: $owner, startDate: $startDate, endDate: $endDate, address: $address, zipCode: $zipCode, city: $city, applicants: $applications, guardian: $guardian, plants: $plants, advices: $advices, conversation: $conversation, createdAt: $createdAt}';
   }
 }

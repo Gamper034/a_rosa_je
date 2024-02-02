@@ -63,96 +63,99 @@ class _BotanistAdvicesState extends State<GuardVisitList> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Garde:', style: ArosajeTextStyle.titleLightTextStyle),
-            SizedBox(height: 10),
-            Container(
-              decoration: BoxDecoration(
-                color: secondaryColor,
-                borderRadius: BorderRadius.circular(10),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Garde:', style: ArosajeTextStyle.titleLightTextStyle),
+              SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 16.0,
+                            backgroundImage: NetworkImage(guard.owner.avatar),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            guard.owner.firstname +
+                                " " +
+                                guard.owner.lastname.substring(0, 1) +
+                                ".",
+                            style: TextStyle(color: textColor, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            widget.guard.startDate.day.toString() +
+                                " " +
+                                GuardService
+                                    .monthNames[guard.startDate.month - 1] +
+                                " - " +
+                                guard.endDate.day.toString() +
+                                " " +
+                                GuardService
+                                    .monthNames[guard.endDate.month - 1],
+                            style: TextStyle(
+                                color: textColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            guard.city + " " + guard.zipCode,
+                            style: TextStyle(
+                                color: greyColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 16.0,
-                          backgroundImage: NetworkImage(guard.owner.avatar),
-                          backgroundColor: Colors.transparent,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          guard.owner.firstname +
-                              " " +
-                              guard.owner.lastname.substring(0, 1) +
-                              ".",
-                          style: TextStyle(color: textColor, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          widget.guard.startDate.day.toString() +
-                              " " +
-                              GuardService
-                                  .monthNames[guard.startDate.month - 1] +
-                              " - " +
-                              guard.endDate.day.toString() +
-                              " " +
-                              GuardService.monthNames[guard.endDate.month - 1],
-                          style: TextStyle(
-                              color: textColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          guard.city + " " + guard.zipCode,
-                          style: TextStyle(
-                              color: greyColor,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              SizedBox(height: 30),
+              Divider(
+                color: Colors.grey,
+                height: 20,
               ),
-            ),
-            SizedBox(height: 30),
-            Divider(
-              color: Colors.grey,
-              height: 20,
-            ),
-            SizedBox(height: 30),
-            CustomButton(
-              onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NewVisit(
-                      guard: guard,
+              SizedBox(height: 30),
+              CustomButton(
+                onPressed: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NewVisit(
+                        guard: guard,
+                      ),
                     ),
-                  ),
-                ).then(
-                  (_) => _getVisits(),
-                )
-              },
-              label: 'Ajouter une nouvelle visite',
-              buttonColor: primaryColor,
-              textColor: Colors.white,
-            ),
-            SizedBox(height: 30),
-            if (visits.length > 0) _VisitsList() else _noVisit(),
-          ],
+                  ).then(
+                    (_) => _getVisits(),
+                  )
+                },
+                label: 'Ajouter une nouvelle visite',
+                buttonColor: primaryColor,
+                textColor: Colors.white,
+              ),
+              SizedBox(height: 30),
+              if (visits.length > 0) _VisitsList() else _noVisit(),
+            ],
+          ),
         ),
       ),
     );

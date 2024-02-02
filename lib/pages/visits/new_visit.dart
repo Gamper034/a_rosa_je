@@ -26,7 +26,7 @@ class _NewVisitState extends State<NewVisit> {
   final _visitDateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String _commentaire = '';
-  List<String?> plantImages = [];
+  List<XFile?> plantImages = [];
   List<String> plantImagesPaths = [];
 
   @override
@@ -171,7 +171,7 @@ class _NewVisitState extends State<NewVisit> {
                       : null,
                 ),
                 SizedBox(height: 30),
-                _listPlant(),
+                _buildPlant(),
                 SizedBox(height: 30),
                 Text('Commentaire', style: ArosajeTextStyle.contentTextStyle),
                 CustomTextField(
@@ -188,7 +188,7 @@ class _NewVisitState extends State<NewVisit> {
                 SizedBox(height: 30),
                 CustomButton(
                   onPressed: () {
-                    _dialogConfirm(context);
+                    _submit();
                   },
                   label: 'Ajouter une nouvelle visite',
                   buttonColor: primaryColor,
@@ -206,33 +206,18 @@ class _NewVisitState extends State<NewVisit> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       //TODO: optimiser le code pour récupérer direct les paths des images & ajout 401 dans tous les services et scroll plantes
-      // plantImagesPaths = plantImages.map((xfile) => xfile?.path ?? '').toList();
-      print(plantImages);
-      // var addVisit = await DataApi().addVisit(
-      //   context,
-      //   _visitDate,
-      //   _commentaire,
-      //   plantImages,
-      //   widget.guard.id,
-      // );
-
-      // Navigator.of(context).pop();
-
-      // print(addVisit['statusCode']);
-      // if (addVisit['statusCode'] == 201) {
-      //   _dialogDone(context);
-      // } else {
-      //   _dialogError(context);
-      // }
+      _dialogConfirm(context);
     }
   }
 
-  _listPlant() {
-    for (int i = 0; i < plants.length; i++) {
-      final plant = plants[i];
-      return _plantItem(plant, i);
-    }
+  _buildPlant() {
+    return Column(
+      children: [
+        for (var i = 0; i < plants.length; i++) _plantItem(plants[i], i),
+      ],
+    );
   }
+
   // _listPlant() {
   //   return Container(
   //     height: 200,
@@ -282,7 +267,7 @@ class _NewVisitState extends State<NewVisit> {
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: Image.file(
-                      File(plantImages[index]!),
+                      File(plantImages[index]!.path),
                       width: 66,
                       height: 66,
                       fit: BoxFit.cover,
@@ -332,7 +317,7 @@ class _NewVisitState extends State<NewVisit> {
         // plants[index]['plantImage'] = Image.file(File(image.path));
 
         setState(() {
-          plantImages[index] = image.path;
+          plantImages[index] = image;
         });
       }
     }
@@ -349,8 +334,25 @@ class _NewVisitState extends State<NewVisit> {
               title: "Publier la visite",
               content:
                   "Êtes-vous sûr de vouloir publier cette visite ? Vous ne pourrez plus la modifier.",
-              onPressedConfirm: () {
-                _submit();
+              onPressedConfirm: () async {
+                plantImagesPaths =
+                    plantImages.map((xfile) => xfile?.path ?? '').toList();
+                var addVisit = await DataApi().addVisit(
+                  context,
+                  _visitDate,
+                  _commentaire,
+                  plantImagesPaths,
+                  widget.guard.id,
+                );
+
+                Navigator.of(context).pop();
+
+                print(addVisit['statusCode']);
+                if (addVisit['statusCode'] == 201) {
+                  _dialogDone(context);
+                } else {
+                  _dialogError(context);
+                }
               },
               onPressedCancel: () {
                 Navigator.of(context).pop();

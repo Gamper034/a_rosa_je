@@ -41,7 +41,6 @@ class _GuardDetailsState extends State<GuardDetails> {
 
   @override
   void initState() {
-    visitsList = widget.guard.visits!;
     user = widget.user;
     print(user.id);
     super.initState();

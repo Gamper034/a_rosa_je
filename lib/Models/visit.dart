@@ -10,7 +10,7 @@ class Visit {
   String? comment;
   Guard? guard;
   List<Advice>? botanistAdvice = [];
-  List<PlantVisit>? plants = [];
+  List<PlantVisit> plants = [];
 
   Visit({
     required this.id,
@@ -19,7 +19,7 @@ class Visit {
     this.comment,
     this.guard,
     this.botanistAdvice,
-    this.plants,
+    required this.plants,
   });
 
   factory Visit.fromJson(Map<String, dynamic> json) {
@@ -34,11 +34,9 @@ class Visit {
       //         .toList()
       //     : null,
       // guard: json['guard'] != null ? Guard.fromJson(json['guard']) : null,
-      plants: json['plant'] != null
-          ? json['plants']
-              .map<PlantVisit>((item) => PlantVisit.fromJson(item))
-              .toList()
-          : null,
+      plants: json['plants']
+          .map<PlantVisit>((item) => PlantVisit.fromJson(item))
+          .toList(),
     );
   }
 }
