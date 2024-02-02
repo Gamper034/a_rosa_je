@@ -42,7 +42,7 @@ class _GuardDetailsState extends State<GuardDetails> {
   @override
   void initState() {
     user = widget.user;
-    print(user.id);
+    // print(user.id);
     super.initState();
     setGuard();
   }

@@ -33,7 +33,7 @@ class _VisitDetailState extends State<VisitDetail> {
     visit = widget.visit;
     guard = widget.guard;
     plantsVisit = visit.plants;
-    print(plantsVisit.length);
+    //print(plantsVisit.length);
     // print(visit);
 
     super.initState();
