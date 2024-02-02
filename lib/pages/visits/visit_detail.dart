@@ -138,8 +138,11 @@ class _VisitDetailState extends State<VisitDetail> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          BotanistVisitAdvices(visit: visit, advices: advices),
+                      builder: (context) => BotanistVisitAdvices(
+                        visit: visit,
+                        advices: advices,
+                        guard: guard,
+                      ),
                     ),
                   );
                 },

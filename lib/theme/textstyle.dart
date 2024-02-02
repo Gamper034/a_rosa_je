@@ -103,6 +103,12 @@ class ArosajeTextStyle {
     color: greyColor,
   );
 
+  static final smallLightTextStyle = baseTextStyle.copyWith(
+    fontWeight: FontWeight.w400,
+    fontSize: 10,
+    color: greyColor,
+  );
+
   static final secondarySubTitle = baseTextStyle.copyWith(
     fontWeight: FontWeight.w500,
     fontSize: 16,
