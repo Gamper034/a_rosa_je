@@ -52,17 +52,14 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.only(right: 20, left: 20, top: 30),
-        child: Column(
-          children: [
-            //for each guard in guards we call the guardCard widget
-
-            for (var guard in guards)
-              GuardCard(guard: guard, myGuards: false, byCurrentUser: false)
-          ],
-        ),
+    return Container(
+      padding: EdgeInsets.only(right: 20, left: 20, top: 30),
+      child: ListView.builder(
+        itemCount: guards.length,
+        itemBuilder: (context, index) {
+          return GuardCard(
+              guard: guards[index], myGuards: false, byCurrentUser: false);
+        },
       ),
     );
   }
