@@ -1,21 +1,23 @@
-import 'dart:convert';
-
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/pages/advices/guard/new_guard_advice.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:a_rosa_je/services/user.dart';
 
 class BotanistGuardAdvices extends StatefulWidget {
   final Guard guard;
   final List<Advice> advices;
+  final User user;
 
   const BotanistGuardAdvices(
-      {super.key, required this.guard, required this.advices});
+      {super.key,
+      required this.guard,
+      required this.advices,
+      required this.user});
 
   @override
   State<BotanistGuardAdvices> createState() => _BotanistAdvicesState();
@@ -26,29 +28,17 @@ class _BotanistAdvicesState extends State<BotanistGuardAdvices> {
   late Guard guard;
   late Map<String, dynamic> json;
   bool isBotanist = false;
+  late User user;
 
   @override
   void initState() {
     guard = widget.guard;
     advices = widget.advices;
-    // print(advices.length);
-    // print(advices);
+    user = widget.user;
+    if (user.role == 'botanist') {
+      isBotanist = true;
+    }
     super.initState();
-    getUserPreference();
-  }
-
-  getUserPreference() async {
-    UserService userService = UserService();
-    String? jsonString = await userService.getUserPreference('user');
-    if (jsonString == null) {
-      return;
-    }
-    Map<String, dynamic> userPreference = jsonDecode(jsonString);
-    if (userPreference['role'] == 'botanist') {
-      setState(() {
-        isBotanist = true;
-      });
-    }
   }
 
   @override

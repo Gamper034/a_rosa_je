@@ -3,7 +3,6 @@ import 'package:a_rosa_je/models/application.dart';
 import 'package:a_rosa_je/models/conversation.dart';
 import 'package:a_rosa_je/models/plant.dart';
 import 'package:a_rosa_je/models/user.dart';
-import 'package:a_rosa_je/models/visit.dart';
 
 class Guard {
   String id;

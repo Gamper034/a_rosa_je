@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/models/visit.dart';
 import 'package:a_rosa_je/pages/advices/visit/new_visit_advice.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
@@ -14,12 +15,14 @@ class BotanistVisitAdvices extends StatefulWidget {
   final Visit visit;
   final List<Advice> advices;
   final Guard guard;
+  final User user;
 
   const BotanistVisitAdvices(
       {super.key,
       required this.visit,
       required this.advices,
-      required this.guard});
+      required this.guard,
+      required this.user});
 
   @override
   State<BotanistVisitAdvices> createState() => _BotanistAdvicesState();
@@ -31,30 +34,18 @@ class _BotanistAdvicesState extends State<BotanistVisitAdvices> {
   late Guard guard;
   late Map<String, dynamic> json;
   bool isBotanist = false;
+  late User user;
 
   @override
   void initState() {
     visit = widget.visit;
     advices = widget.advices;
     guard = widget.guard;
-    // print(advices.length);
-    // print(advices);
+    user = widget.user;
+    if (user.role == 'botanist') {
+      isBotanist = true;
+    }
     super.initState();
-    getUserPreference();
-  }
-
-  getUserPreference() async {
-    UserService userService = UserService();
-    String? jsonString = await userService.getUserPreference('user');
-    if (jsonString == null) {
-      return;
-    }
-    Map<String, dynamic> userPreference = jsonDecode(jsonString);
-    if (userPreference['role'] == 'botanist') {
-      setState(() {
-        isBotanist = true;
-      });
-    }
   }
 
   @override

@@ -1,8 +1,4 @@
-import 'dart:convert';
-
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:a_rosa_je/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum GuardStatus { aVenir, enCours, termine, enAttente, defaultStatus }
 
