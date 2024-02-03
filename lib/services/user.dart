@@ -44,4 +44,14 @@ class UserService {
 
     throw Exception('No user found');
   }
+
+  Future<bool> isBotanist() async {
+    var user = await getUserPreferences();
+
+    if (user.role == 'botanist') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

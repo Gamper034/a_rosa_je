@@ -9,20 +9,19 @@ import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:a_rosa_je/services/user.dart';
 
 class BotanistVisitAdvices extends StatefulWidget {
   final Visit visit;
   final List<Advice> advices;
   final Guard guard;
-  final User user;
+  final bool isBotanist;
 
   const BotanistVisitAdvices(
       {super.key,
       required this.visit,
       required this.advices,
       required this.guard,
-      required this.user});
+      required this.isBotanist});
 
   @override
   State<BotanistVisitAdvices> createState() => _BotanistAdvicesState();
@@ -33,18 +32,14 @@ class _BotanistAdvicesState extends State<BotanistVisitAdvices> {
   late Visit visit;
   late Guard guard;
   late Map<String, dynamic> json;
-  bool isBotanist = false;
-  late User user;
+  late bool isBotanist;
 
   @override
   void initState() {
     visit = widget.visit;
     advices = widget.advices;
     guard = widget.guard;
-    user = widget.user;
-    if (user.role == 'botanist') {
-      isBotanist = true;
-    }
+    isBotanist = widget.isBotanist;
     super.initState();
   }
 

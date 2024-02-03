@@ -11,13 +11,13 @@ import 'package:flutter/material.dart';
 class BotanistGuardAdvices extends StatefulWidget {
   final Guard guard;
   final List<Advice> advices;
-  final User user;
+  final bool isBotanist;
 
   const BotanistGuardAdvices(
       {super.key,
       required this.guard,
       required this.advices,
-      required this.user});
+      required this.isBotanist});
 
   @override
   State<BotanistGuardAdvices> createState() => _BotanistAdvicesState();
@@ -27,17 +27,14 @@ class _BotanistAdvicesState extends State<BotanistGuardAdvices> {
   late List<Advice> advices;
   late Guard guard;
   late Map<String, dynamic> json;
-  bool isBotanist = false;
-  late User user;
+  late bool isBotanist;
 
   @override
   void initState() {
     guard = widget.guard;
     advices = widget.advices;
-    user = widget.user;
-    if (user.role == 'botanist') {
-      isBotanist = true;
-    }
+    isBotanist = widget.isBotanist;
+
     super.initState();
   }
 

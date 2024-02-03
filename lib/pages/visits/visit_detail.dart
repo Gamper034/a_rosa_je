@@ -136,7 +136,7 @@ class _VisitDetailState extends State<VisitDetail> {
                     advices.add(Advice.fromJson(advice));
                   }
 
-                  var user = await UserService().getUserPreferences();
+                  var isBotanist = await UserService().isBotanist();
 
                   Navigator.push(
                     context,
@@ -145,7 +145,7 @@ class _VisitDetailState extends State<VisitDetail> {
                         visit: visit,
                         advices: advices,
                         guard: guard,
-                        user: user,
+                        isBotanist: isBotanist,
                       ),
                     ),
                   );

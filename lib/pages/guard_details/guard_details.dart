@@ -288,9 +288,6 @@ class _GuardDetailsState extends State<GuardDetails> {
                                           for (var visit in jsonVisits) {
                                             visits.add(Visit.fromJson(visit));
                                           }
-                                        //Récupération des informations de l'utilisateur connecté
-                                        user = await UserService()
-                                            .getUserPreferences();
 
                                         Navigator.push(
                                           context,
@@ -386,13 +383,15 @@ class _GuardDetailsState extends State<GuardDetails> {
                           }
 
                           //Récupération des informations de l'utilisateur connecté
-                          user = await UserService().getUserPreferences();
+                          var isBotanist = await UserService().isBotanist();
 
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => BotanistGuardAdvices(
-                                  guard: guard!, advices: advices, user: user),
+                                  guard: guard!,
+                                  advices: advices,
+                                  isBotanist: isBotanist),
                             ),
                           );
                         },
