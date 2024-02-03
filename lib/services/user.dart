@@ -1,7 +1,6 @@
 // services/user.dart
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:a_rosa_je/models/user.dart';
 import 'dart:convert';
@@ -44,10 +43,5 @@ class UserService {
     }
 
     throw Exception('No user found');
-  }
-
-  Future<String?> getUserPreference(String key) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(key);
   }
 }

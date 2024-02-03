@@ -5,6 +5,7 @@ import 'package:a_rosa_je/models/visit.dart';
 import 'package:a_rosa_je/pages/advices/visit/botanist_visit_advices.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
+import 'package:a_rosa_je/services/user.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -135,6 +136,8 @@ class _VisitDetailState extends State<VisitDetail> {
                     advices.add(Advice.fromJson(advice));
                   }
 
+                  var user = await UserService().getUserPreferences();
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -142,6 +145,7 @@ class _VisitDetailState extends State<VisitDetail> {
                         visit: visit,
                         advices: advices,
                         guard: guard,
+                        user: user,
                       ),
                     ),
                   );
