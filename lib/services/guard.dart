@@ -1,4 +1,5 @@
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/services/user.dart';
 
 enum GuardStatus { aVenir, enCours, termine, enAttente, defaultStatus }
 
