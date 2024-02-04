@@ -334,6 +334,10 @@ class _GuardDetailsState extends State<GuardDetails> {
                               onPressed: () {
                                 _dialogConfirm(context);
                                 // dataApi.applyToGuard(guard!.id);
+                                setState(() {
+                                  setGuard();
+                                  status = guardService.getStatus(guard!);
+                                });
                               },
                               label: 'Postuler',
                               textColor: Colors.white,
@@ -341,9 +345,10 @@ class _GuardDetailsState extends State<GuardDetails> {
                             ),
                           ],
                         ),
-
-                      if (status == GuardStatus.enAttente &&
-                          guard!.owner.id == user.id)
+                      if ((status == GuardStatus.enAttente ||
+                              status == GuardStatus.enCours) &&
+                          guard!.owner.id == user.id &&
+                          guard!.guardian == null)
                         Column(
                           children: [
                             SizedBox(height: 20),
@@ -356,6 +361,10 @@ class _GuardDetailsState extends State<GuardDetails> {
                                         GuardCandidature(guard: guard!),
                                   ),
                                 );
+                                setState(() {
+                                  setGuard();
+                                  status = guardService.getStatus(guard!);
+                                });
                               },
                               label: 'Candidatures',
                               textColor: Colors.white,
@@ -441,7 +450,7 @@ class _GuardDetailsState extends State<GuardDetails> {
               content: "Êtes-vous sûr de vouloir postuler pour cette garde ?",
               onPressedConfirm: () async {
                 var applyGuard = await dataApi.applyToGuard(guard!.id);
-                if (applyGuard['statusCode'] == 201) {
+                if (applyGuard['statusCode'] == 200) {
                   _dialogDone(context);
                 } else {
                   _dialogError(context);
@@ -469,6 +478,7 @@ class _GuardDetailsState extends State<GuardDetails> {
               title: "Visite publiée",
               content: "Votre visite a été publiée.",
               onPressedConfirm: () {
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
               height: 240,

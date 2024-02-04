@@ -179,10 +179,10 @@ class _NewVisitState extends State<NewVisit> {
                   minLines: 5,
                   maxLines: 5,
                   keyboardType: TextInputType.multiline,
-                  hintText: "Ajoutez votre conseil ici.",
+                  hintText: "Ajoutez votre commentaire ici.",
                   onSaved: (value) => _commentaire = value ?? '',
                   validator: (value) => value?.isEmpty ?? true
-                      ? 'Veuillez ajouter votre conseil.'
+                      ? 'Veuillez ajouter votre commentaire.'
                       : null,
                 ),
                 SizedBox(height: 30),
