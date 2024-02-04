@@ -1,4 +1,5 @@
 import 'package:a_rosa_je/models/guard.dart';
+import 'package:a_rosa_je/services/user.dart';
 
 enum GuardStatus { aVenir, enCours, termine, enAttente, defaultStatus }
 
@@ -53,5 +54,11 @@ class GuardService {
       return GuardStatus.termine;
     }
     return GuardStatus.defaultStatus;
+  }
+
+  Future<bool> isUserConnectedGuardianOf(Guard guard) async {
+    var user = await UserService().getUserPreferences();
+    if (guard.guardian == null) return false;
+    return user.id == guard.guardian!.id;
   }
 }

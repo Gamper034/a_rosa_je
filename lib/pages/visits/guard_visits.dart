@@ -11,8 +11,13 @@ import 'package:flutter/material.dart';
 class GuardVisitList extends StatefulWidget {
   final Guard guard;
   final List<Visit> visits;
+  final bool isGuardianOfGuard;
 
-  const GuardVisitList({super.key, required this.guard, required this.visits});
+  const GuardVisitList(
+      {super.key,
+      required this.guard,
+      required this.visits,
+      required this.isGuardianOfGuard});
 
   @override
   State<GuardVisitList> createState() => _BotanistAdvicesState();
@@ -22,11 +27,13 @@ class _BotanistAdvicesState extends State<GuardVisitList> {
   late List<Visit> visits;
   late Guard guard;
   late Map<String, dynamic> json;
+  late bool isGuardianOfGuard;
 
   @override
   void initState() {
     guard = widget.guard;
     visits = widget.visits;
+    isGuardianOfGuard = widget.isGuardianOfGuard;
     super.initState();
   }
 
@@ -114,23 +121,24 @@ class _BotanistAdvicesState extends State<GuardVisitList> {
                 height: 20,
               ),
               SizedBox(height: 30),
-              CustomButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NewVisit(
-                        guard: guard,
+              if (isGuardianOfGuard == true)
+                CustomButton(
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewVisit(
+                          guard: guard,
+                        ),
                       ),
-                    ),
-                  ).then(
-                    (_) => _getVisits(),
-                  )
-                },
-                label: 'Ajouter une nouvelle visite',
-                buttonColor: primaryColor,
-                textColor: Colors.white,
-              ),
+                    ).then(
+                      (_) => _getVisits(),
+                    )
+                  },
+                  label: 'Ajouter une nouvelle visite',
+                  buttonColor: primaryColor,
+                  textColor: Colors.white,
+                ),
               SizedBox(height: 30),
               if (visits.length > 0) _VisitsList() else _noVisit(),
             ],

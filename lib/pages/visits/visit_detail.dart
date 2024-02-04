@@ -71,14 +71,15 @@ class _VisitDetailState extends State<VisitDetail> {
                         children: [
                           CircleAvatar(
                             radius: 16.0,
-                            backgroundImage: NetworkImage(guard.owner.avatar),
+                            backgroundImage:
+                                NetworkImage(guard.guardian!.avatar),
                             backgroundColor: Colors.transparent,
                           ),
                           SizedBox(width: 10),
                           Text(
-                            guard.owner.firstname +
+                            guard.guardian!.firstname +
                                 " " +
-                                guard.owner.lastname.substring(0, 1) +
+                                guard.guardian!.lastname.substring(0, 1) +
                                 ".",
                             style: TextStyle(color: textColor, fontSize: 16),
                           ),

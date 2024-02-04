@@ -288,6 +288,10 @@ class _GuardDetailsState extends State<GuardDetails> {
                                           for (var visit in jsonVisits) {
                                             visits.add(Visit.fromJson(visit));
                                           }
+                                        var isGuardianOfGuard =
+                                            await GuardService()
+                                                .isUserConnectedGuardianOf(
+                                                    guard!);
 
                                         Navigator.push(
                                           context,
@@ -296,6 +300,8 @@ class _GuardDetailsState extends State<GuardDetails> {
                                                 GuardVisitList(
                                               guard: guard!,
                                               visits: visits,
+                                              isGuardianOfGuard:
+                                                  isGuardianOfGuard,
                                             ),
                                           ),
                                         );
