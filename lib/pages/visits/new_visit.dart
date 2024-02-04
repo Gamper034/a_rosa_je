@@ -203,10 +203,12 @@ class _NewVisitState extends State<NewVisit> {
   }
 
   _submit() async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && !plantImages.contains(null)) {
       _formKey.currentState!.save();
       //TODO: optimiser le code pour récupérer direct les paths des images & ajout 401 dans tous les services et scroll plantes
       _dialogConfirm(context);
+    } else {
+      _dialogError(context);
     }
   }
 
@@ -217,19 +219,6 @@ class _NewVisitState extends State<NewVisit> {
       ],
     );
   }
-
-  // _listPlant() {
-  //   return Container(
-  //     height: 200,
-  //     child: ListView.builder(
-  //       itemCount: plants.length,
-  //       itemBuilder: (context, index) {
-  //         final plant = plants[index];
-  //         return _plantItem(plant, index);
-  //       },
-  //     ),
-  //   );
-  // }
 
   _plantItem(plant, int index) {
     return Container(
