@@ -478,8 +478,8 @@ class _GuardDetailsState extends State<GuardDetails> {
           child: Container(
             child: ToastInfo(
               icon: LucideIcons.badgeCheck,
-              title: "Visite publiée",
-              content: "Votre visite a été publiée.",
+              title: "Candidature envoyée",
+              content: "Votre candidature a été envoyée.",
               onPressedConfirm: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
