@@ -1,6 +1,5 @@
 import 'package:a_rosa_je/models/advice.dart';
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:a_rosa_je/models/plant.dart';
 import 'package:a_rosa_je/models/plant_visit.dart';
 
 class Visit {

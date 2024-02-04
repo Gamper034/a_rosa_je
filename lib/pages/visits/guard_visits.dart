@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:a_rosa_je/models/guard.dart';
 import 'package:a_rosa_je/models/visit.dart';
 import 'package:a_rosa_je/pages/visits/new_visit.dart';
@@ -9,7 +7,6 @@ import 'package:a_rosa_je/services/guard.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:a_rosa_je/services/user.dart';
 
 class GuardVisitList extends StatefulWidget {
   final Guard guard;
@@ -25,30 +22,12 @@ class _BotanistAdvicesState extends State<GuardVisitList> {
   late List<Visit> visits;
   late Guard guard;
   late Map<String, dynamic> json;
-  bool isBotanist = false;
 
   @override
   void initState() {
     guard = widget.guard;
     visits = widget.visits;
-    // print(visits.length);
-    // print(visits);
     super.initState();
-    getUserPreference();
-  }
-
-  getUserPreference() async {
-    UserService userService = UserService();
-    String? jsonString = await userService.getUserPreference('user');
-    if (jsonString == null) {
-      return;
-    }
-    Map<String, dynamic> userPreference = jsonDecode(jsonString);
-    if (userPreference['role'] == 'botanist') {
-      setState(() {
-        isBotanist = true;
-      });
-    }
   }
 
   @override

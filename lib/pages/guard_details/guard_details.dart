@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:a_rosa_je/models/user.dart';
 import 'package:a_rosa_je/pages/guard_details/guard_candidatures.dart';
 import 'package:a_rosa_je/models/advice.dart';
@@ -8,13 +6,12 @@ import 'package:a_rosa_je/pages/advices/guard/botanist_guard_advices.dart';
 import 'package:a_rosa_je/pages/visits/guard_visits.dart';
 import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/services/guard.dart';
-import 'package:a_rosa_je/theme/color.dart';
+import 'package:a_rosa_je/services/user.dart';
 import 'package:a_rosa_je/widgets/status_badge_guard/status_badge.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:a_rosa_je/models/guard.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/theme.dart';
 
@@ -297,8 +294,9 @@ class _GuardDetailsState extends State<GuardDetails> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 GuardVisitList(
-                                                    guard: guard!,
-                                                    visits: visits),
+                                              guard: guard!,
+                                              visits: visits,
+                                            ),
                                           ),
                                         );
                                       },
@@ -393,11 +391,16 @@ class _GuardDetailsState extends State<GuardDetails> {
                             advices.add(Advice.fromJson(advice));
                           }
 
+                          //Récupération des informations de l'utilisateur connecté
+                          var isBotanist = await UserService().isBotanist();
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => BotanistGuardAdvices(
-                                  guard: guard!, advices: advices),
+                                  guard: guard!,
+                                  advices: advices,
+                                  isBotanist: isBotanist),
                             ),
                           );
                         },

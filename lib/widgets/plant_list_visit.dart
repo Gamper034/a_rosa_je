@@ -1,9 +1,7 @@
 import 'package:a_rosa_je/models/plant.dart';
-import 'package:a_rosa_je/services/api/data_api.dart';
 import 'package:a_rosa_je/theme/theme.dart';
 import 'package:a_rosa_je/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class PlantListVisit extends StatefulWidget {
   const PlantListVisit({super.key, required this.plants});
