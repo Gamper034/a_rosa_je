@@ -247,22 +247,31 @@ class _PublishGuardState extends State<PublishGuard> {
       _formKey.currentState?.save(); // Sauvegarde les valeurs des champs
 
       // print(plants);
-      DataApi dataApi = DataApi();
-      var addGuard = await dataApi.addGuard(
-        context,
-        _startDate!,
-        _endDate!,
-        _address!,
-        _zipCode!,
-        _city!,
-        plants,
-      );
-      addGuard['statusCode'];
 
-      if (addGuard['statusCode'] == 201) {
-        _dialogDone(context);
-      } else {
+      bool hasNull = plants.any((plant) => plant['plantImageUrl'] == null);
+
+      if (hasNull) {
+        // print("Une ou plusieurs images de plantes sont null");
         _dialogError(context);
+      } else {
+        DataApi dataApi = DataApi();
+        var addGuard = await dataApi.addGuard(
+          context,
+          _startDate!,
+          _endDate!,
+          _address!,
+          _zipCode!,
+          _city!,
+          plants,
+        );
+        addGuard['statusCode'];
+
+        if (addGuard['statusCode'] == 201) {
+          _dialogDone(context);
+        } else {
+          _dialogError(context);
+        }
+        // print("Aucune image de plante n'est null");
       }
     }
   }
