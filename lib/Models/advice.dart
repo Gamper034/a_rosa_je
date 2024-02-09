@@ -6,7 +6,7 @@ class Advice {
   String id;
   User user;
   String referer; // "Guard" or "Visit"
-  Guard? guard;
+  // Guard? guard;
   Visit? visit;
   String? visitId;
   String content;
@@ -16,7 +16,7 @@ class Advice {
     required this.id,
     required this.user,
     required this.referer,
-    this.guard,
+    // this.guard,
     this.visit,
     this.visitId,
     required this.content,
@@ -33,7 +33,7 @@ class Advice {
       id: json['id'],
       user: User.fromJson(json['user']),
       referer: json['referer'],
-      guard: json['guard'] != null ? Guard.fromJson(json['guard']) : null,
+      // guard: json['guard'] != null ? Guard.fromJson(json['guard']) : null,
       visit: json['visit'] != null ? Visit.fromJson(json['visit']) : null,
       visitId: json['visitId'],
       content: json['content'],

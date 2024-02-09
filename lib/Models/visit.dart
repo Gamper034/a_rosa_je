@@ -7,8 +7,8 @@ class Visit {
   String guardId;
   DateTime date;
   String? comment;
-  Guard? guard;
-  List<Advice>? botanistAdvice = [];
+  // Guard? guard;
+  // List<Advice>? botanistAdvice = [];
   List<PlantVisit> plants = [];
 
   Visit({
@@ -16,8 +16,8 @@ class Visit {
     required this.guardId,
     required this.date,
     this.comment,
-    this.guard,
-    this.botanistAdvice,
+    // this.guard,
+    // this.botanistAdvice,
     required this.plants,
   });
 

@@ -69,10 +69,6 @@ class Guard {
     );
   }
 
-  fromJsonDetails(Map<String, dynamic> json) {
-    return null;
-  }
-
   @override
   String toString() {
     return 'Guard{id: $id, owner: $owner, startDate: $startDate, endDate: $endDate, address: $address, zipCode: $zipCode, city: $city, applicants: $applications, guardian: $guardian, plants: $plants, advices: $advices, conversation: $conversation, createdAt: $createdAt}';

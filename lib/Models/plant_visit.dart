@@ -3,14 +3,14 @@ import 'package:a_rosa_je/models/plant.dart';
 class PlantVisit {
   String id;
   String visitId;
-  String plantId;
+  // String plantId;
   String image;
   Plant plantInfo;
 
   PlantVisit({
     required this.id,
     required this.visitId,
-    required this.plantId,
+    // required this.plantId,
     required this.image,
     required this.plantInfo,
   });
@@ -19,7 +19,7 @@ class PlantVisit {
     return PlantVisit(
       id: json['id'],
       visitId: json['visitId'],
-      plantId: json['plantId'],
+      // plantId: json['plantId'],
       image: json['image'],
       plantInfo: Plant.fromJson(json['plant']),
     );

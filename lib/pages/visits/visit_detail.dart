@@ -189,7 +189,7 @@ class _VisitDetailState extends State<VisitDetail> {
     );
   }
 
-  _plantItem(plant) {
+  _plantItem(PlantVisit plant) {
     // print(plant);
     return Container(
       padding: EdgeInsets.all(5),

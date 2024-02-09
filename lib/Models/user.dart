@@ -11,11 +11,11 @@ class User {
   String role;
   String? siret;
   String avatar;
-  List<Guard>? guardsRequested = [];
-  List<Guard>? guardsMade = [];
-  List<Guard>? applications = [];
-  List<Message>? messages = [];
-  List<Advice>? advices = [];
+  // List<Guard>? guardsRequested = [];
+  // List<Guard>? guardsMade = [];
+  // List<Guard>? applications = [];
+  // List<Message>? messages = [];
+  // List<Advice>? advices = [];
   DateTime createdAt;
 
   User({
@@ -27,11 +27,11 @@ class User {
     required this.role,
     this.siret,
     required this.avatar,
-    this.guardsRequested,
-    this.guardsMade,
-    this.applications,
-    this.messages,
-    this.advices,
+    // this.guardsRequested,
+    // this.guardsMade,
+    // this.applications,
+    // this.messages,
+    // this.advices,
     required this.createdAt,
   });
 
